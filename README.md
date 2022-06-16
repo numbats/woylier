@@ -18,3 +18,4 @@ Tasks:
 - Create an R package file structure in the repo
 - Add function that matches structure of geodesic_path() from tourr, so this method of interpolation can be swapped in
 - Apply to projection pursuit of splines index to search for nonlinear associations
+- Write a short R Journal format article describing the interpolation methods, and gives an example use
