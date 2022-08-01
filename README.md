@@ -8,6 +8,7 @@ Background reading:
 for High-Dimensional Rotations in Data Visualization" (background/paper-dyn-proj-algs.pdf) 
 - also check the wikipedia page on Givens rotations https://en.wikipedia.org/wiki/Givens_rotation
 - https://github.com/uschiLaa/paper-ppi _main.pdf application of using the splines index to find nonlinear relationships
+- maybe https://www.tandfonline.com/doi/abs/10.1080/1351847X.2019.1647864 or https://link.springer.com/article/10.1007/s10957-020-01664-3
 - Read the geodesic.R code of the tourr package, which matches (https://github.com/ggobi/tourr)
 - Request at https://github.com/ggobi/tourr/issues/110 motivating this project
 
