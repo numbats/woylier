@@ -6,6 +6,7 @@ Background reading:
 
 - Buja et al "Computational Methods
 for High-Dimensional Rotations in Data Visualization" (background/paper-dyn-proj-algs.pdf) 
+- also check the wikipedia page on Givens rotations https://en.wikipedia.org/wiki/Givens_rotation
 - Read the geodesic.R code of the tourr package, which matches (https://github.com/ggobi/tourr)
 - Request at https://github.com/ggobi/tourr/issues/110 motivating this project
 
