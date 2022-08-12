@@ -1,26 +1,55 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # woylier
 
-The purpose of this R package is to provide an alternative to geodesic interpolation between planes in a tour, to interpolate between specific bases. 
+<!-- badges: start -->
+<!-- badges: end -->
 
-Background reading:
+The goal of woylier is to …
 
-- Buja et al "Computational Methods
-for High-Dimensional Rotations in Data Visualization" (background/paper-dyn-proj-algs.pdf) 
-- also check the wikipedia page on Givens rotations https://en.wikipedia.org/wiki/Givens_rotation
-- https://github.com/uschiLaa/paper-ppi _main.pdf application of using the splines index to find nonlinear relationships
-- maybe https://www.tandfonline.com/doi/abs/10.1080/1351847X.2019.1647864 or https://link.springer.com/article/10.1007/s10957-020-01664-3
-- Read the geodesic.R code of the tourr package, which matches (https://github.com/ggobi/tourr)
-- Request at https://github.com/ggobi/tourr/issues/110 motivating this project
+## Installation
 
-R functions: 
+You can install the development version of woylier from
+[GitHub](https://github.com/) with:
 
-- Saurabh/Rotations_1_3_2019.R contains code to do the basis to basis rotation
+``` r
+# install.packages("devtools")
+devtools::install_github("numbats/woylier")
+```
 
-Tasks:
+## Example
 
-- Create an R package file structure in the repo
-- Add function that matches structure of geodesic_path() from tourr, so this method of interpolation can be swapped in
-- Apply to projection pursuit of splines index to search for nonlinear associations
-- Write a short R Journal format article describing the interpolation methods, and gives an example use
+This is a basic example which shows you how to solve a common problem:
 
-check
+``` r
+library(woylier)
+## basic example code
+```
+
+What is special about using `README.Rmd` instead of just `README.md`?
+You can include R chunks like so:
+
+``` r
+summary(cars)
+#>      speed           dist       
+#>  Min.   : 4.0   Min.   :  2.00  
+#>  1st Qu.:12.0   1st Qu.: 26.00  
+#>  Median :15.0   Median : 36.00  
+#>  Mean   :15.4   Mean   : 42.98  
+#>  3rd Qu.:19.0   3rd Qu.: 56.00  
+#>  Max.   :25.0   Max.   :120.00
+```
+
+You’ll still need to render `README.Rmd` regularly, to keep `README.md`
+up-to-date. `devtools::build_readme()` is handy for this. You could also
+use GitHub Actions to re-render `README.Rmd` every time you push. An
+example workflow can be found here:
+<https://github.com/r-lib/actions/tree/v1/examples>.
+
+You can also embed plots, for example:
+
+<img src="man/figures/README-pressure-1.png" width="100%" />
+
+In that case, don’t forget to commit and push the resulting figure
+files, so they display on GitHub and CRAN.
