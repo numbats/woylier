@@ -60,4 +60,35 @@ a <- angle(x, y)
 
 rotate_2d(x, t, 10)
 
-rotate_2d_alt(x, t, 100)
+rotate_2d_alt(x, y, 100)
+
+
+rotate_2_element <- function(v1, v2, k, i, j){
+  # rotates i and jth elements of vector v1 to the corresponding elements of vector v2 with k steps
+  # v1 and v2 are given vectors
+  # i and j are the elements we want to rotate
+  # k is the number of steps
+  a <- as.matrix(c(v1[i],v1[j]))
+  b <- as.matrix(c(v2[i],v2[j]))
+  theta <- angle(a, b) # calculate the angle between the two
+  df <- data.frame(matrix(ncol = 2, nrow = 0)) # creates dataframe for plotting
+  colnames(df) <-c("x", "y") # i and j th elements as plane cooordinates
+  df[1,] <- a
+  a1 <- a # starts with the vector 1
+  for (i in 2:k){
+    # rotates k times 
+    a1 <- simple_rotation(a1, theta/(k-1))
+    df[i,] <- a1 # update the dataframe
+  }
+  fig <- df %>%
+    # plotting
+    plot_ly(x = ~x,y = ~y, type = 'scatter', mode = 'markers', showlegend = F
+    ) %>% 
+    add_segments(xend = ~x, yend = ~y, x = 0, y = 0)
+  print(fig)
+}
+
+vector_1 <- as.matrix(c(2,2, 3, 7))
+vector_2 <- as.matrix(c(1,-1.5, 4, 8))
+
+rotate_2_element(vector_1, vector_2, 100, 2, 3)
