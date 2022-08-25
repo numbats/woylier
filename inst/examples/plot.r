@@ -15,7 +15,7 @@ path_geo_1d_1_m <- t(apply(path_geo_1d_1, 3, c)) %>%
 library(geozoo)
 d <- sphere.hollow(p = 3, n = 1000)
 #d <- sphere.hollow(p = 5, n = 1000)
-#d <- data.frame(d$points)
+d <- data.frame(d$points)
 animate_xy(d, axes="off")
 animate_slice(d, axes="off")
 
