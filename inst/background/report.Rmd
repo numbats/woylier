@@ -1,0 +1,47 @@
+---
+title: "Report"
+output: html_document
+date: "2022-09-01"
+---
+
+## Project scope
+
+The scope of this project includes providing an alternative to geodesic interpolation between planes in a tour, to interpolate between specific bases and applying projection pursuit of spline index to search for non-linear association.
+
+## Summary of background readings
+
+This section summarizes research on the existing literature.
+
+### 1. Computational Methods for High-Dimensional Rotations in Data Visualization
+
+The visualization of higher than 3 dimension is based on rotations of of a lower dimensional projection in high-dimensional space. Animation of these projections are one-parameter (time) family of pictures. 
+
+This paper explains algorithms for dynamic projections such as grand tours, guided tours, and manual tours. 
+
+While we can imagine rotation of 3D object, the generalization of rotation in higher than 3 dimension is quite complex. Notion of grand tour was introduced by Asimov (1985). Grand tour shows 2-D projection of higher dimensional space with no user control. Grand tour is space-filling curve in the manifold of low-dimensional projections of high-dimensional data space. Authors of this paper further explores interactivity of tours which resulted "guided tours" and "manual tours".
+
+The topic of this paper is the construction of paths of projections. Interpolation of paths of projection can be compared to connecting line segments that interpolate points in Euclidean space. Interpolation acts as a bridge between continuous animation and discrete choice of sequences of projections. Sequence of projections can be constructed in various ways depending on user purpose. If user wants to look at the data from all sides, a random sequence of projections can be used, which is implemented in grand tours. Furthermore, the sequence of projections can be pre-computed, data-driven, or even manually controlled. 
+
+Projection pursuit is a technique for finding data projections that are most structured according to a criterio of interest such as clustering or spread.
+
+Authors of the paper prefer interpolation method over original "torus method" used in Asimov (1985) for projection algorithms for several reasons. One reason is that the projection paths based on torus method can be non-uniformly distributed while interpolation method is uniformly distributed by construction. Another pitfall of torus method is it causes discontinuity when user has need to change set of variables that are being viewed. 
+
+**Planar rotation**
+
+A rotation matrix is a transformation matrix that is used to perform a rotation in Euclidean space in xy plane. 
+
+$$ \begin{bmatrix}\cos \theta &-\sin \theta \\\sin \theta &\cos \theta \end{bmatrix} $$
+
+
+If the rotation is in the plane of variables i and j, it is called Givens rotation. The interpolation methods in this paper are based on the composition of a number of Givens rotations that maps starting frame onto the target frame.
+
+$$ W_z = R_m(\tau_m) ... R_2(\tau_2)R_1(\tau_1)W_a$$
+**Interpolating path of Frames**
+
+Frame interpolation is necessary when the orientation of the projection matters. There are several methods discussed in the paper including decomposition of orthogonal matrices, givens decomposition and householder decomposition. One that is  of interest to us is Givens path.
+
+The usage of Givens rotations comes from the fact that in any vector u one can zero out the i'th coordinate with a Givens rotation in the (i; j)-plane for any j $ \neq $ i. This rotation affects only coordinates i and j andleaves all coordinates k $\neq$ i; j unchanged.
+
+Sequences of Givens rotations can map any orthonormal d-frame F in p-space to standard d-frame $E_d=((1, 0, 0, ...)^T, (0, 1, 0, ...)^T, ...)$
+
+

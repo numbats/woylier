@@ -141,7 +141,7 @@ v3 <- normalise(as.matrix(c(1, 1000, 1)))
 v4 <- as.matrix(c(1,0, 0))
 
 # create sphere
-sp <- sphere.hollow(p = 3, n = 1500)
+sp <- sphere.hollow(p = 4, n = 1500)
 sp <- data.frame(sp$points)
 sp <- sp %>%
   rename(V1=X1, V2=X2, V3=X3) %>%
@@ -168,3 +168,7 @@ path_sphere <- path_sphere %>%
 
 path_sphere %>% 
   filter(id == "path")
+
+seed(2022)
+tourr::basis_random(10, d=1)
+tourr::basis_random(10, d=1)
