@@ -1,4 +1,4 @@
-#' Make a d-dimenionsal preprojection space
+#' Make a d-dimenionsal preprojection space by orthonormalizing Fz with regard to Fa
 #'
 #' @param current starting pxd frame
 #' @param target ending pxd frame
@@ -9,9 +9,13 @@
 #' @examples
 preprojection <- function(Fa, Fz) {
   # check both are matrices are both correct size
+  stopifnot("Your inputs do not have the same number of columns!" = ncol(Fa) == ncol(Fz))
+  stopifnot("Your inputs do not have the same number of row!" = nrow(Fa) == nrow(Fz))
   # check each is orthonormal
+  stopifnot("The current frame must be orthonormal!" = is_orthonormal(Fa))
+  stopifnot("The target frame must be orthonormal!" = is_orthonormal(Fz))
   # stopifnot with message
-  Fz_star <- tourr::orthonormalise_by(Fa, Fz)
+  Fz_star <- tourr::orthonormalise_by(Fz, Fa)
   B <- cbind(Fa, Fz_star)
   return(B)
 }
