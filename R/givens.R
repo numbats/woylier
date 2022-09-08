@@ -1,31 +1,37 @@
-#' Make a d-dimenionsal preprojection space by orthonormalizing Fz with regard to Fa
+#' Make a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa
 #'
 #' @param current starting pxd frame
 #' @param target ending pxd frame
 #'
-#' @return B pre-projection 2dxd matrix 
+#' @return B pre-projection px2d matrix 
 #' @export
 #'
 #' @examples
 preprojection <- function(Fa, Fz) {
   # check both are matrices are both correct size
+  
   stopifnot("Your inputs do not have the same number of columns!" = ncol(Fa) == ncol(Fz))
   stopifnot("Your inputs do not have the same number of row!" = nrow(Fa) == nrow(Fz))
+  
   # check each is orthonormal
   stopifnot("The current frame must be orthonormal!" = is_orthonormal(Fa))
   stopifnot("The target frame must be orthonormal!" = is_orthonormal(Fz))
+  
   # stopifnot with message
+  
   Fz_star <- tourr::orthonormalise_by(Fz, Fa)
+  
   B <- cbind(Fa, Fz_star)
+  
   return(B)
 }
 
 #' Construct starting basis from pre-projection
 #'
 #' @param Fa starting pxd frame
-#' @param B pre-projection 2dxd matrix 
+#' @param B pre-projection px2d matrix 
 #'
-#' @return Wa starting 2dxd frame on preprojection space
+#' @return Wa starting 2dxd frame on preprojection space (first dxd entry of this matrix is identity by construction)
 #' @export
 #'
 #' @examples
@@ -34,12 +40,12 @@ construct_Wa <- function(Fa, B) {
   return(Wa)
 }
 
-#' Construct starting basis from pre-projection
+#' Construct target basis from pre-projection
 #'
-#' @param Fz starting pxd frame
-#' @param B pre-projection 2dxd matrix 
+#' @param Fz target pxd frame
+#' @param B pre-projection px2d matrix 
 #'
-#' @return Wz starting 2dxd frame on preprojection space
+#' @return Wz target 2dxd frame on preprojection space 
 #' @export
 #'
 #' @examples
@@ -64,6 +70,17 @@ calculate_tau <- function(F1, F2) {
   return(tau)
 }
 
+#' Title
+#'
+#' @param Wa 
+#' @param tau 
+#' @param nsteps 
+#' @param stepfraction 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 compute_rotation <- function(Wa, tau, nsteps, stepfraction) {
   # For now this will be a single rotation matrix
   # but at some generalised
@@ -71,7 +88,16 @@ compute_rotation <- function(Wa, tau, nsteps, stepfraction) {
   # apply k (nsteps) times
 }
 
-revert_to_original <- function() {
+#' Reconstruct interpolated frames using pre-projection
+#'
+#' @param df nstep number of rotated basis
+#' @param B pre-projection px2d matrix 
+#'
+#' @return array with c(p, d, nstep) dimensions
+#' @export
+#'
+#' @examples
+revert_to_original <- function(df, B) {
   # Fa = BWa
   # Fz = BWz increment
 }

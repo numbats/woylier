@@ -1,12 +1,14 @@
 library(tourr)
 library(tidyverse)
+
+# general
 preprojection <- function(Fa, Fz) {
   # check both are matrices are both correct size
   stopifnot("Your inputs do not have the same number of columns!" = ncol(Fa) == ncol(Fz))
   stopifnot("Your inputs do not have the same number of row!" = nrow(Fa) == nrow(Fz))
   # check each is orthonormal
-  #stopifnot("The current frame must be orthonormal!" = is_orthonormal(Fa))
-  #stopifnot("The target frame must be orthonormal!" = is_orthonormal(Fz))
+  stopifnot("The current frame must be orthonormal!" = is_orthonormal(Fa))
+  stopifnot("The target frame must be orthonormal!" = is_orthonormal(Fz))
   # stopifnot with message
   Fa <- orthonormalise(Fa)
   Fz <- orthonormalise(Fz)
@@ -15,15 +17,19 @@ preprojection <- function(Fa, Fz) {
   return(B)
 }
 
+# general
 construct_Wa <- function(Fa, B) {
   Wa <- t(B) %*% Fa
   return(Wa)
 }
 
+# general
 construct_Wz <- function(Fz, B) {
   Wz <- t(B) %*% Fz
   return(Wz)
 }
+
+# general
 
 calculate_tau <- function(F1, F2) {
   # takes 2 vectors with 2 elements and calculate angle between them 
@@ -32,6 +38,8 @@ calculate_tau <- function(F1, F2) {
   tau <- atan2(F1[2], F1[1]) - atan2(F2[2], F2[1]) 
   return(tau)
 }
+
+# general
 
 rotation_matrix <- function(theta){ 
   # rotate a 2d vector by given angle
@@ -45,6 +53,7 @@ rotation_matrix <- function(theta){
   return(rotation_matrix)
 }
 
+# specific case of d=1
 compute_rotation <- function(Wz, tau, nsteps) {
   # For now this will be a single rotation matrix
   # but at some generalised
@@ -60,10 +69,10 @@ compute_rotation <- function(Wz, tau, nsteps) {
     df[i+1,1] <- rotated[1]
     df[i+1,2] <- rotated[2]# update the dataframe
   }
-  #colnames(df) <-c(paste0("X", i), paste0("X", j)) # i and j th elements as plane cooordinates
   return(df)
   }
 
+# general
 revert_to_original <- function(df, B) {
   result <- array(dim = c(nrow(B), ncol(B)/2, nrow(df)))
   for (i in 1:nrow(df)) {
@@ -72,10 +81,9 @@ revert_to_original <- function(df, B) {
     result[,,i] <- Fi
   }
   print(result)
-  # Fa = BWa
-  # Fz = BWz increment
 }
 
+# example
 set.seed(2022)
 base1 <- orthonormalise(tourr::basis_random(10, d=1))
 base2 <- orthonormalise(tourr::basis_random(10, d=1))
