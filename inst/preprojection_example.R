@@ -85,16 +85,24 @@ revert_to_original <- function(df, B) {
 
 # example
 set.seed(2022)
-base1 <- orthonormalise(tourr::basis_random(10, d=1))
-base2 <- orthonormalise(tourr::basis_random(10, d=1))
+base1 <- tourr::orthonormalise(tourr::basis_random(10, d=1))
+base2 <- tourr::orthonormalise(tourr::basis_random(10, d=1))
 
 b <- preprojection(base1, base2)
 
-Wa <- construct_Wa(base1, b) %>% round(3)
-Wz <- construct_Wz(base2, b) %>% round(3)
+Wa <- construct_Wa(base1, b) #%>% round(3)
+Wz <- construct_Wz(base2, b) #%>% round(3)
 
 tau <- calculate_tau(Wz, Wa)
 
-w <- compute_rotation(Wz, tau, 10)
+w <- givens_path(Wz, tau, 10)
 
-revert_to_original(w, b)
+path <- revert_to_original(w, b)
+
+sp <- generate_space_view(p=10)
+
+sp_path <- add_path(sp, path)
+
+tourr::animate_xy(sp_path[,1:10], col=sp_path$type, 
+                  axes="bottomleft")
+
