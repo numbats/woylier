@@ -16,9 +16,6 @@ preprojection <- function(Fa, Fz) {
   stopifnot("The current frame must be orthonormal!" = tourr::is_orthonormal(Fa))
   stopifnot("The target frame must be orthonormal!" = tourr::is_orthonormal(Fz))
 
-  # stopifnot with message - dont need this because it is tested
-  # Fa <- tourr::orthonormalise(Fa)
-  # Fz <- tourr::orthonormalise(Fz)
   Fz_star <- tourr::orthonormalise_by(Fz, Fa)
   B <- cbind(Fa, Fz_star)
   return(B)
@@ -29,7 +26,7 @@ preprojection <- function(Fa, Fz) {
 #' @param Fa starting pxd frame
 #' @param B pre-projection px2d matrix 
 #'
-#' @return Wa starting 2dxd frame on preprojection space (first dxd entry of this matrix is identity by construction)
+#' @return Wa starting 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
 #' @export
 #'
 #' @examples
@@ -64,15 +61,15 @@ construct_Wz <- function(Fz, B) {
 calculate_tau <- function(F1, F2) {
   # takes 2 vectors with 2 elements and calculate angle between them 
   # This needs to be generalised to frames instead of vectors
-  # calculate the angle between 2 vectors 360 degrees
+  # calculate the angle between 2 vectors 360 degrees in radians
   tau <- atan2(F1[2], F1[1]) - atan2(F2[2], F2[1]) 
   return(-tau)
 }
 
-#' construct rotation matrix
+#' Construct rotation matrix in given angle
 #'
 #' @param theta angle  of rotation
-#' @return
+#' @return rotation matrix
 #' @export
 #'
 #' @examples
@@ -80,21 +77,20 @@ construct_rotation_matrix <- function(theta){
   # rotate a 2d vector by given angle
   if (theta>0) {
     rotation_matrix <- matrix(c(cos(theta),-sin(theta),sin(theta), cos(theta)), nrow = 2, ncol = 2, byrow = TRUE)
-    #x_rotated <- rotation_matrix%*%x
   }
   # clockwise
   rotation_matrix <- matrix(c(cos(theta),sin(theta),-sin(theta), cos(theta)), nrow = 2, ncol = 2, byrow = TRUE)
-  #x_rotated <- rotation_matrix%*%x
+
   return(rotation_matrix)
 }
 
 #' construct tour path
 #'
-#' @param Wa 
-#' @param tau 
-#' @param stepfraction 
+#' @param Wa starting basis in pre-projected space
+#' @param tau angle between starting and target basis
+#' @param stepfraction stepfraction in each interpolation
 #'
-#' @return
+#' @return A givens path by stepfraction in pre-projected space
 #' @export
 #'
 #' @examples
@@ -103,44 +99,42 @@ givens_path <- function(Wa, tau, stepfraction) {
   # but at some generalised
   # this should compute an increment 
   # apply k (nsteps) times
-  #fraction <- 1/nsteps
-  #df <- data.frame(matrix(ncol = 2, nrow = nsteps)) # creates dataframe for plotting
-  #df[1,] <-  Wz
-  #a1 <- Wa # starts with the vector 1
-  #for (i in 1:nsteps) {
   theta = tau*stepfraction
   Wt <- construct_rotation_matrix(theta) %*% Wa
-  #  df[i+1,1] <- rotated[1]
-  #  df[i+1,2] <- rotated[2]# update the dataframe
-  #}
   return(Wt)
 }
 
 #' Reconstruct interpolated frames using pre-projection
 #'
-#' @param df nstep number of rotated basis
 #' @param B pre-projection px2d matrix 
+#' @param Wt A givens path by stepfraction
 #'
-#' @return array with c(p, d, nstep) dimensions
+#' @return A frame of on the step of interpolation
 #' @export
 #'
 #' @examples
 construct_frame <- function(Wt, B) {
-  #result <- array(dim = c(nrow(B), ncol(B)/2, nrow(df)))
-  #for (i in 1:nrow(df)) {
-    #Wi = matrix(c(df[i, 1], df[i, 2]), nrow = 2, ncol = 1, byrow =TRUE)
-    Ft = B %*% Wt
-    #result[,,i] <- Fi
-  #}
+  Ft = B %*% Wt
   return(Ft)
 }
 
+#' Construct full interpolated frames
+#'
+#' @param B pre-projection px2d matrix 
+#' @param Wa starting basis in pre-projected space
+#' @param tau  angle between starting and target basis
+#' @param nsteps number of steps of interpolation
+#'
+#' @return return array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames. 
+#' @export
+#'
+#' @examples
 givens_full_path <- function(B, Wa, tau, nsteps) {
     path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
     for (i in 1:nsteps) {
     stepfraction <- i/nsteps
     Wt <- givens_path(Wa, tau, stepfraction)
-    Ft = B %*% Wt
+    Ft = construct_frame(Wt, B)
     path[,,i] <- Ft
   }
   return(path)

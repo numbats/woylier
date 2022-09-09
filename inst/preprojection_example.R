@@ -18,12 +18,12 @@ frames <- givens_full_path(b, Wa, tau, nsteps=10)
 
 sp <- generate_space_view(p=10)
 
-sp_path <- add_path(sp, path)
+sp_path <- add_path(sp, frames)
 
 b <- preprojection(base2, base3)
 
-Wa <- construct_Wa(base2, b) #%>% round(3)
-Wz <- construct_Wz(base3, b) #%>% round(3)
+Wa <- construct_Wa(base2, b) 
+Wz <- construct_Wz(base3, b) 
 
 tau <- calculate_tau(Wz, Wa)
 
