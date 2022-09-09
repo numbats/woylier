@@ -66,7 +66,7 @@ calculate_tau <- function(F1, F2) {
   # This needs to be generalised to frames instead of vectors
   # calculate the angle between 2 vectors 360 degrees
   tau <- atan2(F1[2], F1[1]) - atan2(F2[2], F2[1]) 
-  return(tau)
+  return(-tau)
 }
 
 #' construct rotation matrix
@@ -92,29 +92,28 @@ construct_rotation_matrix <- function(theta){
 #'
 #' @param Wa 
 #' @param tau 
-#' @param nsteps 
 #' @param stepfraction 
 #'
 #' @return
 #' @export
 #'
 #' @examples
-givens_path <- function(Wz, tau, nsteps) {
+givens_path <- function(Wa, tau, stepfraction) {
   # For now this will be a single rotation matrix
   # but at some generalised
   # this should compute an increment 
   # apply k (nsteps) times
-  fraction <- 1/nsteps
-  df <- data.frame(matrix(ncol = 2, nrow = nsteps)) # creates dataframe for plotting
-  df[1,] <-  Wz
-  a1 <- Wa # starts with the vector 1
-  for (i in 1:nsteps) {
-    theta = tau*fraction*i
-    rotated <- construct_rotation_matrix(theta) %*% Wz
-    df[i+1,1] <- rotated[1]
-    df[i+1,2] <- rotated[2]# update the dataframe
-  }
-  return(df)
+  #fraction <- 1/nsteps
+  #df <- data.frame(matrix(ncol = 2, nrow = nsteps)) # creates dataframe for plotting
+  #df[1,] <-  Wz
+  #a1 <- Wa # starts with the vector 1
+  #for (i in 1:nsteps) {
+  theta = tau*stepfraction
+  Wt <- construct_rotation_matrix(theta) %*% Wa
+  #  df[i+1,1] <- rotated[1]
+  #  df[i+1,2] <- rotated[2]# update the dataframe
+  #}
+  return(Wt)
 }
 
 #' Reconstruct interpolated frames using pre-projection
@@ -126,14 +125,25 @@ givens_path <- function(Wz, tau, nsteps) {
 #' @export
 #'
 #' @examples
-revert_to_original <- function(df, B) {
-  result <- array(dim = c(nrow(B), ncol(B)/2, nrow(df)))
-  for (i in 1:nrow(df)) {
-    Wi = matrix(c(df[i, 1], df[i, 2]), nrow = 2, ncol = 1, byrow =TRUE)
-    Fi = B %*% Wi
-    result[,,i] <- Fi
+construct_frame <- function(Wt, B) {
+  #result <- array(dim = c(nrow(B), ncol(B)/2, nrow(df)))
+  #for (i in 1:nrow(df)) {
+    #Wi = matrix(c(df[i, 1], df[i, 2]), nrow = 2, ncol = 1, byrow =TRUE)
+    Ft = B %*% Wt
+    #result[,,i] <- Fi
+  #}
+  return(Ft)
+}
+
+givens_full_path <- function(B, Wa, tau, nsteps) {
+    path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
+    for (i in 1:nsteps) {
+    stepfraction <- i/nsteps
+    Wt <- givens_path(Wa, tau, stepfraction)
+    Ft = B %*% Wt
+    path[,,i] <- Ft
   }
-  return(result)
+  return(path)
 }
 
 

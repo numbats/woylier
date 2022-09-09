@@ -3,7 +3,7 @@
 export(calculate_tau)
 export(construct_Wa)
 export(construct_Wz)
+export(construct_frame)
 export(construct_rotation_matrix)
 export(givens_path)
 export(preprojection)
-export(revert_to_original)
