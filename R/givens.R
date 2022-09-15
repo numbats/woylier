@@ -27,32 +27,18 @@ preprojection <- function(Fa, Fz) {
   return(B)
 }
 
-#' Construct starting basis from pre-projection
+#' Construct preprojected frames
 #'
-#' @param Fa starting pxd frame
+#' @param Fr Orthonormal frame
 #' @param B pre-projection px2d matrix 
 #'
-#' @return Wa starting 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
+#' @return Preprojected 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
 #' @export
 #'
 #' @examples construct_Wa(base1, b) 
-construct_Wa <- function(Fa, B) {
-  Wa <- t(B) %*% Fa
-  return(Wa)
-}
-
-#' Construct target basis from pre-projection
-#'
-#' @param Fz target pxd frame
-#' @param B pre-projection px2d matrix 
-#'
-#' @return Wz target 2dxd frame on preprojection space 
-#' @export
-#'
-#' @examples construct_Wz(base2, b)
-construct_Wz <- function(Fz, B) {
-  Wz <- t(B) %*% Fz
-  return(Wz)
+construct_preframe <- function(Fr, B) {
+  W <- t(B) %*% Fr
+  return(W)
 }
 
 #' Compute angle between two d-dimensional frames in p-space

@@ -12,8 +12,9 @@ base3 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
 
 b <- preprojection(base1, base2)
 
-Wa <- construct_Wa(base1, b) 
-Wz <- construct_Wz(base2, b) 
+Wa <- construct_preframe(base1, b) 
+Wz <- construct_preframe(base2, b) 
+#Wz <- construct_Wz(base2, b) 
 
 tau <- calculate_tau(Wz, Wa)
 
@@ -37,8 +38,8 @@ sp_path <- rbind(sp_path, point1, point2)
 
 b <- preprojection(base2, base3)
 
-Wa <- construct_Wa(base2, b) 
-Wz <- construct_Wz(base3, b) 
+Wa <- construct_preframe(base2, b) 
+Wz <- construct_preframe(base3, b) 
 
 tau <- calculate_tau(Wz, Wa)
 
