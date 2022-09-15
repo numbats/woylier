@@ -8,11 +8,19 @@ date: "2022-09-01"
 
 The scope of this project includes providing an alternative to geodesic interpolation between planes in a tour, to interpolate between specific bases and applying projection pursuit of spline index to search for non-linear association.
 
-## Summary of background readings
+## Motivation and background
+
+A projection is a tool of visualization of high dimensional data onto lower dimensions. When projecting higher dimensional data onto lower dimensions, one might care about orientation of the projection in such cases projections need to be onto frames rather than planes where orientation does not matter. 
+
+## Objectives
+
+We are aiming to provide alternative interpolation method that is compatible with current geodesic_path() function of tourr package. Then we would attempt to apply this interpolation method to projection pursuit of splines index to search for nonlinear associations between variables in financial data set. Finally, we would provide some example use of the package.
+
+## Methodology
 
 This section summarizes research on the existing literature.
 
-### 1. Computational Methods for High-Dimensional Rotations in Data Visualization
+### Computational Methods for High-Dimensional Rotations in Data Visualization
 
 The visualization of higher than 3 dimension is based on rotations of of a lower dimensional projection in high-dimensional space. Animation of these projections are one-parameter (time) family of pictures. 
 
@@ -28,12 +36,13 @@ Authors of the paper prefer interpolation method over original "torus method" us
 
 **Planar rotation**
 
-A rotation matrix is a transformation matrix that is used to perform a rotation in Euclidean space in xy plane. 
+A rotation matrix is a transformation matrix that is used to perform a rotation in Euclidean space in xy plane. A rotation matrix that transforms 2-D plane by an angle $\theta$  looks like this:
 
 $$ \begin{bmatrix}\cos \theta &-\sin \theta \\\sin \theta &\cos \theta \end{bmatrix} $$
 
+If the rotation is in the plane of variables i and j, it is called Givens rotation. 
 
-If the rotation is in the plane of variables i and j, it is called Givens rotation. The interpolation methods in this paper are based on the composition of a number of Givens rotations that maps starting frame onto the target frame.
+The interpolation methods in this project are based on the composition of a number of Givens rotations that maps starting frame onto the target frame.
 
 $$ W_z = R_m(\tau_m) ... R_2(\tau_2)R_1(\tau_1)W_a$$
 **Interpolating path of Frames**
@@ -42,6 +51,34 @@ Frame interpolation is necessary when the orientation of the projection matters.
 
 The usage of Givens rotations comes from the fact that in any vector u one can zero out the i'th coordinate with a Givens rotation in the (i; j)-plane for any j $ \neq $ i. This rotation affects only coordinates i and j andleaves all coordinates k $\neq$ i; j unchanged.
 
-Sequences of Givens rotations can map any orthonormal d-frame F in p-space to standard d-frame $E_d=((1, 0, 0, ...)^T, (0, 1, 0, ...)^T, ...)$
+Sequences of Givens rotations can map any orthonormal d-frame F in p-space to standard d-frame $E_d=((1, 0, 0, ...)^T, (0, 1, 0, ...)^T, ...)$. 
 
+The path construction algorithm work as follows:
 
+1. Construct preprojection basis $B$ by orthonormalizing $F_z$ with regards tp $F_a$ with Gram-Schmidt:
+
+$$B = (F_a, F_{\star})$$.
+
+2. Get the preprojected frames 
+$$W_a = B^TF_a = E_d$$ and $$W_z = B^TF_z$$
+3. Then we can construct a sequence of Givens rotation that maps $W_z$ to $W_a$:
+
+$$ W_a = R_m(\tau_m) ... R_2(\tau_2)R_1(\tau_1)W_z$$ The inverse mapping is obtained by reversing the sequence of rotations with the negative of the angles:
+
+$$R(\tau) = R_1(-\tau_1) ... R_m(-\tau_m), \    W_z = R(\tau)W_a$$
+
+## Implementation
+
+## Application
+
+## Conclusion
+
+## Limitations
+
+Buja et al. (2004) discussed when the orientation of projection matters. If the rendering on a frame and on the rotated version of the frame yields the same visual scenes, it means the orientation does not matter. 
+
+When d=1, there will be only one dimensional projection visualized horizontally or vertically. If the projection was interpretable, the projections of left-to-right and right-to-left would be different. But in our case d=1, orientation is irrelevant because it is just linear combination of variables.
+
+When d=2, we usually plot Cartesian scatterplot. If we consider reflected or rotated scatterplots, typical structures such as clusters, lines, curves, and outliers are recognizable without rotations. Therefore, orientation does not matter.
+
+## References

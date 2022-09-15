@@ -375,11 +375,28 @@ geodesic interpolation between planes in a tour, to interpolate between
 specific bases and applying projection pursuit of spline index to search
 for non-linear association.</p>
 </div>
-<div id="summary-of-background-readings" class="section level2">
-<h2>Summary of background readings</h2>
+<div id="motivation-and-background" class="section level2">
+<h2>Motivation and background</h2>
+<p>A projection is a tool of visualization of high dimensional data onto
+lower dimensions. When projecting higher dimensional data onto lower
+dimensions, one might care about orientation of the projection in such
+cases projections need to be onto frames rather than planes where
+orientation does not matter.</p>
+</div>
+<div id="objectives" class="section level2">
+<h2>Objectives</h2>
+<p>We are aiming to provide alternative interpolation method that is
+compatible with current geodesic_path() function of tourr package. Then
+we would attempt to apply this interpolation method to projection
+pursuit of splines index to search for nonlinear associations between
+variables in financial data set. Finally, we would provide some example
+use of the package.</p>
+</div>
+<div id="methodology" class="section level2">
+<h2>Methodology</h2>
 <p>This section summarizes research on the existing literature.</p>
 <div id="computational-methods-for-high-dimensional-rotations-in-data-visualization" class="section level3">
-<h3>1. Computational Methods for High-Dimensional Rotations in Data
+<h3>Computational Methods for High-Dimensional Rotations in Data
 Visualization</h3>
 <p>The visualization of higher than 3 dimension is based on rotations of
 of a lower dimensional projection in high-dimensional space. Animation
@@ -414,12 +431,80 @@ distributed by construction. Another pitfall of torus method is it
 causes discontinuity when user has need to change set of variables that
 are being viewed.</p>
 <p><strong>Planar rotation</strong></p>
-<p>In linear algebra, a rotation matrix is a transformation matrix that
-is used to perform a rotation in Euclidean space. For example, using the
-convention below, the matrix</p>
-<span class="math display">\[\begin{bmatrix}\cos \theta &amp;-\sin
-\theta \\\sin \theta &amp;\cos \theta \end{bmatrix}\]</span>
+<p>A rotation matrix is a transformation matrix that is used to perform
+a rotation in Euclidean space in xy plane. A rotation matrix that
+transforms 2-D plane by an angle <span class="math inline">\(\theta\)</span> looks like this:</p>
+<p><span class="math display">\[ \begin{bmatrix}\cos \theta &amp;-\sin
+\theta \\\sin \theta &amp;\cos \theta \end{bmatrix} \]</span></p>
+<p>If the rotation is in the plane of variables i and j, it is called
+Givens rotation.</p>
+<p>The interpolation methods in this project are based on the
+composition of a number of Givens rotations that maps starting frame
+onto the target frame.</p>
+<p><span class="math display">\[ W_z = R_m(\tau_m) ...
+R_2(\tau_2)R_1(\tau_1)W_a\]</span> <strong>Interpolating path of
+Frames</strong></p>
+<p>Frame interpolation is necessary when the orientation of the
+projection matters. There are several methods discussed in the paper
+including decomposition of orthogonal matrices, givens decomposition and
+householder decomposition. One that is of interest to us is Givens
+path.</p>
+<p>The usage of Givens rotations comes from the fact that in any vector
+u one can zero out the i’th coordinate with a Givens rotation in the (i;
+j)-plane for any j $ $ i. This rotation affects only coordinates i and j
+andleaves all coordinates k <span class="math inline">\(\neq\)</span> i;
+j unchanged.</p>
+<p>Sequences of Givens rotations can map any orthonormal d-frame F in
+p-space to standard d-frame <span class="math inline">\(E_d=((1, 0, 0,
+...)^T, (0, 1, 0, ...)^T, ...)\)</span>.</p>
+<p>The path construction algorithm work as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Construct preprojection basis <span class="math inline">\(B\)</span>
+by orthonormalizing <span class="math inline">\(F_z\)</span> with
+regards tp <span class="math inline">\(F_a\)</span> with
+Gram-Schmidt:</li>
+</ol>
+<p><span class="math display">\[B = (F_a, F_{\star})\]</span>.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Get the preprojected frames <span class="math display">\[W_a =
+B^TF_a = E_d\]</span> and <span class="math display">\[W_z =
+B^TF_z\]</span></li>
+<li>Then we can construct a sequence of Givens rotation that maps <span class="math inline">\(W_z\)</span> to <span class="math inline">\(W_a\)</span>:</li>
+</ol>
+<p><span class="math display">\[ W_a = R_m(\tau_m) ...
+R_2(\tau_2)R_1(\tau_1)W_z\]</span> The inverse mapping is obtained by
+reversing the sequence of rotations with the negative of the angles:</p>
+<p><span class="math display">\[R(\tau) = R_1(-\tau_1) ... R_m(-\tau_m),
+\    W_z = R(\tau)W_a\]</span></p>
 </div>
+</div>
+<div id="implementation" class="section level2">
+<h2>Implementation</h2>
+</div>
+<div id="application" class="section level2">
+<h2>Application</h2>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+</div>
+<div id="limitations" class="section level2">
+<h2>Limitations</h2>
+<p>Buja et al. (2004) discussed when the orientation of projection
+matters. If the rendering on a frame and on the rotated version of the
+frame yields the same visual scenes, it means the orientation does not
+matter.</p>
+<p>When d=1, there will be only one dimensional projection visualized
+horizontally or vertically. If the projection was interpretable, the
+projections of left-to-right and right-to-left would be different. But
+in our case d=1, orientation is irrelevant because it is just linear
+combination of variables.</p>
+<p>When d=2, we usually plot Cartesian scatterplot. If we consider
+reflected or rotated scatterplots, typical structures such as clusters,
+lines, curves, and outliers are recognizable without rotations.
+Therefore, orientation does not matter.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
 </div>
 
 

@@ -1,4 +1,4 @@
-#' Make a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa
+#' Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa
 #'
 #' @param current starting pxd frame
 #' @param target ending pxd frame
@@ -7,6 +7,12 @@
 #' @export
 #'
 #' @examples
+#' 
+#' p <- 4
+#' base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
+#' base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
+#' b <- preprojection(base1, base2)
+
 preprojection <- function(Fa, Fz) {
   # check both are matrices are both correct size
   stopifnot("Your inputs do not have the same number of columns!" = ncol(Fa) == ncol(Fz))
