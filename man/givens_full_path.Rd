@@ -21,3 +21,6 @@ return array with nsteps matrix. Each matrix is interpolated frame in between st
 \description{
 Construct full interpolated frames
 }
+\examples{
+givens_full_path(b, Wa, tau, nsteps=10)
+}

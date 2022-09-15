@@ -15,3 +15,6 @@ rotation matrix
 \description{
 Construct rotation matrix in given angle
 }
+\examples{
+construct_rotation_matrix(theta)
+}

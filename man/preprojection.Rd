@@ -7,9 +7,9 @@
 preprojection(Fa, Fz)
 }
 \arguments{
-\item{current}{starting pxd frame}
+\item{Fa}{starting pxd frame}
 
-\item{target}{ending pxd frame}
+\item{Fz}{ending pxd frame}
 }
 \value{
 B pre-projection px2d matrix

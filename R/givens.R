@@ -1,7 +1,7 @@
 #' Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa
 #'
-#' @param current starting pxd frame
-#' @param target ending pxd frame
+#' @param Fa starting pxd frame
+#' @param Fz ending pxd frame
 #'
 #' @return B pre-projection px2d matrix 
 #' @export
@@ -35,7 +35,7 @@ preprojection <- function(Fa, Fz) {
 #' @return Wa starting 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
 #' @export
 #'
-#' @examples
+#' @examples construct_Wa(base1, b) 
 construct_Wa <- function(Fa, B) {
   Wa <- t(B) %*% Fa
   return(Wa)
@@ -49,7 +49,7 @@ construct_Wa <- function(Fa, B) {
 #' @return Wz target 2dxd frame on preprojection space 
 #' @export
 #'
-#' @examples
+#' @examples construct_Wz(base2, b)
 construct_Wz <- function(Fz, B) {
   Wz <- t(B) %*% Fz
   return(Wz)
@@ -63,7 +63,7 @@ construct_Wz <- function(Fz, B) {
 #' @return tau angle in radians
 #' @export
 #'
-#' @examples
+#' @examples calculate_tau(Wz, Wa)
 calculate_tau <- function(F1, F2) {
   # takes 2 vectors with 2 elements and calculate angle between them 
   # This needs to be generalised to frames instead of vectors
@@ -78,7 +78,7 @@ calculate_tau <- function(F1, F2) {
 #' @return rotation matrix
 #' @export
 #'
-#' @examples
+#' @examples construct_rotation_matrix(theta)
 construct_rotation_matrix <- function(theta){ 
   # rotate a 2d vector by given angle
   if (theta>0) {
@@ -99,7 +99,7 @@ construct_rotation_matrix <- function(theta){
 #' @return A givens path by stepfraction in pre-projected space
 #' @export
 #'
-#' @examples
+#' @examples givens_path(Wa, tau, stepfraction)
 givens_path <- function(Wa, tau, stepfraction) {
   # For now this will be a single rotation matrix
   # but at some generalised
@@ -118,7 +118,7 @@ givens_path <- function(Wa, tau, stepfraction) {
 #' @return A frame of on the step of interpolation
 #' @export
 #'
-#' @examples
+#' @examples construct_frame(Wt, B)
 construct_frame <- function(Wt, B) {
   Ft = B %*% Wt
   return(Ft)
@@ -134,7 +134,7 @@ construct_frame <- function(Wt, B) {
 #' @return return array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames. 
 #' @export
 #'
-#' @examples
+#' @examples givens_full_path(b, Wa, tau, nsteps=10)
 givens_full_path <- function(B, Wa, tau, nsteps) {
     path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
     for (i in 1:nsteps) {

@@ -11,6 +11,9 @@ add_path(proj_space, path)
 
 \item{path}{interpolated path}
 }
+\value{
+data frame with interpolated path and points on sphere surface
+}
 \description{
 Overlay paths of interpolation on the sphere
 }

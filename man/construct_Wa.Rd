@@ -17,3 +17,6 @@ Wa starting 2dxd frame on preprojection space (first dxd entry of this matrix is
 \description{
 Construct starting basis from pre-projection
 }
+\examples{
+construct_Wa(base1, b) 
+}

@@ -17,3 +17,6 @@ tau angle in radians
 \description{
 Compute angle between two d-dimensional frames in p-space
 }
+\examples{
+calculate_tau(Wz, Wa)
+}

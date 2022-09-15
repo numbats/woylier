@@ -19,3 +19,6 @@ A givens path by stepfraction in pre-projected space
 \description{
 construct tour path
 }
+\examples{
+givens_path(Wa, tau, stepfraction)
+}

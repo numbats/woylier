@@ -4,9 +4,9 @@
 \name{woylier-package}
 \alias{woylier}
 \alias{woylier-package}
-\title{woylier: What the Package Does (One Line, Title Case)}
+\title{woylier: Interpolation between frames}
 \description{
-What the package does (one paragraph).
+Interpolates between frames via Givens path.
 }
 \author{
 \strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})

@@ -17,3 +17,6 @@ Wz target 2dxd frame on preprojection space
 \description{
 Construct target basis from pre-projection
 }
+\examples{
+construct_Wz(base2, b)
+}

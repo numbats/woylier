@@ -17,3 +17,6 @@ A frame of on the step of interpolation
 \description{
 Reconstruct interpolated frames using pre-projection
 }
+\examples{
+construct_frame(Wt, B)
+}

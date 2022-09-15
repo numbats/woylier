@@ -7,7 +7,7 @@
 #' @return n number of points on the surface of sphere
 #' @export
 #'
-#' @examples
+#' @examples generate_space_view(p=p)
 generate_space_view <- function(n=1000, p=3, d=1) {
 # this will generate the background sphere or torus
   if (d == 1) {
@@ -25,10 +25,10 @@ generate_space_view <- function(n=1000, p=3, d=1) {
 #' @param proj_space  n number of points on the surface of sphere
 #' @param path interpolated path 
 #'
-#' @return
+#' @return data frame with interpolated path and points on sphere surface
 #' @export
 #'
-#' @examples
+#' @examples add_path(sp, frames) 
 add_path <- function(proj_space, path) {
   # overlay sequence of dots for the path
   proj_space$type <- "proj_space"
