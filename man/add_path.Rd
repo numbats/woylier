@@ -17,3 +17,6 @@ data frame with interpolated path and points on sphere surface
 \description{
 Overlay paths of interpolation on the sphere
 }
+\examples{
+add_path(sp, frames) 
+}

@@ -35,7 +35,7 @@ preprojection <- function(Fa, Fz) {
 #' @return Preprojected 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
 #' @export
 #'
-#' @examples construct_Wa(base1, b) 
+#' @examples construct_preframe(base1, b) 
 construct_preframe <- function(Fr, B) {
   W <- t(B) %*% Fr
   return(W)
@@ -104,8 +104,8 @@ givens_path <- function(Wa, tau, stepfraction) {
 #' @return A frame of on the step of interpolation
 #' @export
 #'
-#' @examples construct_frame(Wt, B)
-construct_frame <- function(Wt, B) {
+#' @examples construct_moving_frame(Wt, B)
+construct_moving_frame <- function(Wt, B) {
   Ft = B %*% Wt
   return(Ft)
 }
@@ -126,7 +126,7 @@ givens_full_path <- function(B, Wa, tau, nsteps) {
     for (i in 1:nsteps) {
     stepfraction <- i/nsteps
     Wt <- givens_path(Wa, tau, stepfraction)
-    Ft = construct_frame(Wt, B)
+    Ft = construct_moving_frame(Wt, B)
     path[,,i] <- Ft
   }
   return(path)

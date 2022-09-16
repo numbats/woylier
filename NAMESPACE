@@ -2,9 +2,8 @@
 
 export(add_path)
 export(calculate_tau)
-export(construct_Wa)
-export(construct_Wz)
-export(construct_frame)
+export(construct_moving_frame)
+export(construct_preframe)
 export(construct_rotation_matrix)
 export(generate_space_view)
 export(givens_full_path)
