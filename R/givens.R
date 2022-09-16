@@ -102,7 +102,6 @@ givens_path <- function(Wa, tau, stepfraction) {
 #' @param Wt A givens path by stepfraction
 #'
 #' @return A frame of on the step of interpolation
-#' @export
 #'
 #' @examples construct_moving_frame(Wt, B)
 construct_moving_frame <- function(Wt, B) {
@@ -120,7 +119,15 @@ construct_moving_frame <- function(Wt, B) {
 #' @return return array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames. 
 #' @export
 #'
-#' @examples givens_full_path(b, Wa, tau, nsteps=10)
+#' @examples 
+#' p <- 4
+#' base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
+#' base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
+#' b <- preprojection(base1, base2)
+#' Wa <- construct_preframe(base1, b) 
+#' Wz <- construct_preframe(base2, b) 
+#' tau <- calculate_tau(Wz, Wa)
+#' path <- givens_full_path(b, Wa, tau, nsteps=10)
 givens_full_path <- function(B, Wa, tau, nsteps) {
     path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
     for (i in 1:nsteps) {

@@ -1,12 +1,11 @@
 library(tourr)
-library(tidyverse)
 
 # example
 set.seed(2022)
 p <- 4
-base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
-base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
-base3 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
+base1 <- tourr::basis_random(p, d=1)
+base2 <- tourr::basis_random(p, d=1)
+base3 <- tourr::basis_random(p, d=1)
 
 # first example
 
@@ -57,3 +56,25 @@ sp_path <- rbind(sp_path, point3)
 
 tourr::animate_xy(sp_path[,1:p], col=sp_path$type, 
                   axes="bottomleft")
+
+# Generate 2D example
+set.seed(2022)
+p <- 6
+base1 <- tourr::basis_random(p, d=2)
+base2 <- tourr::basis_random(p, d=2)
+
+b <- preprojection(base1, base2)
+
+Wa <- construct_preframe(base1, b) 
+Wz <- construct_preframe(base2, b) 
+
+# Testing torus construction
+n <- 1000
+p <- 6
+d <- 2
+
+sp <- data.frame(geozoo::torus.flat(p = p, n=n)$points)
+tourr::animate_xy(sp)
+tourr::animate_slice(sp)
+
+

@@ -7,7 +7,9 @@
 #' @return n number of points on the surface of sphere
 #' @export
 #'
-#' @examples generate_space_view(p=p)
+#' @examples 
+#' p <- 4
+#' sp <- generate_space_view(p=p)
 generate_space_view <- function(n=1000, p=3, d=1) {
 # this will generate the background sphere or torus
   if (d == 1) {
@@ -28,11 +30,25 @@ generate_space_view <- function(n=1000, p=3, d=1) {
 #' @return data frame with interpolated path and points on sphere surface
 #' @export
 #'
-#' @examples add_path(sp, frames) 
+#' @examples 
+#' p <- 4
+#' base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
+#' base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
+#' b <- preprojection(base1, base2)
+#' Wa <- construct_preframe(base1, b) 
+#' Wz <- construct_preframe(base2, b) 
+#' tau <- calculate_tau(Wz, Wa)
+#' path <- givens_full_path(b, Wa, tau, nsteps=10)
+#' sp <- generate_space_view(p=p)
+#' sp_path <- add_path(sp, path) 
+#' \dontrun{
+#'   tourr::animate_xy(sp_path[,1:4], col=sp_path$type)
+#' }
 add_path <- function(proj_space, path) {
   # overlay sequence of dots for the path
   proj_space$type <- "proj_space"
   path <- as.data.frame(t(apply(path, 3, c)))
   path$type <- "path"
   space_and_path <- rbind(proj_space, path)
+  return(space_and_path)
 }
