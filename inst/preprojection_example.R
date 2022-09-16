@@ -65,8 +65,19 @@ base2 <- tourr::basis_random(p, d=2)
 
 b <- preprojection(base1, base2)
 
+# Check numbers
+sum(b[,1]^2)
+sum(b[,2]^2)
+sum(b[,3]^2)
+sum(b[,4]^2)
+t(b[,1]%*%b[,3])
+t(b[,2]%*%b[,4])
+det(t(b[,1:2])%*%b[,3:4])
+
 Wa <- construct_preframe(base1, b) 
 Wz <- construct_preframe(base2, b) 
+sum(Wa[,1]^2)
+sum(Wz[,1]^2)
 
 # Testing torus construction
 n <- 1000

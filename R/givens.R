@@ -3,7 +3,7 @@
 #' @param Fa starting pxd frame
 #' @param Fz ending pxd frame
 #'
-#' @return B pre-projection px2d matrix 
+#' @returns B pre-projection px2d matrix 
 #' @export
 #'
 #' @examples
@@ -32,7 +32,7 @@ preprojection <- function(Fa, Fz) {
 #' @param Fr Orthonormal frame
 #' @param B pre-projection px2d matrix 
 #'
-#' @return Preprojected 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
+#' @returns Preprojected 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
 #' @export
 #'
 #' @examples construct_preframe(base1, b) 
@@ -46,7 +46,7 @@ construct_preframe <- function(Fr, B) {
 #' @param F1 pxd frame
 #' @param F2 pxd frame
 #'
-#' @return tau angle in radians
+#' @returns tau angle in radians
 #' @export
 #'
 #' @examples calculate_tau(Wz, Wa)
@@ -61,7 +61,7 @@ calculate_tau <- function(F1, F2) {
 #' Construct rotation matrix in given angle
 #'
 #' @param theta angle  of rotation
-#' @return rotation matrix
+#' @returns rotation matrix
 #' @export
 #'
 #' @examples construct_rotation_matrix(theta)
@@ -82,7 +82,7 @@ construct_rotation_matrix <- function(theta){
 #' @param tau angle between starting and target basis
 #' @param stepfraction stepfraction in each interpolation
 #'
-#' @return A givens path by stepfraction in pre-projected space
+#' @returns A givens path by stepfraction in pre-projected space
 #' @export
 #'
 #' @examples givens_path(Wa, tau, stepfraction)
@@ -101,7 +101,7 @@ givens_path <- function(Wa, tau, stepfraction) {
 #' @param B pre-projection px2d matrix 
 #' @param Wt A givens path by stepfraction
 #'
-#' @return A frame of on the step of interpolation
+#' @returns A frame of on the step of interpolation
 #'
 #' @examples construct_moving_frame(Wt, B)
 construct_moving_frame <- function(Wt, B) {
@@ -116,7 +116,7 @@ construct_moving_frame <- function(Wt, B) {
 #' @param tau  angle between starting and target basis
 #' @param nsteps number of steps of interpolation
 #'
-#' @return return array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames. 
+#' @returns array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames. 
 #' @export
 #'
 #' @examples 
