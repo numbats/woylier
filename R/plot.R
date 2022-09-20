@@ -32,13 +32,9 @@ generate_space_view <- function(n=1000, p=3, d=1) {
 #'
 #' @examples 
 #' p <- 4
-#' base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
-#' base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
-#' b <- preprojection(base1, base2)
-#' Wa <- construct_preframe(base1, b) 
-#' Wz <- construct_preframe(base2, b) 
-#' tau <- calculate_tau(Wz, Wa)
-#' path <- givens_full_path(b, Wa, tau, nsteps=10)
+#' base1 <- tourr::basis_random(p, d=1)
+#' base2 <- tourr::basis_random(p, d=1)
+#' path <- givens_full_path(base1, base2, nsteps=10)
 #' sp <- generate_space_view(p=p)
 #' sp_path <- add_path(sp, path) 
 #' \dontrun{

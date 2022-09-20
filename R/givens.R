@@ -9,8 +9,8 @@
 #' @examples
 #' 
 #' p <- 4
-#' base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
-#' base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
+#' base1 <- tourr::basis_random(p, d=1)
+#' base2 <- tourr::basis_random(p, d=1)
 #' b <- preprojection(base1, base2)
 
 preprojection <- function(Fa, Fz) {
@@ -35,7 +35,14 @@ preprojection <- function(Fa, Fz) {
 #' @returns Preprojected 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
 #' @export
 #'
-#' @examples construct_preframe(base1, b) 
+#' @examples 
+#' 
+#' p <- 4
+#' base1 <- tourr::basis_random(p, d=1)
+#' base2 <- tourr::basis_random(p, d=1)
+#' b <- preprojection(base1, base2)
+#' Wa <- construct_preframe(base1, b) 
+#' Wz <- construct_preframe(base2, b) 
 construct_preframe <- function(Fr, B) {
   W <- t(B) %*% Fr
   return(W)
@@ -49,7 +56,16 @@ construct_preframe <- function(Fr, B) {
 #' @returns tau angle in radians
 #' @export
 #'
-#' @examples calculate_tau(Wz, Wa)
+#' @examples 
+#' 
+#' p <- 4
+#' base1 <- tourr::basis_random(p, d=1)
+#' base2 <- tourr::basis_random(p, d=1)
+#' b <- preprojection(base1, base2)
+#' Wa <- construct_preframe(base1, b) 
+#' Wz <- construct_preframe(base2, b) 
+#' calculate_tau(Wz, Wa)
+#' 
 calculate_tau <- function(F1, F2) {
   # takes 2 vectors with 2 elements and calculate angle between them 
   # This needs to be generalised to frames instead of vectors
@@ -64,7 +80,11 @@ calculate_tau <- function(F1, F2) {
 #' @returns rotation matrix
 #' @export
 #'
-#' @examples construct_rotation_matrix(theta)
+#' @examples 
+#' 
+#' theta <- 1
+#' construct_rotation_matrix(theta)
+
 construct_rotation_matrix <- function(theta){ 
   # rotate a 2d vector by given angle
   if (theta>0) {
@@ -85,7 +105,15 @@ construct_rotation_matrix <- function(theta){
 #' @returns A givens path by stepfraction in pre-projected space
 #' @export
 #'
-#' @examples givens_path(Wa, tau, stepfraction)
+#' @examples 
+#' p <- 4
+#' base1 <- tourr::basis_random(p, d=1)
+#' base2 <- tourr::basis_random(p, d=1)
+#' b <- preprojection(base1, base2)
+#' Wa <- construct_preframe(base1, b) 
+#' Wz <- construct_preframe(base2, b) 
+#' tau <- calculate_tau(Wz, Wa)
+#' givens_path(Wa, tau, stepfraction=0.1)
 givens_path <- function(Wa, tau, stepfraction) {
   # For now this will be a single rotation matrix
   # but at some generalised
@@ -102,8 +130,19 @@ givens_path <- function(Wa, tau, stepfraction) {
 #' @param Wt A givens path by stepfraction
 #'
 #' @returns A frame of on the step of interpolation
+#' 
+#' @export
 #'
-#' @examples construct_moving_frame(Wt, B)
+#' @examples 
+#' p <- 4
+#' base1 <- tourr::basis_random(p, d=1)
+#' base2 <- tourr::basis_random(p, d=1)
+#' b <- preprojection(base1, base2)
+#' Wa <- construct_preframe(base1, b) 
+#' Wz <- construct_preframe(base2, b) 
+#' tau <- calculate_tau(Wz, Wa)
+#' Wt <- givens_path(Wa, tau, stepfraction=0.1)
+#' construct_moving_frame(Wt, b)
 construct_moving_frame <- function(Wt, B) {
   Ft = B %*% Wt
   return(Ft)
@@ -111,10 +150,9 @@ construct_moving_frame <- function(Wt, B) {
 
 #' Construct full interpolated frames
 #'
-#' @param B pre-projection px2d matrix 
-#' @param Wa starting basis in pre-projected space
-#' @param tau  angle between starting and target basis
 #' @param nsteps number of steps of interpolation
+#' @param Fa starting pxd frame
+#' @param Fz target pxd frame
 #'
 #' @returns array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames. 
 #' @export
@@ -123,20 +161,19 @@ construct_moving_frame <- function(Wt, B) {
 #' p <- 4
 #' base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
 #' base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
-#' b <- preprojection(base1, base2)
-#' Wa <- construct_preframe(base1, b) 
-#' Wz <- construct_preframe(base2, b) 
-#' tau <- calculate_tau(Wz, Wa)
-#' path <- givens_full_path(b, Wa, tau, nsteps=10)
-givens_full_path <- function(B, Wa, tau, nsteps) {
-    path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
-    for (i in 1:nsteps) {
+#' path <- givens_full_path(base1, base2, nsteps=10)
+
+givens_full_path <- function(Fa, Fz, nsteps) {
+  B <- preprojection(Fa, Fz)
+  Wa <- construct_preframe(Fa, B)
+  Wz <- construct_preframe(Fz, B)
+  tau <- calculate_tau(Wz, Wa)
+  path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
+  for (i in 1:nsteps) {
     stepfraction <- i/nsteps
-    Wt <- givens_path(Wa, tau, stepfraction)
+    Wt <- givens_path(Wa, tau=tau, stepfraction)
     Ft = construct_moving_frame(Wt, B)
     path[,,i] <- Ft
   }
   return(path)
 }
-
-

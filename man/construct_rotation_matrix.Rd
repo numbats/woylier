@@ -16,5 +16,7 @@ rotation matrix
 Construct rotation matrix in given angle
 }
 \examples{
+
+theta <- 1
 construct_rotation_matrix(theta)
 }

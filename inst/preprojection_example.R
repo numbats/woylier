@@ -9,15 +9,7 @@ base3 <- tourr::basis_random(p, d=1)
 
 # first example
 
-b <- preprojection(base1, base2)
-
-Wa <- construct_preframe(base1, b) 
-Wz <- construct_preframe(base2, b) 
-#Wz <- construct_Wz(base2, b) 
-
-tau <- calculate_tau(Wz, Wa)
-
-frames <- givens_full_path(b, Wa, tau, nsteps=10)
+frames <- givens_full_path(base1, base2, nsteps = 10)
 
 sp <- generate_space_view(p=p)
 
@@ -35,14 +27,7 @@ sp_path <- rbind(sp_path, point1, point2)
 
 # second example
 
-b <- preprojection(base2, base3)
-
-Wa <- construct_preframe(base2, b) 
-Wz <- construct_preframe(base3, b) 
-
-tau <- calculate_tau(Wz, Wa)
-
-frames <- givens_full_path(b, Wa, tau, nsteps=10)
+frames <- givens_full_path(base2, base3, nsteps = 10)
 
 frames <- as.data.frame(t(apply(frames, 3, c)))
 

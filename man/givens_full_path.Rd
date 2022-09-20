@@ -4,19 +4,17 @@
 \alias{givens_full_path}
 \title{Construct full interpolated frames}
 \usage{
-givens_full_path(B, Wa, tau, nsteps)
+givens_full_path(Fa, Fz, nsteps)
 }
 \arguments{
-\item{B}{pre-projection px2d matrix}
+\item{Fa}{starting pxd frame}
 
-\item{Wa}{starting basis in pre-projected space}
-
-\item{tau}{angle between starting and target basis}
+\item{Fz}{target pxd frame}
 
 \item{nsteps}{number of steps of interpolation}
 }
 \value{
-return array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames.
+array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames.
 }
 \description{
 Construct full interpolated frames
@@ -25,9 +23,5 @@ Construct full interpolated frames
 p <- 4
 base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
 base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
-b <- preprojection(base1, base2)
-Wa <- construct_preframe(base1, b) 
-Wz <- construct_preframe(base2, b) 
-tau <- calculate_tau(Wz, Wa)
-givens_full_path(b, Wa, tau, nsteps=10)
+path <- givens_full_path(base1, base2, nsteps=10)
 }

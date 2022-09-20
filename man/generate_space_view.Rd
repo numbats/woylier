@@ -20,5 +20,6 @@ n number of points on the surface of sphere
 Generate the background sphere or torus
 }
 \examples{
-generate_space_view(p=p)
+p <- 4
+sp <- generate_space_view(p=p)
 }

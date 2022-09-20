@@ -18,5 +18,13 @@ data frame with interpolated path and points on sphere surface
 Overlay paths of interpolation on the sphere
 }
 \examples{
-add_path(sp, frames) 
+p <- 4
+base1 <- tourr::basis_random(p, d=1)
+base2 <- tourr::basis_random(p, d=1)
+path <- givens_full_path(base1, base2, nsteps=10)
+sp <- generate_space_view(p=p)
+sp_path <- add_path(sp, path) 
+\dontrun{
+  tourr::animate_xy(sp_path[,1:4], col=sp_path$type)
+}
 }

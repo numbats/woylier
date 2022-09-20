@@ -20,5 +20,12 @@ A givens path by stepfraction in pre-projected space
 construct tour path
 }
 \examples{
-givens_path(Wa, tau, stepfraction)
+p <- 4
+base1 <- tourr::basis_random(p, d=1)
+base2 <- tourr::basis_random(p, d=1)
+b <- preprojection(base1, base2)
+Wa <- construct_preframe(base1, b) 
+Wz <- construct_preframe(base2, b) 
+tau <- calculate_tau(Wz, Wa)
+givens_path(Wa, tau, stepfraction=0.1)
 }
