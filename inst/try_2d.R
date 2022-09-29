@@ -171,6 +171,7 @@ angles = list()
 
 for (col in 1:ncol(Wz)) {
   for (row in col:(nrow(Wz)-1)){
+    # store angles in a named list 
     x <- as.matrix(c(Wa[col, col], Wa[row+1, col]))
     y <- as.matrix(c(wi[col, col], wi[row+1, col]))
     theta = angle2(x, y)
@@ -184,6 +185,7 @@ angles
 w_i = Wa
 for (col in ncol(Wa):1) {
   for (row in (nrow(Wa)-1):col){
+    # rotating in reverse order
     index = paste0(col, row+1)
     theta = - as.numeric(angles[index])
     w_i = row_rot(w_i, col, row+1, theta)
@@ -191,4 +193,46 @@ for (col in ncol(Wa):1) {
 }
 w_i
 Wz
+
+givens_full_path_2d <- function(Fa, Fz, nsteps) {
+  B <- preprojection(base1, base2)
+  Wa <- construct_preframe(base1, B)
+  Wz <- construct_preframe(base2, B)
+  wi = Wz
+  angles = list()
+  for (col in 1:ncol(Wz)) {
+    for (row in col:(nrow(Wz)-1)){
+      # store angles in a named list 
+      x <- as.matrix(c(Wa[col, col], Wa[row+1, col]))
+      y <- as.matrix(c(wi[col, col], wi[row+1, col]))
+      theta = angle2(x, y)
+      angles[paste0(col, row +1)] = theta
+      wi = row_rot(wi, col, row+1, theta)
+    }
+  }
+  path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
+  for (i in 1:nsteps) {
+    stepfraction <- i/nsteps
+    w_i = Wa
+    for (col in ncol(Wa):1) {
+      for (row in (nrow(Wa)-1):col){
+        # rotating in reverse order
+        index = paste0(col, row+1)
+        theta = - as.numeric(angles[index])
+        w_i = row_rot(w_i, col, row+1, theta*stepfraction)
+      }
+    }
+    Wt = w_i
+    Ft = construct_moving_frame(Wt, B)
+    path[,,i] <- Ft
+  }
+  return(path)
+}
+
+frames_2d <- givens_full_path_2d(base1, base2, 10)
+
+# plotting on torus
+
+
+
 
