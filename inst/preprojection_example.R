@@ -69,33 +69,18 @@ orthonormalise_by <- function(x, by) {
   return(x)
 }
 
-preprojection <- function(Fa, Fz) {
-  # check both are matrices are both correct size
-  stopifnot("Your inputs do not have the same number of columns!" = ncol(Fa) == ncol(Fz))
-  stopifnot("Your inputs do not have the same number of row!" = nrow(Fa) == nrow(Fz))
-  
-  # check each is orthonormal
-  stopifnot("The current frame must be orthonormal!" = tourr::is_orthonormal(Fa))
-  stopifnot("The target frame must be orthonormal!" = tourr::is_orthonormal(Fz))
-  
-  Fz_star <- orthonormalise_by(Fz, Fa)
-  B <- cbind(Fa, Fz_star)
-  return(B)
-}
-
-construct_preframe <- function(Fr, B) {
-  W <- t(B) %*% Fr
-  return(W)
-}
-
 set.seed(2022)
 p <- 6
 base1 <- tourr::basis_random(p, d=2)
 base2 <- tourr::basis_random(p, d=2)
 
-b <- preprojection(base1, base2)
+frames_2d <- givens_full_path(base1, base2, 10)
 
-b# Check numbers
+frames_2d[,,10]
+
+base2
+
+# Check numbers
 sum(b[,1]^2)
 sum(b[,2]^2)
 sum(b[,3]^2)

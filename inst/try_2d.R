@@ -242,7 +242,6 @@ frames_2d <- givens_full_path_2d(base1, base2, 10)
 
 # plotting on torus
 
-
 p <- 4
 base1 <- tourr::basis_random(p, d=1)
 base2 <- tourr::basis_random(p, d=1)
