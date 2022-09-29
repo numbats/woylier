@@ -48,15 +48,41 @@ construct_preframe <- function(Fr, B) {
   return(W)
 }
 
-#' Compute angle between two d-dimensional frames in p-space
+#' Compute the angle between 2d vectors 360 degrees
 #'
-#' @param F1 pxd frame
-#' @param F2 pxd frame
+#' @param x vector with length 2
+#' @param y vector with length 2
 #'
-#' @returns tau angle in radians
+#' @return angle in radians
 #' @export
 #'
-#' @examples 
+#' @examples
+
+#' p <- 4
+#' base1 <- tourr::basis_random(p, d=1)
+#' base2 <- tourr::basis_random(p, d=1)
+#' b <- preprojection(base1, base2)
+#' Wa <- construct_preframe(base1, b) 
+#' Wz <- construct_preframe(base2, b) 
+#' x1 <- as.matrix(c(Wa[1, 1], Wa[2, 1]))
+#' y1 <- as.matrix(c(Wz[1, 1], Wz[2, 1]))
+#' theta1 <- angle2(x1, y1)
+angle2 <-  function(x, y){ 
+  theta <- atan2(x[2], x[1]) - atan2(y[2], y[1]) 
+  return(theta)
+}
+
+#' Takes i and k th row of a matrix and rotate matrix by theta angle (requires matrix a to we 2*q matrix)
+#'
+#' @param a matrix
+#' @param i row
+#' @param k row that we want to zero the element
+#' @param theta  angle between them
+#'
+#' @return rotated matrix a
+#' @export
+#'
+#' @examples
 #' 
 #' p <- 4
 #' base1 <- tourr::basis_random(p, d=1)
@@ -64,64 +90,84 @@ construct_preframe <- function(Fr, B) {
 #' b <- preprojection(base1, base2)
 #' Wa <- construct_preframe(base1, b) 
 #' Wz <- construct_preframe(base2, b) 
-#' calculate_tau(Wz, Wa)
-#' 
-calculate_tau <- function(F1, F2) {
-  # takes 2 vectors with 2 elements and calculate angle between them 
-  # This needs to be generalised to frames instead of vectors
-  # calculate the angle between 2 vectors 360 degrees in radians
-  tau <- atan2(F1[2], F1[1]) - atan2(F2[2], F2[1]) 
-  return(-tau)
-}
-
-#' Construct rotation matrix in given angle
-#'
-#' @param theta angle  of rotation
-#' @returns rotation matrix
-#' @export
-#'
-#' @examples 
-#' 
-#' theta <- 1
-#' construct_rotation_matrix(theta)
-
-construct_rotation_matrix <- function(theta){ 
-  # rotate a 2d vector by given angle
-  if (theta>0) {
-    rotation_matrix <- matrix(c(cos(theta),-sin(theta),sin(theta), cos(theta)), nrow = 2, ncol = 2, byrow = TRUE)
+#' x1 <- as.matrix(c(Wa[1, 1], Wa[2, 1]))
+#' y1 <- as.matrix(c(Wz[1, 1], Wz[2, 1]))
+#' theta1 <- angle2(x1, y1)
+#' row_rot(Wz, 1, 2, theta1)
+row_rot <- function(a, i, k, theta) {
+  n <- ncol(a)
+  for (q in 1:n){
+    x = a[i, q]
+    y = a[k, q]
+    a[i, q] = cos(theta)*x - sin(theta)*y
+    a[k, q] = sin(theta)*x + cos(theta)*y
   }
-  # clockwise
-  rotation_matrix <- matrix(c(cos(theta),sin(theta),-sin(theta), cos(theta)), nrow = 2, ncol = 2, byrow = TRUE)
-
-  return(rotation_matrix)
+  return(a)
 }
 
-#' construct tour path
+#' Calculate angles of required rotations to map Wz to Wa
 #'
-#' @param Wa starting basis in pre-projected space
-#' @param tau angle between starting and target basis
-#' @param stepfraction stepfraction in each interpolation
+#' @param Wa starting preprojected frame
+#' @param Wz target preprojected frame
 #'
-#' @returns A givens path by stepfraction in pre-projected space
+#' @return named list of angles
 #' @export
 #'
-#' @examples 
+#' @examples
+#' 
 #' p <- 4
 #' base1 <- tourr::basis_random(p, d=1)
 #' base2 <- tourr::basis_random(p, d=1)
 #' b <- preprojection(base1, base2)
 #' Wa <- construct_preframe(base1, b) 
 #' Wz <- construct_preframe(base2, b) 
-#' tau <- calculate_tau(Wz, Wa)
-#' givens_path(Wa, tau, stepfraction=0.1)
-givens_path <- function(Wa, tau, stepfraction) {
-  # For now this will be a single rotation matrix
-  # but at some generalised
-  # this should compute an increment 
-  # apply k (nsteps) times
-  theta = tau*stepfraction
-  Wt <- construct_rotation_matrix(theta) %*% Wa
-  return(Wt)
+#' angles <- calculate_angles(Wa, Wz)
+calculate_angles <- function(Wa, Wz) {
+  angles = list()
+  wi = Wz
+  for (col in 1:ncol(Wz)) {
+    for (row in col:(nrow(Wz)-1)){
+      # store angles in a named list 
+      x <- as.matrix(c(Wa[col, col], Wa[row+1, col]))
+      y <- as.matrix(c(wi[col, col], wi[row+1, col]))
+      theta = angle2(x, y)
+      angles[paste0(col, row +1)] = theta
+      wi = row_rot(wi, col, row+1, theta)
+    }
+  }
+  return(angles)
+}
+
+
+#' It implements series of Givens rotations that maps Wa to Wz
+#'
+#' @param Wa starting preprojected frame
+#' @param angles angles of required rotations to map Wz to Wa
+#' @param stepfraction for the interpolation of rotations 
+#'
+#' @return Givens path by stepfraction in pre-projected space
+#' @export
+#'
+#' @examples
+#' p <- 4
+#' base1 <- tourr::basis_random(p, d=1)
+#' base2 <- tourr::basis_random(p, d=1)
+#' b <- preprojection(base1, base2)
+#' Wa <- construct_preframe(base1, b) 
+#' Wz <- construct_preframe(base2, b) 
+#' angles <- calculate_angles(Wa, Wz)
+#' givens_rotation(Wa, angles, stepfraction=0.1)
+givens_rotation <- function(Wa, angles, stepfraction) {
+  w_i = Wa
+  for (col in ncol(Wa):1) {
+    for (row in (nrow(Wa)-1):col){
+      # rotating in reverse order
+      index = paste0(col, row+1)
+      theta = - as.numeric(angles[index])
+      w_i = row_rot(w_i, col, row+1, theta*stepfraction)
+    }
+  }
+  return(w_i)
 }
 
 #' Reconstruct interpolated frames using pre-projection
@@ -140,8 +186,8 @@ givens_path <- function(Wa, tau, stepfraction) {
 #' b <- preprojection(base1, base2)
 #' Wa <- construct_preframe(base1, b) 
 #' Wz <- construct_preframe(base2, b) 
-#' tau <- calculate_tau(Wz, Wa)
-#' Wt <- givens_path(Wa, tau, stepfraction=0.1)
+#' angles <- calculate_angles(Wa, Wz)
+#' Wt <- givens_rotation(Wa, angles, stepfraction=0.1)
 #' construct_moving_frame(Wt, b)
 construct_moving_frame <- function(Wt, B) {
   Ft = B %*% Wt
@@ -167,11 +213,11 @@ givens_full_path <- function(Fa, Fz, nsteps) {
   B <- preprojection(Fa, Fz)
   Wa <- construct_preframe(Fa, B)
   Wz <- construct_preframe(Fz, B)
-  tau <- calculate_tau(Wz, Wa)
+  angles <- calculate_angles(Wa, Wz)
   path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
   for (i in 1:nsteps) {
     stepfraction <- i/nsteps
-    Wt <- givens_path(Wa, tau=tau, stepfraction)
+    Wt = givens_rotation(Wa, angles, stepfraction)
     Ft = construct_moving_frame(Wt, B)
     path[,,i] <- Ft
   }

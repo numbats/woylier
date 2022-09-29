@@ -194,12 +194,9 @@ for (col in ncol(Wa):1) {
 w_i
 Wz
 
-givens_full_path_2d <- function(Fa, Fz, nsteps) {
-  B <- preprojection(base1, base2)
-  Wa <- construct_preframe(base1, B)
-  Wz <- construct_preframe(base2, B)
-  wi = Wz
+calculate_taus <- function(Wa, Wz) {
   angles = list()
+  wi = Wz
   for (col in 1:ncol(Wz)) {
     for (row in col:(nrow(Wz)-1)){
       # store angles in a named list 
@@ -210,19 +207,31 @@ givens_full_path_2d <- function(Fa, Fz, nsteps) {
       wi = row_rot(wi, col, row+1, theta)
     }
   }
+  return(angles)
+}
+
+givens_rotation <- function(Wa, angles, stepfraction) {
+  w_i = Wa
+  for (col in ncol(Wa):1) {
+    for (row in (nrow(Wa)-1):col){
+      # rotating in reverse order
+      index = paste0(col, row+1)
+      theta = - as.numeric(angles[index])
+      w_i = row_rot(w_i, col, row+1, theta*stepfraction)
+    }
+  }
+  return(w_i)
+}
+
+givens_full_path_2d <- function(Fa, Fz, nsteps) {
+  B <- preprojection(Fa, Fz)
+  Wa <- construct_preframe(Fa, B)
+  Wz <- construct_preframe(Fz, B)
+  angles = calculate_taus(Wa, Wz)
   path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
   for (i in 1:nsteps) {
     stepfraction <- i/nsteps
-    w_i = Wa
-    for (col in ncol(Wa):1) {
-      for (row in (nrow(Wa)-1):col){
-        # rotating in reverse order
-        index = paste0(col, row+1)
-        theta = - as.numeric(angles[index])
-        w_i = row_rot(w_i, col, row+1, theta*stepfraction)
-      }
-    }
-    Wt = w_i
+    Wt = givens_rotation(Wa, angles, stepfraction)
     Ft = construct_moving_frame(Wt, B)
     path[,,i] <- Ft
   }
@@ -234,5 +243,20 @@ frames_2d <- givens_full_path_2d(base1, base2, 10)
 # plotting on torus
 
 
+p <- 4
+base1 <- tourr::basis_random(p, d=1)
+base2 <- tourr::basis_random(p, d=1)
+base3 <- tourr::basis_random(p, d=1)
+
+b <- preprojection(base1, base2)
+
+Wa <- construct_preframe(base1, b) %>% round(3)
+Wz <- construct_preframe(base2, b) 
+
+angles <- calculate_taus(Wa, Wz)
+
+givens_full_path_2d(base1, base2, 10)
+
+givens_full_path_2d(base2, base3, 10)
 
 
