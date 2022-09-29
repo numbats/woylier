@@ -115,64 +115,80 @@ g5 <- matrix(c(1, 0, 0, 0, 0, cos(theta5), 0, -sin(theta5), 0, 0, 1, 0, 0, sin(t
 w5 <- g5 %*% w4
 w5 %>% round(3)
 
-# ends manual multiplication 
-
-row_rot <- function(a, theta) {
-  # takes a matrix and angle rotate rows by given angle
-  n <- ncol(a)
-  for (i in 1:n){
-    x = a[1, i]
-    print(x)
-    y = a[2, i]
-    print(y)
-    a[1, i] = cos(theta)*x - sin(theta)*y
-    a[2, i] = cos(theta)*x + sin(theta)*y
-  }
-  return(a)
-}
-
-
-
-
-row_rot(Wz, theta1)
 Wz
 
-w1
+# ends manual multiplication 
 
-col_rot <- function(a, theta) {
-  # takes a matrix and angle rotate columns by given angle
-  n <- nrow(a)
-  for (i in 1:n){
-    x = a[i, 1]
-    y = a[i, 2]
-    a[i, 1] = cos(theta)*x - sin(theta)*y
-    a[i, 2] = cos(theta)*x + sin(theta)*y
+# trying simple structure of rotation matrix 5.1.9 of Matrix computations
+
+row_rot <- function(a, i, k, theta) {
+  # takes i and k th row of a matrix and rotate matrix by theta angle
+  # requires matrix a to we 2*q matrix
+  n <- ncol(a)
+  for (q in 1:n){
+    x = a[i, q]
+    y = a[k, q]
+    a[i, q] = cos(theta)*x - sin(theta)*y
+    a[k, q] = sin(theta)*x + cos(theta)*y
   }
   return(a)
 }
 
-col_rot(Wz, theta1)
+row_rot(Wz, 1, 2, theta1)
 
-w1
+row_rot(w1, 1, 3, theta2)
 
-givens_angle <- function(a, b) {
-  if (b == 0) {
-    c = 1
-    s = 0
+row_rot(w2, 1, 4, theta3)
+
+row_rot(w3, 2, 3, theta4)
+
+row_rot(w4, 2, 4, theta5)
+
+# putting above in a loop
+
+wi = Wz
+for (col in 1:ncol(Wz)) {
+  for (row in col:(nrow(Wz)-1)){
+    x <- as.matrix(c(Wa[col, col], Wa[row+1, col]))
+    y <- as.matrix(c(wi[col, col], wi[row+1, col]))
+    theta = angle2(x, y)
+    wi = row_rot(wi, col, row+1, theta)
   }
-  else {
-    if (abs(b) > abs(a)) {
-      tau = -a/b
-      s = 1/sqrt(a + tau^2)
-      c = s*tau
-    }
-    else {
-      tau = -b/a
-      c = 1/sqrt(a + tau^2)
-      s = c*tau
-    }
-  }
-  return(c(c, s))
 }
 
-givens_angle(0.1898, -0.0973)
+# reversing to order of rotation
+
+w_1 <- row_rot(Wa, 2, 4, -theta5)
+w_2 <- row_rot(w_1, 2, 3, -theta4)
+w_3 <- row_rot(w_2, 1, 4, -theta3)
+w_4 <- row_rot(w_3, 1, 3, -theta2)
+w_5 <- row_rot(w_4, 1, 2, -theta1)
+w_5
+Wz
+
+wi = Wz
+angles = list()
+
+for (col in 1:ncol(Wz)) {
+  for (row in col:(nrow(Wz)-1)){
+    x <- as.matrix(c(Wa[col, col], Wa[row+1, col]))
+    y <- as.matrix(c(wi[col, col], wi[row+1, col]))
+    theta = angle2(x, y)
+    angles[paste0(col, row +1)] = theta
+    wi = row_rot(wi, col, row+1, theta)
+  }
+}
+
+angles
+
+w_i = Wa
+for (col in ncol(Wa):1) {
+  for (row in (nrow(Wa)-1):col){
+    index = paste0(col, row+1)
+    theta = - as.numeric(angles[index])
+    w_i = row_rot(w_i, col, row+1, theta)
+  }
+}
+w_i
+Wz
+

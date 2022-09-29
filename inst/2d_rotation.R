@@ -97,7 +97,7 @@ row_rot <- function(a, theta) {
     x = a[1, i]
     y = a[2, i]
     a[1, i] = cos(theta)*x - sin(theta)*y
-    a[2, i] = cos(theta)*x + sin(theta)*y
+    a[2, i] = sin(theta)*x + cos(theta)*y
   }
   return(a)
 }
@@ -109,9 +109,29 @@ col_rot <- function(a, theta) {
     x = a[i, 1]
     y = a[i, 2]
     a[i, 1] = cos(theta)*x - sin(theta)*y
-    a[i, 2] = cos(theta)*x + sin(theta)*y
+    a[i, 2] = sin(theta)*x + cos(theta)*y
   }
   return(a)
+}
+
+givens_angle <- function(a, b) {
+  if (b == 0) {
+    c = 1
+    s = 0
+  }
+  else {
+    if (abs(b) > abs(a)) {
+      tau = -a/b
+      s = 1/sqrt(a + tau^2)
+      c = s*tau
+    }
+    else {
+      tau = -b/a
+      c = 1/sqrt(a + tau^2)
+      s = c*tau
+    }
+  }
+  return(c(c, s))
 }
 
 rotate2 <- function(v1, v2, k, i, j){
