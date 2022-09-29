@@ -102,6 +102,21 @@ d <- 2
 
 sp <- data.frame(geozoo::torus.flat(p = p, n=n)$points)
 tourr::animate_xy(sp)
-tourr::animate_slice(sp)
+#tourr::animate_slice(sp)
 
+# Check on torus
+proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
+  purrr::flatten_dbl() %>% 
+  matrix(ncol = p, byrow = TRUE) %>%
+  as_tibble()
+tourr::animate_xy(proj_2d)
 
+# Path
+path_2d <- apply(frames_2d, 1, c) %>% as.data.frame()
+tourr::animate_xy(path_2d)
+
+# Join
+proj_2d <- proj_2d %>% mutate(type="torus")
+path_2d <- path_2d %>% mutate(type="path")
+proj_path <- bind_rows(proj_2d, path_2d)
+tourr::animate_xy(proj_path[,1:6], col=proj_path$type)
