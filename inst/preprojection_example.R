@@ -100,8 +100,8 @@ n <- 1000
 p <- 3
 d <- 2
 
-sp <- data.frame(geozoo::torus.flat(p = p*2, n=n)$points)
-tourr::animate_xy(sp, axes="bottomleft")
+#sp <- data.frame(geozoo::torus.flat(p = p*2, n=n)$points)
+#tourr::animate_xy(sp, axes="bottomleft")
 #tourr::animate_slice(sp)
 
 # Check on torus
