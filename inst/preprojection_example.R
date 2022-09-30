@@ -1,4 +1,6 @@
 library(tourr)
+library(tidyverse)
+library(woylier)
 
 # example
 set.seed(2022)
@@ -110,6 +112,7 @@ proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
   matrix(ncol = p*2, byrow = TRUE) %>%
   as_tibble()
 tourr::animate_xy(proj_2d, axes="bottomleft")
+tourr::animate_slice(proj_2d, axes="bottomleft")
 
 # Path
 path_2d <- t(apply(frames_2d, 3, c)) %>% as.data.frame()
