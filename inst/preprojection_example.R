@@ -2,14 +2,15 @@ library(tourr)
 library(tidyverse)
 library(woylier)
 
-# example
+# Generate 1D example
+
 set.seed(2022)
 p <- 4
 base1 <- tourr::basis_random(p, d=1)
 base2 <- tourr::basis_random(p, d=1)
 base3 <- tourr::basis_random(p, d=1)
 
-# first example
+# First example
 
 frames <- givens_full_path(base1, base2, nsteps = 10)
 
@@ -46,31 +47,6 @@ tourr::animate_xy(sp_path[,1:p], col=sp_path$type,
 
 # Generate 2D example
 
-orthonormalise_by <- function(x, by) {
-  stopifnot(ncol(x) == ncol(by))
-  stopifnot(nrow(x) == nrow(by))
-  
-  x <- normalise(x)
-  by <- normalise(by)
-  
-  for (j in seq_len(ncol(x))) {
-    x[, j] <- x[, j] - as.vector(crossprod(x[, j], by[, j])) * by[, j]
-    for (k in seq_len(ncol(by))) {
-      x[, j] <- x[, j] - as.vector(crossprod(x[, j], by[, k])) * by[, k]
-      x[, j] <- normalise(x[, j])
-    }
-  }
-  normalise(x)
-  # Last step, columns new matrix to orthonormal
-  if (ncol(x) > 1) {
-    for (j in 2:ncol(x)) {
-      x[, j] <- x[, j] - as.vector(crossprod(x[, j], x[, j-1])) * x[, j-1]
-      normalise(x[, j])
-    }
-  }
-  return(x)
-}
-
 set.seed(2022)
 p <- 3
 base1 <- tourr::basis_random(p, d=2)
@@ -78,26 +54,14 @@ base2 <- tourr::basis_random(p, d=2)
 
 frames_2d <- givens_full_path(base1, base2, 10)
 
+# Check if last matrix of interpolation is the target frame
+
 frames_2d[,,10]
 
 base2
 
-# Check numbers
-sum(b[,1]^2)
-sum(b[,2]^2)
-sum(b[,3]^2)
-sum(b[,4]^2)
-t(b[,1]%*%b[,3])
-t(b[,2]%*%b[,4])
-det(t(b[,1:2])%*%b[,3:4])
-
-Wa <- construct_preframe(base1, b) 
-Wz <- construct_preframe(base2, b) 
-sum(Wa[,1]^2)
-sum(Wa[,2]^2)
-sum(Wz[,1]^2)
-
 # Testing torus construction
+
 n <- 1000
 p <- 3
 d <- 2
@@ -107,21 +71,32 @@ d <- 2
 #tourr::animate_slice(sp)
 
 # Check on torus
+
 proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
   purrr::flatten_dbl() %>% 
   matrix(ncol = p*2, byrow = TRUE) %>%
   as_tibble()
+
 tourr::animate_xy(proj_2d, axes="bottomleft")
 tourr::animate_slice(proj_2d, axes="bottomleft")
 
 # Path
-path_2d <- t(apply(frames_2d, 3, c)) %>% as.data.frame()
+path_2d <- t(apply(frames_2d, 3, c)) %>% 
+  as.data.frame()
+
 tourr::animate_xy(path_2d)
 
 # Join
-proj_2d <- proj_2d %>% mutate(type="torus")
-path_2d <- path_2d %>% mutate(type="path")
+proj_2d <- proj_2d %>% 
+  mutate(type="torus")
+
+path_2d <- path_2d %>% 
+  mutate(type="path")
+
 proj_path <- bind_rows(proj_2d, path_2d)
+
+sp_path <- rbind(sp_path, point1, point2) 
+
 tourr::animate_xy(proj_path[,1:6], 
                   col=proj_path$type, 
                   axes="bottomleft")
