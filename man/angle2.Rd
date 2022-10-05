@@ -17,14 +17,4 @@ angle in radians
 \description{
 Compute the angle between 2d vectors 360 degrees
 }
-\examples{
-p <- 4
-base1 <- tourr::basis_random(p, d=1)
-base2 <- tourr::basis_random(p, d=1)
-b <- preprojection(base1, base2)
-Wa <- construct_preframe(base1, b) 
-Wz <- construct_preframe(base2, b) 
-x1 <- as.matrix(c(Wa[1, 1], Wa[2, 1]))
-y1 <- as.matrix(c(Wz[1, 1], Wz[2, 1]))
-theta1 <- angle2(x1, y1)
-}
+\keyword{internal}

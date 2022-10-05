@@ -1,17 +1,10 @@
 #' Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa
 #'
+#' @keywords internal
 #' @param Fa starting pxd frame
 #' @param Fz ending pxd frame
 #'
 #' @returns B pre-projection px2d matrix 
-#' @export
-#'
-#' @examples
-#' 
-#' p <- 4
-#' base1 <- tourr::basis_random(p, d=1)
-#' base2 <- tourr::basis_random(p, d=1)
-#' b <- preprojection(base1, base2)
 
 preprojection <- function(Fa, Fz) {
   # check both are matrices are both correct size
@@ -28,21 +21,14 @@ preprojection <- function(Fa, Fz) {
 }
 
 #' Construct preprojected frames
+#' 
+#' @keywords internal
 #'
 #' @param Fr Orthonormal frame
 #' @param B pre-projection px2d matrix 
 #'
 #' @returns Preprojected 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
-#' @export
-#'
-#' @examples 
-#' 
-#' p <- 4
-#' base1 <- tourr::basis_random(p, d=1)
-#' base2 <- tourr::basis_random(p, d=1)
-#' b <- preprojection(base1, base2)
-#' Wa <- construct_preframe(base1, b) 
-#' Wz <- construct_preframe(base2, b) 
+
 construct_preframe <- function(Fr, B) {
   W <- t(B) %*% Fr
   return(W)
@@ -50,23 +36,13 @@ construct_preframe <- function(Fr, B) {
 
 #' Compute the angle between 2d vectors 360 degrees
 #'
+#' @keywords internal
+#'
 #' @param x vector with length 2
 #' @param y vector with length 2
 #'
 #' @return angle in radians
-#' @export
-#'
-#' @examples
 
-#' p <- 4
-#' base1 <- tourr::basis_random(p, d=1)
-#' base2 <- tourr::basis_random(p, d=1)
-#' b <- preprojection(base1, base2)
-#' Wa <- construct_preframe(base1, b) 
-#' Wz <- construct_preframe(base2, b) 
-#' x1 <- as.matrix(c(Wa[1, 1], Wa[2, 1]))
-#' y1 <- as.matrix(c(Wz[1, 1], Wz[2, 1]))
-#' theta1 <- angle2(x1, y1)
 angle2 <-  function(x, y){ 
   theta <- atan2(x[2], x[1]) - atan2(y[2], y[1]) 
   return(theta)
@@ -74,26 +50,14 @@ angle2 <-  function(x, y){
 
 #' Takes i and k th row of a matrix and rotate matrix by theta angle (requires matrix a to we 2*q matrix)
 #'
+#' @keywords internal
 #' @param a matrix
 #' @param i row
 #' @param k row that we want to zero the element
 #' @param theta  angle between them
 #'
 #' @return rotated matrix a
-#' @export
-#'
-#' @examples
-#' 
-#' p <- 4
-#' base1 <- tourr::basis_random(p, d=1)
-#' base2 <- tourr::basis_random(p, d=1)
-#' b <- preprojection(base1, base2)
-#' Wa <- construct_preframe(base1, b) 
-#' Wz <- construct_preframe(base2, b) 
-#' x1 <- as.matrix(c(Wa[1, 1], Wa[2, 1]))
-#' y1 <- as.matrix(c(Wz[1, 1], Wz[2, 1]))
-#' theta1 <- angle2(x1, y1)
-#' row_rot(Wz, 1, 2, theta1)
+
 row_rot <- function(a, i, k, theta) {
   n <- ncol(a)
   for (q in 1:n){
@@ -106,22 +70,14 @@ row_rot <- function(a, i, k, theta) {
 }
 
 #' Calculate angles of required rotations to map Wz to Wa
+#' 
+#' @keywords internal
 #'
 #' @param Wa starting preprojected frame
 #' @param Wz target preprojected frame
 #'
 #' @return named list of angles
-#' @export
-#'
-#' @examples
-#' 
-#' p <- 4
-#' base1 <- tourr::basis_random(p, d=1)
-#' base2 <- tourr::basis_random(p, d=1)
-#' b <- preprojection(base1, base2)
-#' Wa <- construct_preframe(base1, b) 
-#' Wz <- construct_preframe(base2, b) 
-#' angles <- calculate_angles(Wa, Wz)
+
 calculate_angles <- function(Wa, Wz) {
   angles = list()
   wi = Wz
@@ -140,23 +96,15 @@ calculate_angles <- function(Wa, Wz) {
 
 
 #' It implements series of Givens rotations that maps Wa to Wz
+#' 
+#' @keywords internal
 #'
 #' @param Wa starting preprojected frame
 #' @param angles angles of required rotations to map Wz to Wa
 #' @param stepfraction for the interpolation of rotations 
 #'
 #' @return Givens path by stepfraction in pre-projected space
-#' @export
-#'
-#' @examples
-#' p <- 4
-#' base1 <- tourr::basis_random(p, d=1)
-#' base2 <- tourr::basis_random(p, d=1)
-#' b <- preprojection(base1, base2)
-#' Wa <- construct_preframe(base1, b) 
-#' Wz <- construct_preframe(base2, b) 
-#' angles <- calculate_angles(Wa, Wz)
-#' givens_rotation(Wa, angles, stepfraction=0.1)
+
 givens_rotation <- function(Wa, angles, stepfraction) {
   w_i = Wa
   for (col in ncol(Wa):1) {
@@ -171,24 +119,14 @@ givens_rotation <- function(Wa, angles, stepfraction) {
 }
 
 #' Reconstruct interpolated frames using pre-projection
+#' 
+#' @keywords internal
 #'
 #' @param B pre-projection px2d matrix 
 #' @param Wt A givens path by stepfraction
 #'
 #' @returns A frame of on the step of interpolation
-#' 
-#' @export
-#'
-#' @examples 
-#' p <- 4
-#' base1 <- tourr::basis_random(p, d=1)
-#' base2 <- tourr::basis_random(p, d=1)
-#' b <- preprojection(base1, base2)
-#' Wa <- construct_preframe(base1, b) 
-#' Wz <- construct_preframe(base2, b) 
-#' angles <- calculate_angles(Wa, Wz)
-#' Wt <- givens_rotation(Wa, angles, stepfraction=0.1)
-#' construct_moving_frame(Wt, b)
+
 construct_moving_frame <- function(Wt, B) {
   Ft = B %*% Wt
   return(Ft)

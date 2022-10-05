@@ -17,13 +17,4 @@ named list of angles
 \description{
 Calculate angles of required rotations to map Wz to Wa
 }
-\examples{
-
-p <- 4
-base1 <- tourr::basis_random(p, d=1)
-base2 <- tourr::basis_random(p, d=1)
-b <- preprojection(base1, base2)
-Wa <- construct_preframe(base1, b) 
-Wz <- construct_preframe(base2, b) 
-angles <- calculate_angles(Wa, Wz)
-}
+\keyword{internal}

@@ -17,10 +17,4 @@ B pre-projection px2d matrix
 \description{
 Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa
 }
-\examples{
-
-p <- 4
-base1 <- tourr::basis_random(p, d=1)
-base2 <- tourr::basis_random(p, d=1)
-b <- preprojection(base1, base2)
-}
+\keyword{internal}

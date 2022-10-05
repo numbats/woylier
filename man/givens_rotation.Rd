@@ -19,13 +19,4 @@ Givens path by stepfraction in pre-projected space
 \description{
 It implements series of Givens rotations that maps Wa to Wz
 }
-\examples{
-p <- 4
-base1 <- tourr::basis_random(p, d=1)
-base2 <- tourr::basis_random(p, d=1)
-b <- preprojection(base1, base2)
-Wa <- construct_preframe(base1, b) 
-Wz <- construct_preframe(base2, b) 
-angles <- calculate_angles(Wa, Wz)
-givens_rotation(Wa, angles, stepfraction=0.1)
-}
+\keyword{internal}

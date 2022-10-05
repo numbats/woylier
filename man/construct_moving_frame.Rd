@@ -17,14 +17,4 @@ A frame of on the step of interpolation
 \description{
 Reconstruct interpolated frames using pre-projection
 }
-\examples{
-p <- 4
-base1 <- tourr::basis_random(p, d=1)
-base2 <- tourr::basis_random(p, d=1)
-b <- preprojection(base1, base2)
-Wa <- construct_preframe(base1, b) 
-Wz <- construct_preframe(base2, b) 
-angles <- calculate_angles(Wa, Wz)
-Wt <- givens_rotation(Wa, angles, stepfraction=0.1)
-construct_moving_frame(Wt, b)
-}
+\keyword{internal}

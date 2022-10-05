@@ -17,12 +17,4 @@ Preprojected 2dxd frame on preprojection space (first dxd entry of this matrix i
 \description{
 Construct preprojected frames
 }
-\examples{
-
-p <- 4
-base1 <- tourr::basis_random(p, d=1)
-base2 <- tourr::basis_random(p, d=1)
-b <- preprojection(base1, base2)
-Wa <- construct_preframe(base1, b) 
-Wz <- construct_preframe(base2, b) 
-}
+\keyword{internal}
