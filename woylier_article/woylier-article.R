@@ -3,6 +3,12 @@
 
 ## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tourr)
+library(tidyverse)
+library(woylier)
+
+
+## ---- include=FALSE-----------------------------------------------------------
 library(plotly)
 library(ggplot2)
 library(palmerpenguins)

@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-"woylier" package provides alternative method for generating a tour path by interpolating between d-D frames in p-D space rather than d-D planes. 
+The "woylier" package provides alternative method for generating a tour path by interpolating between d-D frames in p-D space rather than d-D planes. 
 
 ```{r setup}
 library(woylier)
