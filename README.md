@@ -20,36 +20,51 @@ devtools::install_github("numbats/woylier")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This example illustrates 1D visualization of the interpolation of 3 points in 6D. 
 
-``` r
+```{r setup}
 library(woylier)
-## basic example code
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+```{r}
+# Generate 1D example
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+set.seed(2022)
+p <- 6
+base1 <- tourr::basis_random(p, d=1)
+base2 <- tourr::basis_random(p, d=1)
+base3 <- tourr::basis_random(p, d=1)
+
+# First example
+
+frames <- givens_full_path(base1, base2, nsteps = 10)
+
+sp <- generate_space_view(p=p)
+
+sp_path <- add_path(sp, frames) 
+
+point1 <- as.data.frame(t(base1)) 
+point1$type <- "point1"
+
+point2 <- as.data.frame(t(base2))
+point2$type <- "point2"
+
+sp_path <- rbind(sp_path, point1, point2) 
+
+# second example
+
+frames <- givens_full_path(base2, base3, nsteps = 10)
+
+frames <- as.data.frame(t(apply(frames, 3, c)))
+
+frames$type <- "path"
+sp_path <- rbind(sp_path, frames)
+
+point3 <- as.data.frame(t(base3))
+point3$type <- "point3"
+
+sp_path <- rbind(sp_path, point3) 
+
+tourr::animate_xy(sp_path[,1:p], col=sp_path$type, 
+                  axes="bottomleft")
 ```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
