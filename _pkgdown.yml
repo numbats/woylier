@@ -1,4 +1,17 @@
-url: ~
+url: https://numbats.github.io/woylier
 template:
   bootstrap: 5
+  bootswatch: lux
 
+reference:
+- title: Tour path construction
+  desc: >
+    Functions for constructing interpolation paths
+  contents:
+  - givens_full_path
+- title: Plotting the path
+  desc: >
+    Functions to plot paths
+  contents:
+  - generate_space_view
+  - add_path
