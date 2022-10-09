@@ -47,6 +47,23 @@ library(woylier)
 
 # Introduction
 
+The idea of projection pursuit is a procedure used to locate the projection of high-to-low dimensional space that expose the most interesting feature of data originally proposed by Kruskal[@kruskal_1969]. The projection pursuit technique involves a criterion of interest, numerical objective function, and the most interesting projection of data is achieved when the criterion is maximized. In the literature, there are a number of such criterion has been developed based on clustering, spread, and outliers. 
+
+Grand tour is a multivariate data visualization technique developed by Asimov[@asimov_1985], which is based on idea of rotations of a lower dimensional projection in high-dimensional space. This technique is equivalent to rotating an object in 3D to better understand its shape and dimensions. Originally, Asimov's grand tour presents the viewer with an automatic movie of projections with no user control. Since then the literature on the tour has been about interactivity of the tour giving the control to users.[@buja_cook_asimov_hurley_2005] One of the interactive visual data exploration tool is "guided tour".
+
+The guided tour gives user an extrapolation power by combining projection pursuit with tour which is implemented in the "tourr"[@tourr] package. Current implementation of guided tour used geodesic interpolation between planes. 
+
+The interpolated paths based on geodesic interpolation between bases is visually invariant under changes of orientation. However, in some cases of non-linear projection pursuit the orientation of frames does matter. One example is splines2D index. This rotational variety issue of non-linear projection pursuit functions was the motivation of this work. 
+
+A few alternatives to geodesic interpolation were proposed by Buja et al[@buja_cook_asimov_hurley_2005]. The purpose of woylier package is to implement Givens paths method. This algorithms adapts Given's matrix decomposition technique that zeros out all but first elements of a vector. 
+
+This article is structured as follows. The next section provided the theoretical framework of Givens interpolation method followed by a section about the implementation Givens path in woylier package that is compatible with current geodesic_path() function of tourr package. Furthermore, we would attempt to apply this interpolation method to projection pursuit of splines index to search for nonlinear associations between variables in example data set. Finally, this article includes a discussion about the limitations.
+
+# Background
+
+**High-dimensional data visualisation**
+
+
 A projection is a tool of visualization of high dimensional data onto lower dimensions.[@buja_cook_asimov_hurley_2005] When projecting higher dimensional data onto lower dimensions, one might care about orientation of the projection in such cases projections need to be onto frames rather than planes where orientation does not matter.
 
 The visualization of higher than 3 dimension is based on rotations of of a lower dimensional projection in high-dimensional space. Animation of these projections are one-parameter (time) family of pictures. 
@@ -63,9 +80,7 @@ Buja et al[@buja_cook_asimov_hurley_2005] prefers interpolation method over orig
 
 We are aiming to provide alternative interpolation method that is compatible with current geodesic_path() function of tourr package. Then we would attempt to apply this interpolation method to projection pursuit of splines index to search for nonlinear associations between variables in financial data set. Finally, we would provide some example use of the package.
 
-# Background
-
-**High-dimensional data visualisation**
+Givens rotation[@matrix_computation] algorithm
 
 **Tour**
 

@@ -77,14 +77,14 @@ proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
   matrix(ncol = p*2, byrow = TRUE) %>%
   as_tibble()
 
-tourr::animate_xy(proj_2d, axes="bottomleft")
-tourr::animate_slice(proj_2d, axes="bottomleft")
+#tourr::animate_xy(proj_2d, axes="bottomleft")
+#tourr::animate_slice(proj_2d, axes="bottomleft")
 
 # Path
 path_2d <- t(apply(frames_2d, 3, c)) %>% 
   as.data.frame()
 
-tourr::animate_xy(path_2d)
+#tourr::animate_xy(path_2d)
 
 # Join
 proj_2d <- proj_2d %>% 
@@ -100,3 +100,30 @@ sp_path <- rbind(sp_path, point1, point2)
 tourr::animate_xy(proj_path[,1:6], 
                   col=proj_path$type, 
                   axes="bottomleft")
+
+
+# Example of guided tour
+
+sinData <- function(n, p){
+  vName <- paste0("V",n)
+  vNameM1 <- paste0("V",n-1)
+  expr <- paste0(vName,"=sin(",vNameM1,")") # need string expression if I want to use tibble here
+  dRet <- as_tibble(matrix(rnorm((n-1)*p), ncol=(n-1))) #generate normal distributed n-1 dim data
+  dRet <- mutate_(dRet, expr) #string evaluation calculates var(n) as tan(var(n-1))
+  colnames(dRet)[n] <- vName #correct name of new variable
+  dRet[vName] <- jitter(dRet[[vName]]) #adding noise
+  return(dRet)
+}
+
+
+dt <- sinData(n = 4, p = 5000)
+animate(dt, tour_path = guided_tour(splines2d()))
+
+set.seed(123)
+tourr::render_gif(
+  dt,
+  tour_path = guided_tour(splines2d()),
+  display = display_xy(),
+  frames = 20,
+  gif_file = here::here("splines2d.gif")
+)

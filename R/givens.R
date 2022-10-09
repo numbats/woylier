@@ -48,7 +48,7 @@ angle2 <-  function(x, y){
   return(theta)
 }
 
-#' Takes i and k th row of a matrix and rotate matrix by theta angle (requires matrix a to we 2*q matrix)
+#' Takes i and k th row of a matrix and rotate matrix by theta angle (requires matrix a to be 2*q matrix)
 #'
 #' @keywords internal
 #' @param a matrix
@@ -57,6 +57,8 @@ angle2 <-  function(x, y){
 #' @param theta  angle between them
 #'
 #' @return rotated matrix a
+#' 
+#' refer to Algorithm 5.1.6 of Matrix computation (Golub, Van)
 
 row_rot <- function(a, i, k, theta) {
   n <- ncol(a)

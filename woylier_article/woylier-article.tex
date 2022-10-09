@@ -11,6 +11,23 @@ The woylier package implements alternative method for interpolation path between
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
+The idea of projection pursuit is a procedure used to locate the projection of high-to-low dimensional space that expose the most interesting feature of data originally proposed by Kruskal(Kruskal 1969). The projection pursuit technique involves a criterion of interest, numerical objective function, and the most interesting projection of data is achieved when the criterion is maximized. In the literature, there are a number of such criterion has been developed based on clustering, spread, and outliers.
+
+Grand tour is a multivariate data visualization technique developed by Asimov(Asimov 1985), which is based on idea of rotations of a lower dimensional projection in high-dimensional space. This technique is equivalent to rotating an object in 3D to better understand its shape and dimensions. Originally, Asimov's grand tour presents the viewer with an automatic movie of projections with no user control. Since then the literature on the tour has been about interactivity of the tour giving the control to users.(Buja et al. 2005) One of the interactive visual data exploration tool is ``guided tour''.
+
+The guided tour gives user an extrapolation power by combining projection pursuit with tour which is implemented in the ``tourr''(Wickham et al. 2011) package. Current implementation of guided tour used geodesic interpolation between planes.
+
+The interpolated paths based on geodesic interpolation between bases is visually invariant under changes of orientation. However, in some cases of non-linear projection pursuit the orientation of frames does matter. One example is splines2D index. This rotational variety issue of non-linear projection pursuit functions was the motivation of this work.
+
+A few alternatives to geodesic interpolation were proposed by Buja et al(Buja et al. 2005). The purpose of woylier package is to implement Givens paths method. This algorithms adapts Given's matrix decomposition technique that zeros out all but first elements of a vector.
+
+This article is structured as follows. The next section provided the theoretical framework of Givens interpolation method followed by a section about the implementation Givens path in woylier package that is compatible with current geodesic\_path() function of tourr package. Furthermore, we would attempt to apply this interpolation method to projection pursuit of splines index to search for nonlinear associations between variables in example data set. Finally, this article includes a discussion about the limitations.
+
+\hypertarget{background}{%
+\section{Background}\label{background}}
+
+\textbf{High-dimensional data visualisation}
+
 A projection is a tool of visualization of high dimensional data onto lower dimensions.(Buja et al. 2005) When projecting higher dimensional data onto lower dimensions, one might care about orientation of the projection in such cases projections need to be onto frames rather than planes where orientation does not matter.
 
 The visualization of higher than 3 dimension is based on rotations of of a lower dimensional projection in high-dimensional space. Animation of these projections are one-parameter (time) family of pictures.
@@ -27,10 +44,7 @@ Buja et al(Buja et al. 2005) prefers interpolation method over original ``torus 
 
 We are aiming to provide alternative interpolation method that is compatible with current geodesic\_path() function of tourr package. Then we would attempt to apply this interpolation method to projection pursuit of splines index to search for nonlinear associations between variables in financial data set. Finally, we would provide some example use of the package.
 
-\hypertarget{background}{%
-\section{Background}\label{background}}
-
-\textbf{High-dimensional data visualisation}
+Givens rotation(Golub and Loan 1989) algorithm
 
 \textbf{Tour}
 
@@ -181,20 +195,32 @@ We have displayed various tooltips that are available in the package \pkg{ToOoOl
 
 \hypertarget{refs}{}
 \begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-asimov_1985}{}}%
+Asimov, D. 1985. {``The Grand Tour: A Tool for Viewing Multidimensional Data.''} \emph{SIAM J Sci Stat Comput 6(1)}, 128--43.
+
 \leavevmode\vadjust pre{\hypertarget{ref-buja_cook_asimov_hurley_2005}{}}%
 Buja, Andreas, Dianne Cook, Daniel Asimov, and Catherine Hurley. 2005. {``Computational Methods for High-Dimensional Rotations in Data Visualization.''} \emph{Handbook of Statistics}, 391--413. \url{https://doi.org/10.1016/s0169-7161(04)24014-7}.
 
 \leavevmode\vadjust pre{\hypertarget{ref-crosstalk}{}}%
 Cheng, Joe, and Carson Sievert. 2021. \emph{{crosstalk}: Inter-Widget Interactivity for HTML Widgets}. \url{https://CRAN.R-project.org/package=crosstalk}.
 
+\leavevmode\vadjust pre{\hypertarget{ref-matrix_computation}{}}%
+Golub, Gene H., and Charles F Van Loan. 1989. \emph{Matrix Computations}. Johns Hopkins University Press.
+
 \leavevmode\vadjust pre{\hypertarget{ref-palmerpenguins}{}}%
 Horst, Allison Marie, Alison Presmanes Hill, and Kristen B Gorman. 2020. \emph{{palmerpenguins}: Palmer Archipelago (Antarctica) Penguin Data}. \url{https://allisonhorst.github.io/palmerpenguins/}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-kruskal_1969}{}}%
+Kruskal, JB. 1969. {``Toward a Practical Method Which Helps Uncover the Structure of a Set of Observations by Finding the Line Transformation Which Optimizes a New ``Index of Condensation.''} \emph{Statistical Computation; New York, Academic Press}, 427--40.
 
 \leavevmode\vadjust pre{\hypertarget{ref-plotly}{}}%
 Sievert, Carson. 2020. \emph{{Interactive Web-Based Data Visualizatio}n with r, Plotly, and Shiny}. Chapman; Hall/CRC. \url{https://plotly-r.com}.
 
 \leavevmode\vadjust pre{\hypertarget{ref-RJ-2021-050}{}}%
 Wang, Earo, and Dianne Cook. 2021. {``Conversations in Time: Interactive Visualisation to Explore Structured Temporal Data.''} \emph{The R Journal}. \url{https://doi.org/10.32614/RJ-2021-050}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-tourr}{}}%
+Wickham, Hadley, Dianne Cook, Heike Hofmann, and Andreas Buja. 2011. {``{tourr}: An {R} Package for Exploring Multivariate Data with Projections.''} \emph{Journal of Statistical Software} 40 (2): 1--18. \url{https://doi.org/10.18637/jss.v040.i02}.
 
 \end{CSLReferences}
 
