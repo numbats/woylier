@@ -61,36 +61,39 @@ This article is structured as follows. The next section provided the theoretical
 
 # Background
 
-**High-dimensional data visualisation**
-
-
-A projection is a tool of visualization of high dimensional data onto lower dimensions.[@buja_cook_asimov_hurley_2005] When projecting higher dimensional data onto lower dimensions, one might care about orientation of the projection in such cases projections need to be onto frames rather than planes where orientation does not matter.
-
-The visualization of higher than 3 dimension is based on rotations of of a lower dimensional projection in high-dimensional space. Animation of these projections are one-parameter (time) family of pictures. 
-
-This paper explains algorithms for dynamic projections such as grand tours, guided tours, and manual tours. 
-
-While we can imagine rotation of 3D object, the generalization of rotation in higher than 3 dimension is quite complex. Notion of grand tour was introduced by Asimov (1985). Grand tour shows 2-D projection of higher dimensional space with no user control. Grand tour is space-filling curve in the manifold of low-dimensional projections of high-dimensional data space. Authors of this paper further explores interactivity of tours which resulted "guided tours" and "manual tours".
+The tour method of visualization is animated high-to-low dimensional data rotation that is a movie, one-parameter (time) family of static projections. Several algorithms for such dynamic projections are discussed by Buja et al[@buja_cook_asimov_hurley_2005] is based on the idea of smoothly interpolating a discrete sequence of projections. 
 
 The topic of this paper is the construction of paths of projections. Interpolation of paths of projection can be compared to connecting line segments that interpolate points in Euclidean space. Interpolation acts as a bridge between continuous animation and discrete choice of sequences of projections. Sequence of projections can be constructed in various ways depending on user purpose. If user wants to look at the data from all sides, a random sequence of projections can be used, which is implemented in grand tours. Furthermore, the sequence of projections can be pre-computed, data-driven, or even manually controlled. 
 
-Projection pursuit is a technique for finding data projections that are most structured according to a criterion of interest such as clustering or spread.
+Before continuing with the interpolation algorithms, we need to define the notations. 
 
-Buja et al[@buja_cook_asimov_hurley_2005] prefers interpolation method over original "torus method" used in Asimov (1985) for projection algorithms for several reasons. One reason is that the projection paths based on torus method can be non-uniformly distributed while interpolation method is uniformly distributed by construction. Another pitfall of torus method is it causes discontinuity when user has need to change set of variables that are being viewed. 
+- Let the p be the dimension of original data and d be the dimension onto which the data is being projected. 
+- A frame F is defined as $p\times d$ matrix with pairwise orthogonal columns of unit length that satisfies, where $I_d$ is the identity matrix in d dimensions. 
 
-We are aiming to provide alternative interpolation method that is compatible with current geodesic_path() function of tourr package. Then we would attempt to apply this interpolation method to projection pursuit of splines index to search for nonlinear associations between variables in financial data set. Finally, we would provide some example use of the package.
+$$F^TF = I_d$$ 
+- Paths of projections are given by continuous one-parameter families $F(t)$ where $t\in [a, z]$ interval representing time. We denote the starting frame by $F_a = F(a)$ and target frame by $F_z = F(z)$.
 
-Givens rotation[@matrix_computation] algorithm
+**Preprojection algorithm**
 
-**Tour**
+The purpose of preprojection is to limit the data subspace $F_a$ and $F_z$ that the interpolated path is traversing so that the interpolation is carried out simply. Simply, it is defining the joint subspace of $F_a$ and $F_z$.
 
-https://en.wikipedia.org/wiki/Grand_Tour_(data_visualisation)
+The procedure starts with forming an arbitrary orthonormal basis by applying Gram-Schmidt to $F_z$ with regard to $F_a$. We denote the resulting orthonormal basis of $p\times d_s$ by $B$. 
 
-**Rotation and projection**
+Now, we can express the original frames in this basis:
 
-- Interactive and dynamic projection
+$$F_a = BW_a, F_z = BW_z$$
 
-**Planar rotation**
+The interpolation problem is then reduced to the construction of paths of frames $W(t)$ that interpolate the projected frames $W_a$ and $W_z$.
+
+**The interpolating paths of plane versus frames**
+
+The interpolation of frames is required when the orientation of projection matters. If the rendering on a frame and on the rotated version of the frame yields the same visual scenes, it means the orientation does not matter. 
+
+Current implementation of tourr package[@tourr] is locally shortest (geodesic) interpolation of planes. The pitfall of this interpolation method is that it does not account for rotation variability. 
+
+The orientation of frames could be important when non-linear projection pursuit function is used in guided tour. An illustration of such cases are shown below.
+
+**Givens transformation**
 
 A rotation matrix is a transformation matrix that is used to perform a rotation in Euclidean space in xy plane. A rotation matrix that transforms 2-D plane by an angle $\theta$  looks like this:
 
@@ -102,12 +105,8 @@ The interpolation methods in this project are based on the composition of a numb
 
 $$ W_z = R_m(\tau_m) ... R_2(\tau_2)R_1(\tau_1)W_a$$
 
-**Interpolation in tour**
 
-- Between planes
-- Between frames (Householder, Givens, Orthogonal matrix paths)
-
-**Interpolating path of Frames**
+**Givens interpolation path algorithm**
 
 Frame interpolation is necessary when the orientation of the projection matters. There are several methods discussed in the paper including decomposition of orthogonal matrices, givens decomposition and householder decomposition. One that is  of interest to us is Givens path.
 
@@ -128,13 +127,9 @@ $$W_a = B^TF_a = E_d$$ and $$W_z = B^TF_z$$
 $$ W_a = R_m(\tau_m) ... R_2(\tau_2)R_1(\tau_1)W_z$$ The inverse mapping is obtained by reversing the sequence of rotations with the negative of the angles:
 
 $$R(\tau) = R_1(-\tau_1) ... R_m(-\tau_m), \    W_z = R(\tau)W_a$$
-## Limitations
 
-Buja et al. (2004) discussed when the orientation of projection matters. If the rendering on a frame and on the rotated version of the frame yields the same visual scenes, it means the orientation does not matter. 
 
-When d=1, there will be only one dimensional projection visualized horizontally or vertically. If the projection was interpretable, the projections of left-to-right and right-to-left would be different. But in our case d=1, orientation is irrelevant because it is just linear combination of variables.
 
-When d=2, we usually plot Cartesian scatterplot. If we consider reflected or rotated scatterplots, typical structures such as clusters, lines, curves, and outliers are recognizable without rotations. Therefore, orientation does not matter.
 
 ```{r, include=FALSE}
 library(plotly)
