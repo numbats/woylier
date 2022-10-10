@@ -67,16 +67,28 @@ for (i in 1:dim(sine_path)[3]) {
   sine_plotly <- bind_rows(sine_plotly, d)
 }
 sine_label <- sine_plotly %>%
-  select(idx, frame) %>%
-  distinct() %>%
-  mutate(X1 = -3, X2 = 2.4, idx = paste("spl= ", idx))
-sine_anim <- ggplot() +
-                geom_point(data=sine_plotly, 
-                           aes(x=X1, y=X2, 
+  #select(idx, frame) %>%
+  #distinct() %>%
+  mutate(labelX = -3.5, labelY = 2.4, label_idx = paste0("spl=", idx))
+
+sine_anim <- ggplot(sine_label) +
+                geom_point(aes(x=X1, y=X2, 
                                frame=frame)) +
-                geom_text(data=sine_label, 
-                          aes(x=X1, y=X2, 
+                geom_text(aes(x=labelX, y=labelY, 
                               frame=frame, 
-                              label=idx)) +
+                              label=label_idx)) +
                 xlab("") + ylab("") 
-ggplotly(sine_anim)
+ggplotly(sine_anim) # text not showing
+
+# Or with gganimate
+library(gganimate)
+library(gapminder)
+
+sine_anim <- ggplot(sine_label) +
+  geom_point(aes(x=X1, y=X2)) +
+  geom_text(aes(x=labelX, y=labelY, 
+                label=label_idx), size=5) +
+  xlab("") + ylab("") +
+  transition_time(frame)
+sine_anim
+anim_save("sine_anim.gif")
