@@ -18,9 +18,11 @@ The "woylier" package provides alternative method for generating a tour path by 
 
 ```{r setup}
 library(woylier)
+library(geozoo)
+library(tidyverse)
 ```
 
-# Example
+# Example 1
 
 This example illustrates 1D visualization of the interpolation of 3 points in 6D. 
 
@@ -67,3 +69,41 @@ tourr::animate_xy(sp_path[,1:p], col=sp_path$type,
                   axes="bottomleft")
 ```
 
+# Example 2
+
+```{r}
+# Generate 2D example
+
+set.seed(2022)
+n <- 1000
+p <- 3
+d <- 2
+base1 <- tourr::basis_random(p, d)
+base2 <- tourr::basis_random(p, d)
+
+frames_2d <- givens_full_path(base1, base2, 10)
+
+proj_2d <- map(1:n, ~tourr::basis_random(n = p,  d=d)) %>%
+  purrr::flatten_dbl() %>% 
+  matrix(ncol = p*2, byrow = TRUE) %>%
+  as_tibble()
+
+# Path
+path_2d <- t(apply(frames_2d, 3, c)) %>% 
+  as.data.frame()
+
+# Join
+proj_2d <- proj_2d %>% 
+  mutate(type="torus")
+
+path_2d <- path_2d %>% 
+  mutate(type="path")
+
+proj_path <- bind_rows(proj_2d, path_2d)
+
+tourr::animate_xy(proj_path[,1:6], 
+                  col=proj_path$type, 
+                  axes="bottomleft")
+```
+ 
+ 

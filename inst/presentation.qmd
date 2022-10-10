@@ -1,0 +1,75 @@
+---
+title: "Woylier: Alternative tour frame interpolation method"
+format: revealjs
+editor: visual
+---
+
+## Outline
+
+-   Motivation of the project
+-   Notations
+-   Givens transformation
+-   Givens interpolation path algorithm
+-   Implementation
+-   How to use the package
+-   Data application
+-   Conclusion
+
+## Motivation of the project
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tourr)
+library(tidyverse)
+library(woylier)
+library(geozoo)
+library(ggplot2)
+library(patchwork)
+```
+
+```{r}
+data("sine_curve")
+mat <- data.frame(sine_curve[,5:6])
+mat_idx <- round(tourr::splines2d()(mat), 2)
+
+mat_rot <- data.frame(x = cos(pi/6) * sine_curve$V5 + 
+                          sin(pi/6) * sine_curve$V6,
+                      y = -sin(pi/6) * sine_curve$V5 + 
+                           cos(pi/6) * sine_curve$V6)
+mat_rot_idx <- round(tourr::splines2d()(mat_rot), 2)
+
+p1 <- ggplot(mat, aes(x=V5, y=V6)) + 
+  geom_point() + 
+  ggtitle(paste("Splines index = ", mat_idx)) +
+  theme(aspect.ratio=1)
+
+p2 <- ggplot(mat_rot, aes(x=x, y=y)) + 
+  geom_point() + 
+  xlab("Rotated 1") + ylab("Rotated 2") +
+  ggtitle(paste("Splines index = ", mat_rot_idx)) +
+  theme(aspect.ratio=1)
+
+p1+p2
+```
+
+
+## Notations
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+## Givens transformation
+
+## Givens interpolation path algorithm
+
+## Implementation
+
+## How to use the package
+
+## Data application
+
+## Conclusion
+
+## Any questions?
