@@ -6,6 +6,15 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(tourr)
 library(tidyverse)
 library(woylier)
+library(geozoo)
+
+
+## -----------------------------------------------------------------------------
+d <- sphere.hollow(p = 3, n = 1000)
+#d <- sphere.hollow(p = 5, n = 1000)
+d <- data.frame(d$points)
+#animate_xy(d, axes="off") 
+# include gif of the a sphere and torus
 
 
 ## ---- include=FALSE-----------------------------------------------------------
