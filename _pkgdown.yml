@@ -2,6 +2,8 @@ url: https://numbats.github.io/woylier
 template:
   bootstrap: 5
   bootswatch: lux
+  bslib:
+    pkgdown-nav-height: 100px
 
 reference:
 - title: Tour path construction

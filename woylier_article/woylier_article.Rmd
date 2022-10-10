@@ -44,6 +44,8 @@ library(tourr)
 library(tidyverse)
 library(woylier)
 library(geozoo)
+library(ggplot2)
+library(patchwork)
 ```
 
 # Introduction
@@ -55,6 +57,33 @@ Grand tour is a multivariate data visualization technique developed by Asimov[@a
 The guided tour gives user an extrapolation power by combining projection pursuit with tour which is implemented in the "tourr"[@tourr] package. Current implementation of guided tour used geodesic interpolation between planes. 
 
 The interpolated paths based on geodesic interpolation between bases is visually invariant under changes of orientation. However, in some cases of non-linear projection pursuit the orientation of frames does matter. One example is splines2D index.[@pp] The lack of rotation invariance of splines2d index raise complications in the optimization process.[@pp] This rotational variety issue of non-linear projection pursuit functions was the motivation of this work. 
+
+```{r splines2d-static, echo = FALSE, fig.height = 5, fig.cap="The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "Two side by side scatterplots with 6 points. The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index. "}
+
+data("sine_curve")
+mat <- data.frame(sine_curve[,5:6])
+mat_idx <- round(tourr::splines2d()(mat), 2)
+
+mat_rot <- data.frame(x = cos(pi/6) * sine_curve$V5 + 
+                          sin(pi/6) * sine_curve$V6,
+                      y = -sin(pi/6) * sine_curve$V5 + 
+                           cos(pi/6) * sine_curve$V6)
+mat_rot_idx <- round(tourr::splines2d()(mat_rot), 2)
+
+p1 <- ggplot(mat, aes(x=V5, y=V6)) + 
+  geom_point() + 
+  ggtitle(paste("Splines index = ", mat_idx)) +
+  theme(aspect.ratio=1)
+
+p2 <- ggplot(mat_rot, aes(x=x, y=y)) + 
+  geom_point() + 
+  xlab("Rotated 1") + ylab("Rotated 2") +
+  ggtitle(paste("Splines index = ", mat_rot_idx)) +
+  theme(aspect.ratio=1)
+
+p1+p2
+```
+
 
 A few alternatives to geodesic interpolation were proposed by Buja et al[@buja_cook_asimov_hurley_2005]. The purpose of woylier package is to implement Givens paths method. This algorithms adapts Given's matrix decomposition technique that zeros out all but first elements of a vector. 
 
@@ -145,7 +174,7 @@ $$R_1(\theta_1) = G(1, 2, \theta_1) = \begin{bmatrix} cos\theta_1 & -sin\theta_1
 
 4. The inverse mapping is obtained by reversing the sequence of rotations with the negative of the angles, we starts from the starting basis and end at the target basis. 
 
-$$R(\tau) = R_1(-\tau_1) ... R_m(-\tau_m), \    W_z = R(\tau)W_a$$
+$$R(\theta) = R_1(-\theta_1) ... R_m(-\theta_m), \    W_z = R(\theta)W_a$$
 This step should include the time parameter, $t$, so it shows the interpolation process rendered in the movie-like sequence.
 
 5. Finally, we reconstruct our original frame using $B$. This reconstruction is done at each step of interpolation so we have interpolated path as result.
@@ -169,6 +198,18 @@ d <- data.frame(d$points)
 #animate_xy(d, axes="off") 
 # include gif of the a sphere and torus
 ```
+
+# Implementation
+
+# Examples of interpolated paths
+
+**Interpolated paths of 1D projection**
+
+**Interpolated paths of 2D projection**
+
+# Data application
+
+# Conclusion
 
 
 

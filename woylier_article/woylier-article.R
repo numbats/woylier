@@ -7,6 +7,34 @@ library(tourr)
 library(tidyverse)
 library(woylier)
 library(geozoo)
+library(ggplot2)
+library(patchwork)
+
+
+## ----splines2d-static, echo = FALSE, fig.height = 5, fig.cap="The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "Two side by side scatterplots with 6 points. The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index. "----
+#> 
+#> data("sine_curve")
+#> mat <- data.frame(sine_curve[,5:6])
+#> mat_idx <- round(tourr::splines2d()(mat), 2)
+#> 
+#> mat_rot <- data.frame(x = cos(pi/6) * sine_curve$V5 +
+#>                           sin(pi/6) * sine_curve$V6,
+#>                       y = -sin(pi/6) * sine_curve$V5 +
+#>                            cos(pi/6) * sine_curve$V6)
+#> mat_rot_idx <- round(tourr::splines2d()(mat_rot), 2)
+#> 
+#> p1 <- ggplot(mat, aes(x=V5, y=V6)) +
+#>   geom_point() +
+#>   ggtitle(paste("Splines index = ", mat_idx)) +
+#>   theme(aspect.ratio=1)
+#> 
+#> p2 <- ggplot(mat_rot, aes(x=x, y=y)) +
+#>   geom_point() +
+#>   xlab("Rotated 1") + ylab("Rotated 2") +
+#>   ggtitle(paste("Splines index = ", mat_rot_idx)) +
+#>   theme(aspect.ratio=1)
+#> 
+#> p1+p2
 
 
 ## -----------------------------------------------------------------------------
