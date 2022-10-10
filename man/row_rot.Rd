@@ -2,7 +2,7 @@
 % Please edit documentation in R/givens.R
 \name{row_rot}
 \alias{row_rot}
-\title{Takes i and k th row of a matrix and rotate matrix by theta angle (requires matrix a to we 2*q matrix)}
+\title{Takes i and k th row of a matrix and rotate matrix by theta angle (requires matrix a to be 2*q matrix)}
 \usage{
 row_rot(a, i, k, theta)
 }
@@ -17,8 +17,10 @@ row_rot(a, i, k, theta)
 }
 \value{
 rotated matrix a
+
+refer to Algorithm 5.1.6 of Matrix computation (Golub, Van)
 }
 \description{
-Takes i and k th row of a matrix and rotate matrix by theta angle (requires matrix a to we 2*q matrix)
+Takes i and k th row of a matrix and rotate matrix by theta angle (requires matrix a to be 2*q matrix)
 }
 \keyword{internal}
