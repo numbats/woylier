@@ -45,3 +45,38 @@ p2 <- ggplot(mat_rot, aes(x=x, y=y)) +
 
 p1+p2
 
+# Generate a sample interpolation
+set.seed(5543)
+base1 <- tourr::orthonormalise(tourr::basis_random(6, d=2))
+base2 <- matrix(c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1), ncol=2, byrow=T)
+sine_path <- givens_full_path(base1, base2, nsteps=100)
+#class(sine_path) <- "history_array"
+
+#animate_xy(sine_curve, planned_tour(sine_path))
+# Doesn't respect the specific frame
+
+# Try with plotly
+library(plotly)
+library(tidyverse)
+sine_plotly <- NULL
+for (i in 1:dim(sine_path)[3]) {
+  d <- as.matrix(sine_curve) %*% as.matrix(sine_path[,,i])
+  d <- data.frame(d)
+  d$idx <- round(tourr::splines2d()(d), 2)
+  d$frame <- i
+  sine_plotly <- bind_rows(sine_plotly, d)
+}
+sine_label <- sine_plotly %>%
+  select(idx, frame) %>%
+  distinct() %>%
+  mutate(X1 = -3, X2 = 2.4, idx = paste("spl= ", idx))
+sine_anim <- ggplot() +
+                geom_point(data=sine_plotly, 
+                           aes(x=X1, y=X2, 
+                               frame=frame)) +
+                geom_text(data=sine_label, 
+                          aes(x=X1, y=X2, 
+                              frame=frame, 
+                              label=idx)) +
+                xlab("") + ylab("") 
+ggplotly(sine_anim)
