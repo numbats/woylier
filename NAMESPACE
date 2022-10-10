@@ -3,3 +3,4 @@
 export(add_path)
 export(generate_space_view)
 export(givens_full_path)
+export(givens_path)
