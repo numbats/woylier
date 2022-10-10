@@ -63,14 +63,16 @@ This article is structured as follows. The next section provided the theoretical
 
 The tour method of visualization is animated high-to-low dimensional data rotation that is a movie, one-parameter (time) family of static projections. Several algorithms for such dynamic projections are discussed by Buja et al[@buja_cook_asimov_hurley_2005] is based on the idea of smoothly interpolating a discrete sequence of projections. 
 
-The topic of this paper is the construction of paths of projections. Interpolation of paths of projection can be compared to connecting line segments that interpolate points in Euclidean space. Interpolation acts as a bridge between continuous animation and discrete choice of sequences of projections. Sequence of projections can be constructed in various ways depending on user purpose. If user wants to look at the data from all sides, a random sequence of projections can be used, which is implemented in grand tours. Furthermore, the sequence of projections can be pre-computed, data-driven, or even manually controlled. 
+The topic of this article is the construction of paths of projections. Interpolation of paths of projection can be compared to connecting line segments that interpolate points in Euclidean space. Interpolation acts as a bridge between continuous animation and discrete choice of sequences of projections. Sequence of projections can be constructed in various ways depending on user purpose. If user wants to look at the data from all sides, a random sequence of projections can be used, which is implemented in grand tours. Furthermore, the sequence of projections can be pre-computed, data-driven, or even manually controlled. 
 
 Before continuing with the interpolation algorithms, we need to define the notations. 
 
-- Let the p be the dimension of original data and d be the dimension onto which the data is being projected. 
-- A frame F is defined as $p\times d$ matrix with pairwise orthogonal columns of unit length that satisfies, where $I_d$ is the identity matrix in d dimensions. 
+- Let the $p$ be the dimension of original data and $d$ be the dimension onto which the data is being projected. 
+
+- A frame $F$ is defined as $p\times d$ matrix with pairwise orthogonal columns of unit length that satisfies, where $I_d$ is the identity matrix in d dimensions. 
 
 $$F^TF = I_d$$ 
+
 - Paths of projections are given by continuous one-parameter families $F(t)$ where $t\in [a, z]$ interval representing time. We denote the starting frame by $F_a = F(a)$ and target frame by $F_z = F(z)$.
 
 **Preprojection algorithm**
@@ -87,47 +89,67 @@ The interpolation problem is then reduced to the construction of paths of frames
 
 **The interpolating paths of plane versus frames**
 
-The interpolation of frames is required when the orientation of projection matters. If the rendering on a frame and on the rotated version of the frame yields the same visual scenes, it means the orientation does not matter. 
-
-Current implementation of tourr package[@tourr] is locally shortest (geodesic) interpolation of planes. The pitfall of this interpolation method is that it does not account for rotation variability. 
+Current implementation of tourr package[@tourr] is locally shortest (geodesic) interpolation of planes. The pitfall of this interpolation method is that it does not account for rotation variability. However, the interpolation of frames is required when the orientation of projection matters. If the rendering on a frame and on the rotated version of the frame yields the same visual scenes, it means the orientation does not matter. 
 
 The orientation of frames could be important when non-linear projection pursuit function is used in guided tour. An illustration of such cases are shown below.
 
-**Givens transformation**
+**Givens rotation**
 
-A rotation matrix is a transformation matrix that is used to perform a rotation in Euclidean space in xy plane. A rotation matrix that transforms 2-D plane by an angle $\theta$  looks like this:
+A rotation matrix is a transformation matrix that is used to perform a rotation in Euclidean space in xy plane. A rotation matrix that transforms 2-D plane by an angle $\theta$ looks like this:
 
 $$ \begin{bmatrix}\cos \theta &-\sin \theta \\\sin \theta &\cos \theta \end{bmatrix} $$
 
-If the rotation is in the plane of variables i and j, it is called Givens rotation. 
+If the rotation is in the plane of variables i and j, it is called Givens rotation. The Givens is useful for introducing zeros on a grand scale and used for computing the QR decomposition of matrix in linear algebra problems. One advantage over other transformation methods which is particularly useful in our case is the ability to zero elements more selectively.
 
-The interpolation methods in this project are based on the composition of a number of Givens rotations that maps starting frame onto the target frame.
-
-$$ W_z = R_m(\tau_m) ... R_2(\tau_2)R_1(\tau_1)W_a$$
-
+The interpolation methods in the woylier package is based on the fact that in any vector u one can zero out the i-th coordinate with a Givens rotation in the $(i, j)$-plane for any $j\neq i$. This rotation affects only coordinate $i$ and $j$ and leave all other coordinates unchanged. 
 
 **Givens interpolation path algorithm**
 
-Frame interpolation is necessary when the orientation of the projection matters. There are several methods discussed in the paper including decomposition of orthogonal matrices, givens decomposition and householder decomposition. One that is  of interest to us is Givens path.
-
-The usage of Givens rotations comes from the fact that in any vector u one can zero out the i'th coordinate with a Givens rotation in the (i; j)-plane for any j $ \neq $ i. This rotation affects only coordinates i and j andleaves all coordinates k $\neq$ i; j unchanged.
+We established that the between frames interpolation is necessary when the orientation of the projection matters. There are several methods discussed in the paper including decomposition of orthogonal matrices, Givens decomposition and Householder decomposition. One that isof interest to us is Givens path.
 
 Sequences of Givens rotations can map any orthonormal d-frame F in p-space to standard d-frame $E_d=((1, 0, 0, ...)^T, (0, 1, 0, ...)^T, ...)$. 
 
-The path construction algorithm work as follows:
+The interpolation path construction algorithm from starting frame $F_a$ to target frame $F_z$ is illustrated below. The example is 2D path construction process of original 6D data frame. 
 
 1. Construct preprojection basis $B$ by orthonormalizing $F_z$ with regards tp $F_a$ with Gram-Schmidt:
 
-$$B = (F_a, F_{\star})$$.
+$$B = (F_a, F_{\star})$$
 
-2. Get the preprojected frames 
+
+
+$F_a$ and $F_z$ are $p\times d$ or $6\times2$ matrices that are orthonormal. The preprojection basis $B$ is $p\times 2d$ matrix that is $6\times 4$ in our example.
+
+
+2. Get the preprojected frames using the preprojection basis $B$.
 $$W_a = B^TF_a = E_d$$ and $$W_z = B^TF_z$$
-3. Then we can construct a sequence of Givens rotation that maps $W_z$ to $W_a$:
+Since $B$ is orthonormalized basis of $F_z$ with regard to $F_a$, $W_a$ is $2d\times d$ matrix of 1, 0s by construction that looks like in our example:
 
-$$ W_a = R_m(\tau_m) ... R_2(\tau_2)R_1(\tau_1)W_z$$ The inverse mapping is obtained by reversing the sequence of rotations with the negative of the angles:
+
+$$ \begin{bmatrix}1 & 0 \\0  &1 \\ 0&0 \\0&0\end{bmatrix} $$
+
+$W_z$ is orthonormal $2d\times d$ matrix that looks like:
+
+$$ \begin{bmatrix} a_{11} & a_{12} \\a_{21}  &a_{22} \\ a_{31}&a_{32} \\a_{41}&a_{42}\end{bmatrix} $$
+
+
+3. Then, we can construct a sequence of Givens rotations that maps $W_z$ to $W_a$:
+
+$$ W_a = R_m(\theta_m) ... R_2(\theta_2)R_1(\theta_1)W_z$$ 
+
+At each rotation, the angle $\theta$ that zero out the second coordinate of a plane is calculated.
+
+When $d = 2$, there are 5 rotations involved with 5 different angles that makes each elements 0. For example, the first rotation angle $\theta_1$ is an angle between $(1, 0)$ and $(a_{11}, a_{21})$. This rotation matrix would make element $a_{21}$ zero:
+
+$$R_1(\theta_1) = G(1, 2, \theta_1) = \begin{bmatrix} cos\theta_1 & -sin\theta_1 & 0 & 0 \\sin\theta_1  &cos\theta_1 & 0 &0 \\ 0&0&1&0 \\0&0&0&1\end{bmatrix}$$
+
+4. The inverse mapping is obtained by reversing the sequence of rotations with the negative of the angles, we starts from the starting basis and end at the target basis. 
 
 $$R(\tau) = R_1(-\tau_1) ... R_m(-\tau_m), \    W_z = R(\tau)W_a$$
+This step should include the time parameter, $t$, so it shows the interpolation process rendered in the movie-like sequence.
 
+5. Finally, we reconstruct our original frame using $B$. This reconstruction is done at each step of interpolation so we have interpolated path as result.
+
+$$F_t = B * W_t$$
 
 
 
