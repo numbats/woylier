@@ -12,7 +12,7 @@ sinData <- function(n, p){
   return(dRet)
 }
 
-sine_curve <- t(sinData(500, 6))
+sine_curve <- as_tibble(t(sinData(500, 6)))
 library(GGally)
 ggscatmat(sine_curve)
 
