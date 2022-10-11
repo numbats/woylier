@@ -80,8 +80,7 @@ givens_info <- function(Fa, Fz) {
 givens_step_fraction <- function(interp, fraction) {
   # Interpolate between starting and end frames
   #  - must multiply column wise (hence all the transposes)
-  Wt = givens_rotation(interp$Wa, interp$angles, fraction)
+  Wt = givens_rotation(interp$Wa, interp$tau, fraction)
   Ft = construct_moving_frame(Wt, interp$B)
-  
   return(Ft)
 }
