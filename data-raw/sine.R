@@ -55,45 +55,62 @@ set.seed(5543)
 base1 <- tourr::orthonormalise(tourr::basis_random(6, d=2))
 base2 <- matrix(c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1), ncol=2, byrow=T)
 sine_path <- givens_full_path(base1, base2, nsteps=100)
-#class(sine_path) <- "history_array"
-
-#animate_xy(sine_curve, planned_tour(sine_path))
-# Doesn't respect the specific frame
-
-# Try with plotly
-library(plotly)
-library(tidyverse)
-sine_plotly <- NULL
+sine_all <- NULL
+sine_proj <- NULL
 for (i in 1:dim(sine_path)[3]) {
   d <- as.matrix(sine_curve) %*% as.matrix(sine_path[,,i])
   d <- data.frame(d)
   d$idx <- round(tourr::splines2d()(d), 2)
   d$frame <- i
-  sine_plotly <- bind_rows(sine_plotly, d)
+  sine_all <- bind_rows(sine_all, d)
+  prj <- as.data.frame(sine_path[,,i])
+  prj$frame <- i
+  prj$names <- colnames(sine_curve)
+  sine_proj <- bind_rows(sine_proj, prj)
 }
-sine_label <- sine_plotly %>%
-  #select(idx, frame) %>%
-  #distinct() %>%
-  mutate(labelX = -3.5, labelY = 2.4, label_idx = paste0("spl=", idx))
+sine_label <- sine_all %>%
+  mutate(labelX = -1, labelY = 1, label_idx = paste0("spl=", idx))
+sine_proj <- sine_proj %>%
+  mutate(cx = 0, cy = 0)
 
-sine_anim <- ggplot(sine_label) +
-                geom_point(aes(x=X1, y=X2,
-                               frame=frame)) +
-                geom_text(aes(x=labelX, y=labelY,
-                              frame=frame,
-                              label=label_idx)) +
-                xlab("") + ylab("")
-ggplotly(sine_anim) # text not showing
-
-# Or with gganimate
+# With gganimate
 library(gganimate)
-library(gapminder)
 
-sine_anim <- ggplot(sine_label) +
-  geom_point(aes(x=X1, y=X2)) +
-  geom_text(aes(x=labelX, y=labelY,
-                label=label_idx), size=5) +
+sine_anim <- ggplot() +
+  geom_segment(data=sine_proj, aes(x=V1, y=V2,
+                                   xend=cx, yend=cy,
+                                   group=frame),
+               colour="grey60") +
+  geom_text(data=sine_proj, aes(x=V1, y=V2,
+                                label=names,
+                                group=frame),
+               colour="grey60") +
+  geom_point(data=sine_label, aes(x=X1, y=X2)) +
+  geom_text(data=sine_label, aes(x=labelX, y=labelY,
+                label=label_idx), size=10) +
   xlab("") + ylab("") +
-  transition_time(frame)
-sine_anim
+  transition_time(frame) +
+  theme_void() +
+  theme(aspect.ratio=1)
+animate(sine_anim, fps=8, renderer = gifski_renderer(loop = FALSE))
 anim_save("sine_anim.gif")
+
+# With planned tour - Doesn't respect the specific frame
+#class(sine_path) <- "history_array"
+
+#animate_xy(sine_curve, planned_tour(sine_path))
+
+# Try with plotly
+#library(plotly)
+#library(tidyverse)
+
+#sine_anim <- ggplot(sine_label) +
+#                geom_point(aes(x=X1, y=X2,
+#                               frame=frame)) +
+#                geom_text(aes(x=labelX, y=labelY,
+#                              frame=frame,
+#                              label=label_idx)) +
+#                xlab("") + ylab("")
+#ggplotly(sine_anim) # text not showing
+
+
