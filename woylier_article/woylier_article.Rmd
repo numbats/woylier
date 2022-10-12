@@ -135,7 +135,7 @@ The interpolation methods in the woylier package is based on the fact that in an
 
 **Givens interpolation path algorithm**
 
-We established that the between frames interpolation is necessary when the orientation of the projection matters. There are several methods discussed in the paper including decomposition of orthogonal matrices, Givens decomposition and Householder decomposition. One that isof interest to us is Givens path.
+We established that the between frames interpolation is necessary when the orientation of the projection matters. There are several methods discussed in the paper including decomposition of orthogonal matrices, Givens decomposition and Householder decomposition. One that is of interest to us is Givens path.
 
 Sequences of Givens rotations can map any orthonormal d-frame F in p-space to standard d-frame $E_d=((1, 0, 0, ...)^T, (0, 1, 0, ...)^T, ...)$. 
 

@@ -16,15 +16,15 @@ frames <- givens_full_path(base1, base2, nsteps = 10)
 
 sp <- generate_space_view(p=p)
 
-sp_path <- add_path(sp, frames) 
+sp_path <- add_path(sp, frames)
 
-point1 <- as.data.frame(t(base1)) 
+point1 <- as.data.frame(t(base1))
 point1$type <- "point1"
 
 point2 <- as.data.frame(t(base2))
 point2$type <- "point2"
 
-sp_path <- rbind(sp_path, point1, point2) 
+sp_path <- rbind(sp_path, point1, point2)
 
 #tourr::animate_xy(sp_path[,1:p], col=sp_path$type, axes="bottomleft")
 
@@ -40,9 +40,9 @@ sp_path <- rbind(sp_path, frames)
 point3 <- as.data.frame(t(base3))
 point3$type <- "point3"
 
-sp_path <- rbind(sp_path, point3) 
+sp_path <- rbind(sp_path, point3)
 
-tourr::animate_xy(sp_path[,1:p], col=sp_path$type, 
+tourr::animate_xy(sp_path[,1:p], col=sp_path$type,
                   axes="bottomleft")
 
 # Generate 2D example
@@ -73,7 +73,7 @@ d <- 2
 # Check on torus
 
 proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
-  purrr::flatten_dbl() %>% 
+  purrr::flatten_dbl() %>%
   matrix(ncol = p*2, byrow = TRUE) %>%
   as_tibble()
 
@@ -81,24 +81,22 @@ proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
 #tourr::animate_slice(proj_2d, axes="bottomleft")
 
 # Path
-path_2d <- t(apply(frames_2d, 3, c)) %>% 
+path_2d <- t(apply(frames_2d, 3, c)) %>%
   as.data.frame()
 
 #tourr::animate_xy(path_2d)
 
 # Join
-proj_2d <- proj_2d %>% 
+proj_2d <- proj_2d %>%
   mutate(type="torus")
 
-path_2d <- path_2d %>% 
+path_2d <- path_2d %>%
   mutate(type="path")
 
 proj_path <- bind_rows(proj_2d, path_2d)
 
-sp_path <- rbind(sp_path, point1, point2) 
-
-tourr::animate_xy(proj_path[,1:6], 
-                  col=proj_path$type, 
+tourr::animate_xy(proj_path[,1:6],
+                  col=proj_path$type,
                   axes="bottomleft")
 
 
