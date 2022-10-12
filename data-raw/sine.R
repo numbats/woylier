@@ -13,6 +13,8 @@ sinData <- function(n, p){
 }
 
 sine_curve <- as_tibble(sinData(6, 500))
+sine_curve <- sine_curve %>%
+  mutate(across(V1:V6, function(x) (x-mean(x))/sd(x)))
 library(GGally)
 ggscatmat(sine_curve)
 
