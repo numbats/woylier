@@ -54,7 +54,7 @@ The idea of projection pursuit is a procedure used to locate the projection of h
 
 Grand tour is a multivariate data visualization technique developed by Asimov[@asimov_1985], which is based on idea of rotations of a lower dimensional projection in high-dimensional space. This technique is equivalent to rotating an object in 3D to better understand its shape and dimensions. Originally, Asimov's grand tour presents the viewer with an automatic movie of projections with no user control. Since then the literature on the tour has been about interactivity of the tour giving the control to users.[@buja_cook_asimov_hurley_2005] One of the interactive visual data exploration tool is "guided tour".
 
-The guided tour gives user an extrapolation power by combining projection pursuit with tour which is implemented in the "tourr"[@tourr] package. Current implementation of guided tour used geodesic interpolation between planes. 
+The guided tour gives user an exploration power by combining projection pursuit with tour which is implemented in the "tourr"[@tourr] package. Current implementation of guided tour used geodesic interpolation between planes. 
 
 The interpolated paths based on geodesic interpolation between bases is visually invariant under changes of orientation. However, in some cases of non-linear projection pursuit the orientation of frames does matter. One example is splines2D index.[@pp] The lack of rotation invariance of splines2d index raise complications in the optimization process.[@pp] This rotational variety issue of non-linear projection pursuit functions was the motivation of this work. 
 

@@ -39,22 +39,94 @@ library(patchwork)
 -   Conclusion
 -   Acknowledgements and references
 
-## Motivation of the project 
+## Motivation of the project {.smaller .scrollable transition="slide"}
 
-- tour
+::: panel-tabset
 
-```{r}
-animate(flea[, 1:6], tour_path = grand_tour(), display = display_xy())
+### Plot
+
+::: columns
+::: {.column width="45%"}
+
+- Tour is a high-dimensional data visualization technique based on rotation of high-to-low dimensional data projection.
+
+- Tour usage 
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="50%"}
+
+```{r include=FALSE}
+render_gif(flea[, 1:6], grand_tour(), 
+           display_xy(axes="bottomleft", col = flea$species), 
+           "flea.gif", frames=100, width=450, height=450)
 ```
 
-- guided tour
+![](flea.gif){.r-stretch}
 
-```{r}
-animate_xy(flea[, 1:6], guided_tour(lda_pp(flea$species)), sphere = TRUE, col = flea$species)
+:::
+:::
+
+### Code
+
+```{r echo=TRUE, eval=FALSE}
+render_gif(flea[, 1:6], grand_tour(), 
+           display_xy(axes="bottomleft", col = flea$species), 
+           "flea.gif", frames=100, width=450, height=450)
 ```
 
+:::
 
-## Motivation of the project 
+## Motivation of the project {.smaller .scrollable transition="slide"}
+
+::: panel-tabset
+
+### Plot
+
+::: columns
+::: {.column width="45%"}
+
+- The guided tour gives user an exploration power by combining projection pursuit with tour
+- Guided tour using LDA index
+
+```{r include=FALSE}
+render_gif(flea[, 1:6], guided_tour(lda_pp(flea$species)), 
+           display_xy(col=flea$species, axes="bottomleft"), 
+           "flea_guided.gif", 
+           frames=50, width=450, height=450)
+```
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="50%"}
+
+![](flea_guided.gif){.r-stretch}
+:::
+:::
+
+### Code
+
+```{r echo=TRUE, eval=FALSE}
+render_gif(flea[, 1:6], guided_tour(lda_pp(flea$species)), 
+           display_xy(col=flea$species, axes="bottomleft"), 
+           "flea_guided.gif", 
+           frames=50, width=450, height=450)
+```
+
+:::
+
+
+## Motivation of the project {.smaller .scrollable transition="slide"}
+
+- Geodesic interpolation between planes
+
+- The interpolated paths are visually invariant under changes of orientation. 
 
 ![](tour_path.png){.r-stretch}
 
@@ -63,6 +135,20 @@ animate_xy(flea[, 1:6], guided_tour(lda_pp(flea$species)), sphere = TRUE, col = 
 ::: panel-tabset
 
 ### Plot
+
+::: columns
+::: {.column width="35%"}
+
+- However, in some cases of non-linear projection pursuit the orientation of frames does matter. 
+- One example is splines2D index. 
+- This was the motivation of this work. 
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="60%"}
 
 ```{r}
 data("sine_curve")
@@ -98,6 +184,8 @@ ggplot(mat_all, aes(x=x, y=y, colour=type)) +
   geom_text(data=mat_all_label, aes(x=x, y=y, label=label, colour=type, size=20)) +
   theme(aspect.ratio=1, panel.background = element_rect(fill='white', colour='black'))
 ```
+:::
+:::
 
 ### Code
 
@@ -150,7 +238,7 @@ sine_curve
 
 ![](frame_to_frame.png){.absolute top="170" right="5" width="450" height="400"}
 
-## Notations
+## Notations {.smaller .scrollable transition="slide"}
 
 | Notation | Description                                                            |
 |------------|------------------------------------------------------------------------|
@@ -171,9 +259,9 @@ $$ \begin{bmatrix}\cos \theta &-\sin \theta \\\sin \theta &\cos \theta \end{bmat
 - Used for introducing zeros on a grand scale and used for computing the QR decomposition of matrix in linear algebra problems. 
 - One advantage of Givens rotation that is useful for us is the ability to zero elements selectively. 
 
-## Givens transformation
+## Givens transformation {.smaller .scrollable transition="slide"}
 
-\begin{bmatrix} b_{11} & b_{12} &b_{13} \\b_{21}  &b_{22} &b_{23}\\ 0&b_{32} &b_{33}\end{bmatrix} =\begin{bmatrix} cos \theta & -\sin\theta & 0 \\\sin\theta &cos \theta &0\\ 0&0 &1\end{bmatrix} \begin{bmatrix} a_{11} & a_{12} &a_{13} \\a_{21}  &a_{22} &a_{23}\\ a_{31}&a_{32} &a_{33}\end{bmatrix}
+\begin{bmatrix} b_{11} & b_{12} &b_{13} \\b_{21}  &b_{22} &b_{23}\\ 0&b_{32} &b_{33}\end{bmatrix} = \begin{bmatrix} cos \theta & -\sin\theta & 0 \\\sin\theta &cos \theta &0\\ 0&0 &1\end{bmatrix} \begin{bmatrix} a_{11} & a_{12} &a_{13} \\a_{21}  &a_{22} &a_{23}\\ a_{31}&a_{32} &a_{33}\end{bmatrix}
 
 
 ## Givens interpolation path algorithm {.smaller}
@@ -280,15 +368,77 @@ Finally, we reconstruct our original frame using $B$. This reconstruction is don
 
 $$F_t = B * W_t$$
 
-## Implementation {auto-animate="true"}
+## Implementation in R {auto-animate="true"}
+
+```{r eval=FALSE, echo=TRUE}
+preprojection <- function(Fa, Fz) {
+  # check both are matrices are both correct size
+  stopifnot("Your inputs do not have the same number of columns!" = ncol(Fa) == ncol(Fz))
+  stopifnot("Your inputs do not have the same number of row!" = nrow(Fa) == nrow(Fz))
+
+  # check each is orthonormal
+  stopifnot("The current frame must be orthonormal!" = tourr::is_orthonormal(Fa))
+  stopifnot("The target frame must be orthonormal!" = tourr::is_orthonormal(Fz))
+
+  Fz_star <- tourr::orthonormalise_by(Fz, Fa)
+  B <- cbind(Fa, Fz_star)
+  return(B)
+}
+
+construct_preframe <- function(Fr, B) {
+  W <- t(B) %*% Fr
+  return(W)
+}
+
+givens_rotation <- function(Wa, angles, stepfraction) {
+  w_i = Wa
+  for (col in ncol(Wa):1) {
+    for (row in (nrow(Wa)-1):col){
+      # rotating in reverse order
+      index = paste0(col, row+1)
+      theta = - as.numeric(angles[index])
+      w_i = row_rot(w_i, col, row+1, theta*stepfraction)
+    }
+  }
+  return(w_i)
+}
+
+construct_moving_frame <- function(Wt, B) {
+  Ft = B %*% Wt
+  return(Ft)
+}
+
+givens_full_path <- function(Fa, Fz, nsteps) {
+  B <- preprojection(Fa, Fz)
+  Wa <- construct_preframe(Fa, B)
+  Wz <- construct_preframe(Fz, B)
+  angles <- calculate_angles(Wa, Wz)
+  path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
+  for (i in 1:nsteps) {
+    stepfraction <- i/nsteps
+    Wt = givens_rotation(Wa, angles, stepfraction)
+    Ft = construct_moving_frame(Wt, B)
+    path[,,i] <- Ft
+  }
+  return(path)
+}
+```
+
+
+## Implementation illustration {.smaller .scrollable transition="slide"}
 
 ::: panel-tabset
 
 ### Plot
 
-```{r}
+::: columns
+::: {.column width="45%"}
+
+- 1D interpolation path of 6D data on the surface of a sphere in 10 steps.
+
+```{r include=FALSE}
 set.seed(2022)
-p <- 4
+p <- 6
 base1 <- tourr::basis_random(p, d=1)
 base2 <- tourr::basis_random(p, d=1)
 base3 <- tourr::basis_random(p, d=1)
@@ -316,13 +466,28 @@ point3 <- as.data.frame(t(base3))
 point3$type <- "point3"
 
 sp_path <- rbind(sp_path, point3) 
-tourr::animate_xy(sp_path[,1:p], col=sp_path$type, 
-                  axes="bottomleft")
+
+tourr::render_gif(sp_path[,1:p], 
+                  tour_path = grand_tour(),
+                  display = display_xy(axes="bottomleft", col=sp_path$type),
+                  frames = 100,
+                  "sphere.gif")
 ```
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="50%"}
+
+![](sphere.gif){.r-stretch}
+:::
+:::
 
 ### Code
 
-```{r eval=FALSE, echo=TRUE}
+```{r echo=TRUE, eval=FALSE}
 set.seed(2022)
 p <- 4
 base1 <- tourr::basis_random(p, d=1)
@@ -352,28 +517,37 @@ point3 <- as.data.frame(t(base3))
 point3$type <- "point3"
 
 sp_path <- rbind(sp_path, point3) 
-tourr::animate_xy(sp_path[,1:p], col=sp_path$type, 
-                  axes="bottomleft")
+
+tourr::render_gif(sp_path[,1:p], 
+                  tour_path = grand_tour(),
+                  display = display_xy(axes="bottomleft", col=sp_path$type),
+                  frames = 100,
+                  "sphere.gif")
 ```
 
 :::
 
 
-## Implementation {auto-animate="true"}
+## Implementation illustration {.smaller .scrollable transition="slide"}
 
 ::: panel-tabset
 
 ### Plot
 
-```{r}
+::: columns
+::: {.column width="45%"}
+
+- 2D interpolation path of 6D data on the surface of a sphere in 10 steps.
+
+```{r include=FALSE}
 set.seed(2022)
-p <- 3
+p <- 6
+n <- 1500
+d <- 2
 base1 <- tourr::basis_random(p, d=2)
 base2 <- tourr::basis_random(p, d=2)
 
 frames_2d <- givens_full_path(base1, base2, 10)
-n <- 1000
-d <- 2
 
 proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
   purrr::flatten_dbl() %>% 
@@ -389,21 +563,34 @@ path_2d <- path_2d %>%
 
 proj_path <- bind_rows(proj_2d, path_2d)
 
-tourr::animate_xy(proj_path[,1:6], 
-                  col=proj_path$type, 
-                  axes="bottomleft")
+tourr::render_gif(proj_path[,1:6], 
+                  tour_path = grand_tour(),
+                  display = display_xy(axes="bottomleft", col=proj_path$type),
+                  frames = 100,
+                  "torus.gif")
 ```
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="50%"}
+
+![](torus.gif){.r-stretch}
+:::
+:::
 
 ### Code
 
-```{r eval=FALSE, echo=TRUE}
+```{r echo=TRUE, eval=FALSE}
 set.seed(2022)
 p <- 3
 base1 <- tourr::basis_random(p, d=2)
 base2 <- tourr::basis_random(p, d=2)
 
 frames_2d <- givens_full_path(base1, base2, 10)
-n <- 1000
+n <- 1500
 d <- 2
 
 proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
@@ -420,26 +607,47 @@ path_2d <- path_2d %>%
 
 proj_path <- bind_rows(proj_2d, path_2d)
 
-tourr::animate_xy(proj_path[,1:6], 
-                  col=proj_path$type, 
-                  axes="bottomleft")
+tourr::render_gif(proj_path[,1:6], 
+                  tour_path = grand_tour(),
+                  display = display_xy(axes="bottomleft", col=proj_path$type),
+                  frames = 100,
+                  "torus.gif")
 ```
 
 :::
 
 ## Data application
 
-- Code for the sine 
-
-- the animation of the givens path for the splines example.
+![Using Givens path for optimizing Splines index](sine_anim.gif){.r-stretch}
 
 ## Next steps
 
 - Integrate with tour package
+- Produce data application examples
 - Produce RJournal article
 
-## Acknowledgements and references
+## Summary
 
-- References
+::: {.nonincremental}
+- Alternative tour interpolation path
+- Used for detection of non-linear projection pursuit 
+:::
 
-## Any questions?
+The woylier package repo is [here](https://github.com/numbats/woylier).
+
+
+## References {.smaller .scrollable transition="slide"}
+
+- D. Asimov. The grand tour: A tool for viewing multidimensional data. 
+- A. Buja, D. Cook, D. Asimov and C. Hurley. [Computational methods for high-dimensional rotations in data visualization](10.1016/s0169-7161(04)24014-7).
+- U. Laa and D. Cook. [Using tours to visually investigate properties of new projection pursuit indexes with application to problems in physics.](https://doi.org/10.1007/s00180-020-00954-8).
+- B. Schloerke. [Geozoo: Zoo of geometric objects](https://CRAN.R-project.org/package=geozoo).
+- H. Wickham, D. Cook, H. Hofmann and A. Buja. [tourr: An R package for exploring multivariate data with projections.](https://doi.org/10.18637/jss.v040.i02)
+
+## Acknowledgements
+
+Slides produced using [quarto](https://quarto.org).
+
+Slides available in the [Github repo](https://github.com/numbats/woylier). 
+
+
