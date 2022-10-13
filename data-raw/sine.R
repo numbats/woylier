@@ -94,7 +94,7 @@ sine_anim <- ggplot() +
   theme(aspect.ratio=1,
         plot.background = element_rect(fill=NULL, colour = "black"))
 
-animate(sine_anim, fps=8, renderer = gifski_renderer(loop = FALSE))
+animate(sine_anim, fps=8, renderer = gifski_renderer(loop = FALSE), width=300, height=300)
 anim_save("sine_anim.gif")
 
 # With planned tour - Doesn't respect the specific frame
