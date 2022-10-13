@@ -69,7 +69,7 @@ for (i in 1:dim(sine_path)[3]) {
   sine_proj <- bind_rows(sine_proj, prj)
 }
 sine_label <- sine_all %>%
-  mutate(labelX = -1, labelY = 1, label_idx = paste0("spl=", idx))
+  mutate(labelX = -1, labelY = 1.3, label_idx = paste0("spl=", format(idx, digits=2)))
 sine_proj <- sine_proj %>%
   mutate(cx = 0, cy = 0)
 
@@ -91,7 +91,9 @@ sine_anim <- ggplot() +
   xlab("") + ylab("") +
   transition_time(frame) +
   theme_void() +
-  theme(aspect.ratio=1)
+  theme(aspect.ratio=1,
+        plot.background = element_rect(fill=NULL, colour = "black"))
+
 animate(sine_anim, fps=8, renderer = gifski_renderer(loop = FALSE))
 anim_save("sine_anim.gif")
 
