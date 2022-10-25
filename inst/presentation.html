@@ -499,7 +499,7 @@
 <section id="motivation-of-the-project-2" class="slide level2 smaller scrollable" data-transition="slide">
 <h2>Motivation of the project 💫</h2>
 <ul>
-<li><p>Geodesic interpolation between planes</p></li>
+<li><p>Geodesic interpolation between planes.</p></li>
 <li><p>The interpolated paths are visually invariant under changes of orientation.</p></li>
 </ul>
 <img data-src="tour_path.png" class="r-stretch">
@@ -683,7 +683,7 @@
 <div class="columns">
 <div class="column" style="width:47.5%;">
 <h4 id="step-1">Step 1</h4>
-<p>Construct preprojection basis <span class="math inline">\(B\)</span> by orthonormalizing <span class="math inline">\(F_z\)</span> with regards tp <span class="math inline">\(F_a\)</span> with Gram-Schmidt:</p>
+<p>Construct preprojection basis <span class="math inline">\(B\)</span> by orthonormalizing <span class="math inline">\(F_z\)</span> with regards to <span class="math inline">\(F_a\)</span> with Gram-Schmidt:</p>
 <p><span class="math display">\[B = (F_a, F_{\star})\]</span></p>
 <h4 id="step-2">Step 2</h4>
 <p>Get the preprojected frames using the preprojection basis <span class="math inline">\(B\)</span>. <span class="math display">\[W_a = B^TF_a = E_d\]</span> and <span class="math display">\[W_z = B^TF_z\]</span></p>
@@ -822,7 +822,7 @@
 <div id="tabset-4-2">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">set.seed</span>(<span class="dv">2022</span>)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>p <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>p <span class="ot">&lt;-</span> <span class="dv">6</span></span>
 <span id="cb13-3"><a href="#cb13-3"></a>base1 <span class="ot">&lt;-</span> tourr<span class="sc">::</span><span class="fu">basis_random</span>(p, <span class="at">d=</span><span class="dv">1</span>)</span>
 <span id="cb13-4"><a href="#cb13-4"></a>base2 <span class="ot">&lt;-</span> tourr<span class="sc">::</span><span class="fu">basis_random</span>(p, <span class="at">d=</span><span class="dv">1</span>)</span>
 <span id="cb13-5"><a href="#cb13-5"></a></span>
@@ -852,72 +852,19 @@
 </div>
 </div>
 </section>
-<section id="implementation-illustration-1" class="slide level2 smaller scrollable" data-transition="slide">
-<h2>Implementation illustration 💻</h2>
+<section id="data-application" class="slide level2 scrollable" data-transition="slide">
+<h2>Data application ✅</h2>
 <div class="panel-tabset">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Plot</a></li><li><a href="#tabset-5-2">Code</a></li></ul>
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Motivation</a></li><li><a href="#tabset-5-2">Plot</a></li><li><a href="#tabset-5-3">Code</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1">
-<div class="columns">
-<div class="column" style="width:45%;">
-<ul>
-<li>2D interpolation path of 6D data on the surface of a torus in 10 steps.</li>
-</ul>
-</div><div class="column" style="width:5%;">
-
-</div><div class="column" style="width:50%;">
-<img data-src="torus.gif" class="r-stretch">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-14-1.png" width="960"></p>
 </div>
 </div>
 </div>
 <div id="tabset-5-2">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">set.seed</span>(<span class="dv">2022</span>)</span>
-<span id="cb14-2"><a href="#cb14-2"></a>p <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>base1 <span class="ot">&lt;-</span> tourr<span class="sc">::</span><span class="fu">basis_random</span>(p, <span class="at">d=</span><span class="dv">2</span>)</span>
-<span id="cb14-4"><a href="#cb14-4"></a>base2 <span class="ot">&lt;-</span> tourr<span class="sc">::</span><span class="fu">basis_random</span>(p, <span class="at">d=</span><span class="dv">2</span>)</span>
-<span id="cb14-5"><a href="#cb14-5"></a></span>
-<span id="cb14-6"><a href="#cb14-6"></a>frames_2d <span class="ot">&lt;-</span> <span class="fu">givens_full_path</span>(base1, base2, <span class="dv">10</span>)</span>
-<span id="cb14-7"><a href="#cb14-7"></a>n <span class="ot">&lt;-</span> <span class="dv">1500</span></span>
-<span id="cb14-8"><a href="#cb14-8"></a>d <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a></span>
-<span id="cb14-10"><a href="#cb14-10"></a>proj_2d <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="sc">~</span><span class="fu">basis_random</span>(<span class="at">n =</span> p,  <span class="at">d=</span>d)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-11"><a href="#cb14-11"></a>  purrr<span class="sc">::</span><span class="fu">flatten_dbl</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb14-12"><a href="#cb14-12"></a>  <span class="fu">matrix</span>(<span class="at">ncol =</span> p<span class="sc">*</span><span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-13"><a href="#cb14-13"></a>  <span class="fu">as_tibble</span>()</span>
-<span id="cb14-14"><a href="#cb14-14"></a>path_2d <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(frames_2d, <span class="dv">3</span>, c)) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-15"><a href="#cb14-15"></a>  <span class="fu">as.data.frame</span>()</span>
-<span id="cb14-16"><a href="#cb14-16"></a></span>
-<span id="cb14-17"><a href="#cb14-17"></a>proj_2d <span class="ot">&lt;-</span> proj_2d <span class="sc">%&gt;%</span> </span>
-<span id="cb14-18"><a href="#cb14-18"></a>  <span class="fu">mutate</span>(<span class="at">type=</span><span class="st">"torus"</span>)</span>
-<span id="cb14-19"><a href="#cb14-19"></a>path_2d <span class="ot">&lt;-</span> path_2d <span class="sc">%&gt;%</span> </span>
-<span id="cb14-20"><a href="#cb14-20"></a>  <span class="fu">mutate</span>(<span class="at">type=</span><span class="st">"path"</span>)</span>
-<span id="cb14-21"><a href="#cb14-21"></a></span>
-<span id="cb14-22"><a href="#cb14-22"></a>proj_path <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(proj_2d, path_2d)</span>
-<span id="cb14-23"><a href="#cb14-23"></a></span>
-<span id="cb14-24"><a href="#cb14-24"></a>tourr<span class="sc">::</span><span class="fu">render_gif</span>(proj_path[,<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>], </span>
-<span id="cb14-25"><a href="#cb14-25"></a>                  <span class="at">tour_path =</span> <span class="fu">grand_tour</span>(),</span>
-<span id="cb14-26"><a href="#cb14-26"></a>                  <span class="at">display =</span> <span class="fu">display_xy</span>(<span class="at">axes=</span><span class="st">"bottomleft"</span>, <span class="at">col=</span>proj_path<span class="sc">$</span>type),</span>
-<span id="cb14-27"><a href="#cb14-27"></a>                  <span class="at">frames =</span> <span class="dv">100</span>,</span>
-<span id="cb14-28"><a href="#cb14-28"></a>                  <span class="st">"torus.gif"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="data-application" class="slide level2 scrollable" data-transition="slide">
-<h2>Data application ✅</h2>
-<div class="panel-tabset">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">Motivation</a></li><li><a href="#tabset-6-2">Plot</a></li><li><a href="#tabset-6-3">Code</a></li></ul>
-<div class="tab-content">
-<div id="tabset-6-1">
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-16-1.png" width="960"></p>
-</div>
-</div>
-</div>
-<div id="tabset-6-2">
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <img data-src="sine_anim.gif" class="r-stretch">
@@ -925,53 +872,53 @@
 </figure>
 </div>
 </div>
-<div id="tabset-6-3">
+<div id="tabset-5-3">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># Generate a sample interpolation</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">set.seed</span>(<span class="dv">5543</span>)</span>
-<span id="cb15-3"><a href="#cb15-3"></a>base1 <span class="ot">&lt;-</span> tourr<span class="sc">::</span><span class="fu">orthonormalise</span>(tourr<span class="sc">::</span><span class="fu">basis_random</span>(<span class="dv">6</span>, <span class="at">d=</span><span class="dv">2</span>))</span>
-<span id="cb15-4"><a href="#cb15-4"></a>base2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">byrow=</span>T)</span>
-<span id="cb15-5"><a href="#cb15-5"></a>sine_path <span class="ot">&lt;-</span> <span class="fu">givens_full_path</span>(base1, base2, <span class="at">nsteps=</span><span class="dv">100</span>)</span>
-<span id="cb15-6"><a href="#cb15-6"></a>sine_all <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a>sine_proj <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(sine_path)[<span class="dv">3</span>]) {</span>
-<span id="cb15-9"><a href="#cb15-9"></a>  d <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(sine_curve) <span class="sc">%*%</span> <span class="fu">as.matrix</span>(sine_path[,,i])</span>
-<span id="cb15-10"><a href="#cb15-10"></a>  d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(d)</span>
-<span id="cb15-11"><a href="#cb15-11"></a>  d<span class="sc">$</span>idx <span class="ot">&lt;-</span> <span class="fu">round</span>(tourr<span class="sc">::</span><span class="fu">splines2d</span>()(d), <span class="dv">2</span>)</span>
-<span id="cb15-12"><a href="#cb15-12"></a>  d<span class="sc">$</span>frame <span class="ot">&lt;-</span> i</span>
-<span id="cb15-13"><a href="#cb15-13"></a>  sine_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(sine_all, d)</span>
-<span id="cb15-14"><a href="#cb15-14"></a>  prj <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sine_path[,,i])</span>
-<span id="cb15-15"><a href="#cb15-15"></a>  prj<span class="sc">$</span>frame <span class="ot">&lt;-</span> i</span>
-<span id="cb15-16"><a href="#cb15-16"></a>  prj<span class="sc">$</span>names <span class="ot">&lt;-</span> <span class="fu">colnames</span>(sine_curve)</span>
-<span id="cb15-17"><a href="#cb15-17"></a>  sine_proj <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(sine_proj, prj)</span>
-<span id="cb15-18"><a href="#cb15-18"></a>}</span>
-<span id="cb15-19"><a href="#cb15-19"></a>sine_label <span class="ot">&lt;-</span> sine_all <span class="sc">%&gt;%</span></span>
-<span id="cb15-20"><a href="#cb15-20"></a>  <span class="fu">mutate</span>(<span class="at">labelX =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">labelY =</span> <span class="fl">1.45</span>, <span class="at">label_idx =</span> <span class="fu">paste0</span>(<span class="st">"spl="</span>, <span class="fu">format</span>(idx, <span class="at">digits=</span><span class="dv">2</span>)))</span>
-<span id="cb15-21"><a href="#cb15-21"></a>sine_proj <span class="ot">&lt;-</span> sine_proj <span class="sc">%&gt;%</span></span>
-<span id="cb15-22"><a href="#cb15-22"></a>  <span class="fu">mutate</span>(<span class="at">cx =</span> <span class="dv">0</span>, <span class="at">cy =</span> <span class="dv">0</span>)</span>
-<span id="cb15-23"><a href="#cb15-23"></a><span class="co"># With gganimate</span></span>
-<span id="cb15-24"><a href="#cb15-24"></a><span class="fu">library</span>(gganimate)</span>
-<span id="cb15-25"><a href="#cb15-25"></a></span>
-<span id="cb15-26"><a href="#cb15-26"></a>sine_anim <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb15-27"><a href="#cb15-27"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>sine_proj, <span class="fu">aes</span>(<span class="at">x=</span>V1, <span class="at">y=</span>V2,</span>
-<span id="cb15-28"><a href="#cb15-28"></a>                                   <span class="at">xend=</span>cx, <span class="at">yend=</span>cy,</span>
-<span id="cb15-29"><a href="#cb15-29"></a>                                   <span class="at">group=</span>frame),</span>
-<span id="cb15-30"><a href="#cb15-30"></a>               <span class="at">colour=</span><span class="st">"grey60"</span>) <span class="sc">+</span></span>
-<span id="cb15-31"><a href="#cb15-31"></a>  <span class="fu">geom_text</span>(<span class="at">data=</span>sine_proj, <span class="fu">aes</span>(<span class="at">x=</span>V1, <span class="at">y=</span>V2,</span>
-<span id="cb15-32"><a href="#cb15-32"></a>                                <span class="at">label=</span>names,</span>
-<span id="cb15-33"><a href="#cb15-33"></a>                                <span class="at">group=</span>frame),</span>
-<span id="cb15-34"><a href="#cb15-34"></a>               <span class="at">colour=</span><span class="st">"grey60"</span>) <span class="sc">+</span></span>
-<span id="cb15-35"><a href="#cb15-35"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>sine_label, <span class="fu">aes</span>(<span class="at">x=</span>X1, <span class="at">y=</span>X2)) <span class="sc">+</span></span>
-<span id="cb15-36"><a href="#cb15-36"></a>  <span class="fu">geom_text</span>(<span class="at">data=</span>sine_label, <span class="fu">aes</span>(<span class="at">x=</span>labelX, <span class="at">y=</span>labelY,</span>
-<span id="cb15-37"><a href="#cb15-37"></a>                <span class="at">label=</span>label_idx), <span class="at">size=</span><span class="dv">10</span>) <span class="sc">+</span></span>
-<span id="cb15-38"><a href="#cb15-38"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb15-39"><a href="#cb15-39"></a>  <span class="fu">transition_time</span>(frame) <span class="sc">+</span></span>
-<span id="cb15-40"><a href="#cb15-40"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb15-41"><a href="#cb15-41"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio=</span><span class="dv">1</span>,</span>
-<span id="cb15-42"><a href="#cb15-42"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="cn">NULL</span>, <span class="at">colour =</span> <span class="st">"black"</span>))</span>
-<span id="cb15-43"><a href="#cb15-43"></a></span>
-<span id="cb15-44"><a href="#cb15-44"></a><span class="fu">animate</span>(sine_anim, <span class="at">fps=</span><span class="dv">8</span>, <span class="at">renderer =</span> <span class="fu">gifski_renderer</span>(<span class="at">loop =</span> <span class="cn">FALSE</span>), <span class="at">width=</span><span class="dv">400</span>, <span class="at">height=</span><span class="dv">400</span>)</span>
-<span id="cb15-45"><a href="#cb15-45"></a><span class="fu">anim_save</span>(<span class="st">"inst/sine_anim.gif"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Generate a sample interpolation</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">set.seed</span>(<span class="dv">5543</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>base1 <span class="ot">&lt;-</span> tourr<span class="sc">::</span><span class="fu">orthonormalise</span>(tourr<span class="sc">::</span><span class="fu">basis_random</span>(<span class="dv">6</span>, <span class="at">d=</span><span class="dv">2</span>))</span>
+<span id="cb14-4"><a href="#cb14-4"></a>base2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">byrow=</span>T)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>sine_path <span class="ot">&lt;-</span> <span class="fu">givens_full_path</span>(base1, base2, <span class="at">nsteps=</span><span class="dv">100</span>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a>sine_all <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a>sine_proj <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(sine_path)[<span class="dv">3</span>]) {</span>
+<span id="cb14-9"><a href="#cb14-9"></a>  d <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(sine_curve) <span class="sc">%*%</span> <span class="fu">as.matrix</span>(sine_path[,,i])</span>
+<span id="cb14-10"><a href="#cb14-10"></a>  d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(d)</span>
+<span id="cb14-11"><a href="#cb14-11"></a>  d<span class="sc">$</span>idx <span class="ot">&lt;-</span> <span class="fu">round</span>(tourr<span class="sc">::</span><span class="fu">splines2d</span>()(d), <span class="dv">2</span>)</span>
+<span id="cb14-12"><a href="#cb14-12"></a>  d<span class="sc">$</span>frame <span class="ot">&lt;-</span> i</span>
+<span id="cb14-13"><a href="#cb14-13"></a>  sine_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(sine_all, d)</span>
+<span id="cb14-14"><a href="#cb14-14"></a>  prj <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(sine_path[,,i])</span>
+<span id="cb14-15"><a href="#cb14-15"></a>  prj<span class="sc">$</span>frame <span class="ot">&lt;-</span> i</span>
+<span id="cb14-16"><a href="#cb14-16"></a>  prj<span class="sc">$</span>names <span class="ot">&lt;-</span> <span class="fu">colnames</span>(sine_curve)</span>
+<span id="cb14-17"><a href="#cb14-17"></a>  sine_proj <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(sine_proj, prj)</span>
+<span id="cb14-18"><a href="#cb14-18"></a>}</span>
+<span id="cb14-19"><a href="#cb14-19"></a>sine_label <span class="ot">&lt;-</span> sine_all <span class="sc">%&gt;%</span></span>
+<span id="cb14-20"><a href="#cb14-20"></a>  <span class="fu">mutate</span>(<span class="at">labelX =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">labelY =</span> <span class="fl">1.45</span>, <span class="at">label_idx =</span> <span class="fu">paste0</span>(<span class="st">"spl="</span>, <span class="fu">format</span>(idx, <span class="at">digits=</span><span class="dv">2</span>)))</span>
+<span id="cb14-21"><a href="#cb14-21"></a>sine_proj <span class="ot">&lt;-</span> sine_proj <span class="sc">%&gt;%</span></span>
+<span id="cb14-22"><a href="#cb14-22"></a>  <span class="fu">mutate</span>(<span class="at">cx =</span> <span class="dv">0</span>, <span class="at">cy =</span> <span class="dv">0</span>)</span>
+<span id="cb14-23"><a href="#cb14-23"></a><span class="co"># With gganimate</span></span>
+<span id="cb14-24"><a href="#cb14-24"></a><span class="fu">library</span>(gganimate)</span>
+<span id="cb14-25"><a href="#cb14-25"></a></span>
+<span id="cb14-26"><a href="#cb14-26"></a>sine_anim <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb14-27"><a href="#cb14-27"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>sine_proj, <span class="fu">aes</span>(<span class="at">x=</span>V1, <span class="at">y=</span>V2,</span>
+<span id="cb14-28"><a href="#cb14-28"></a>                                   <span class="at">xend=</span>cx, <span class="at">yend=</span>cy,</span>
+<span id="cb14-29"><a href="#cb14-29"></a>                                   <span class="at">group=</span>frame),</span>
+<span id="cb14-30"><a href="#cb14-30"></a>               <span class="at">colour=</span><span class="st">"grey60"</span>) <span class="sc">+</span></span>
+<span id="cb14-31"><a href="#cb14-31"></a>  <span class="fu">geom_text</span>(<span class="at">data=</span>sine_proj, <span class="fu">aes</span>(<span class="at">x=</span>V1, <span class="at">y=</span>V2,</span>
+<span id="cb14-32"><a href="#cb14-32"></a>                                <span class="at">label=</span>names,</span>
+<span id="cb14-33"><a href="#cb14-33"></a>                                <span class="at">group=</span>frame),</span>
+<span id="cb14-34"><a href="#cb14-34"></a>               <span class="at">colour=</span><span class="st">"grey60"</span>) <span class="sc">+</span></span>
+<span id="cb14-35"><a href="#cb14-35"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>sine_label, <span class="fu">aes</span>(<span class="at">x=</span>X1, <span class="at">y=</span>X2)) <span class="sc">+</span></span>
+<span id="cb14-36"><a href="#cb14-36"></a>  <span class="fu">geom_text</span>(<span class="at">data=</span>sine_label, <span class="fu">aes</span>(<span class="at">x=</span>labelX, <span class="at">y=</span>labelY,</span>
+<span id="cb14-37"><a href="#cb14-37"></a>                <span class="at">label=</span>label_idx), <span class="at">size=</span><span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb14-38"><a href="#cb14-38"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb14-39"><a href="#cb14-39"></a>  <span class="fu">transition_time</span>(frame) <span class="sc">+</span></span>
+<span id="cb14-40"><a href="#cb14-40"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb14-41"><a href="#cb14-41"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio=</span><span class="dv">1</span>,</span>
+<span id="cb14-42"><a href="#cb14-42"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="cn">NULL</span>, <span class="at">colour =</span> <span class="st">"black"</span>))</span>
+<span id="cb14-43"><a href="#cb14-43"></a></span>
+<span id="cb14-44"><a href="#cb14-44"></a><span class="fu">animate</span>(sine_anim, <span class="at">fps=</span><span class="dv">8</span>, <span class="at">renderer =</span> <span class="fu">gifski_renderer</span>(<span class="at">loop =</span> <span class="cn">FALSE</span>), <span class="at">width=</span><span class="dv">400</span>, <span class="at">height=</span><span class="dv">400</span>)</span>
+<span id="cb14-45"><a href="#cb14-45"></a><span class="fu">anim_save</span>(<span class="st">"inst/sine_anim.gif"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -1000,9 +947,9 @@
 <h2>References 📄</h2>
 <ul>
 <li>D. Asimov. The grand tour: A tool for viewing multidimensional data.</li>
-<li>A. Buja, D. Cook, D. Asimov and C. Hurley. <a href="10.1016/s0169-7161(04)24014-7">Computational methods for high-dimensional rotations in data visualization</a>.</li>
-<li>U. Laa and D. Cook. <a href="https://doi.org/10.1007/s00180-020-00954-8">Using tours to visually investigate properties of new projection pursuit indexes with application to problems in physics.</a>.</li>
-<li>B. Schloerke. <a href="https://CRAN.R-project.org/package=geozoo">Geozoo: Zoo of geometric objects</a>.</li>
+<li>A. Buja, D. Cook, D. Asimov and C. Hurley. <a href="10.1016/s0169-7161(04)24014-7">Computational methods for high-dimensional rotations in data visualization.</a></li>
+<li>U. Laa and D. Cook. <a href="https://doi.org/10.1007/s00180-020-00954-8">Using tours to visually investigate properties of new projection pursuit indexes with application to problems in physics.</a></li>
+<li>B. Schloerke. <a href="https://CRAN.R-project.org/package=geozoo">Geozoo: Zoo of geometric objects.</a></li>
 <li>H. Wickham, D. Cook, H. Hofmann and A. Buja. <a href="https://doi.org/10.18637/jss.v040.i02">tourr: An R package for exploring multivariate data with projections.</a></li>
 </ul>
 </section>
@@ -1010,6 +957,7 @@
 <h2>Acknowledgements 🙌</h2>
 <p>Slides produced using <a href="https://quarto.org">quarto</a>.</p>
 <p>Slides available in the <a href="https://github.com/numbats/woylier">Github repo</a>.</p>
+<p>Thank you for listening 😄</p>
 <div class="footer footer-default">
 <p><a href="https://numbats.github.io/woylier/" class="uri">https://numbats.github.io/woylier/</a></p>
 </div>

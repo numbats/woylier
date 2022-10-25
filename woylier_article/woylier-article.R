@@ -12,28 +12,23 @@ library(patchwork)
 
 
 ## ----splines2d-static, echo = FALSE, fig.height = 5, fig.cap="The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "Two side by side scatterplots with 6 points. The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index. "----
-#> 
 #> data("sine_curve")
 #> mat <- data.frame(sine_curve[,5:6])
 #> mat_idx <- round(tourr::splines2d()(mat), 2)
-#> 
 #> mat_rot <- data.frame(x = cos(pi/6) * sine_curve$V5 +
 #>                           sin(pi/6) * sine_curve$V6,
 #>                       y = -sin(pi/6) * sine_curve$V5 +
 #>                            cos(pi/6) * sine_curve$V6)
 #> mat_rot_idx <- round(tourr::splines2d()(mat_rot), 2)
-#> 
 #> p1 <- ggplot(mat, aes(x=V5, y=V6)) +
 #>   geom_point() +
 #>   ggtitle(paste("Splines index = ", mat_idx)) +
 #>   theme(aspect.ratio=1)
-#> 
 #> p2 <- ggplot(mat_rot, aes(x=x, y=y)) +
 #>   geom_point() +
 #>   xlab("Rotated 1") + ylab("Rotated 2") +
 #>   ggtitle(paste("Splines index = ", mat_rot_idx)) +
 #>   theme(aspect.ratio=1)
-#> 
 #> p1+p2
 
 
@@ -43,6 +38,69 @@ d <- sphere.hollow(p = 3, n = 1000)
 d <- data.frame(d$points)
 #animate_xy(d, axes="off") 
 # include gif of the a sphere and torus
+
+
+## ----echo = FALSE, include=FALSE----------------------------------------------
+set.seed(2022)
+p <- 6
+base1 <- tourr::basis_random(p, d=1)
+base2 <- tourr::basis_random(p, d=1)
+
+frames <- givens_full_path(base1, base2, nsteps = 10)
+
+sp <- generate_space_view(p=p)
+
+sp_path <- add_path(sp, frames)
+
+point1 <- as.data.frame(t(base1))
+point1$type <- "point1"
+
+point2 <- as.data.frame(t(base2))
+point2$type <- "point2"
+
+sp_path <- rbind(sp_path, point1, point2)
+
+tourr::render_gif(sp_path[,1:p], 
+                  tour_path = grand_tour(),
+                  display = display_xy(axes="bottomleft", col=sp_path$type),
+                  frames = 100,
+                  "sphere.gif")
+
+
+## ----1d-path-dynamic, echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 1D projections of 6D data", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "2 highlighted points on the surface of sphere connected by 10 interpolated steps, rotating."----
+#> knitr::include_graphics("sphere.gif")
+
+
+## ----echo = FALSE, include=FALSE----------------------------------------------
+set.seed(2022)
+p <- 6
+n <- 1500
+d <- 2
+base1 <- tourr::basis_random(p, d=2)
+base2 <- tourr::basis_random(p, d=2)
+frames_2d <- givens_full_path(base1, base2, 10)
+proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
+  purrr::flatten_dbl() %>% 
+  matrix(ncol = p*2, byrow = TRUE) %>%
+  as_tibble()
+path_2d <- t(apply(frames_2d, 3, c)) %>% 
+  as.data.frame()
+proj_2d <- proj_2d %>% 
+  mutate(type="torus")
+path_2d <- path_2d %>% 
+  mutate(type="path")
+proj_path <- bind_rows(proj_2d, path_2d)
+
+tourr::render_gif(proj_path[,1:6], 
+                  tour_path = grand_tour(),
+                  display = display_xy(axes="bottomleft", col=proj_path$type),
+                  frames = 100,
+                  "torus.gif")
+
+
+## ----2d-path-dynamic, echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 2D projections of 6D data", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "2 highlighted points on the surface of torus connected by 10 interpolated steps, rotating."----
+#> 
+#> knitr::include_graphics("torus.gif")
 
 
 ## ---- include=FALSE-----------------------------------------------------------

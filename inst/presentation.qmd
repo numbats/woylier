@@ -278,7 +278,7 @@ base2
 ::: {.column width="47.5%"}
 #### Step 1
 
-Construct preprojection basis $B$ by orthonormalizing $F_z$ with regards tp $F_a$ with Gram-Schmidt:
+Construct preprojection basis $B$ by orthonormalizing $F_z$ with regards to $F_a$ with Gram-Schmidt:
 
 $$B = (F_a, F_{\star})$$
 
@@ -475,7 +475,7 @@ tourr::render_gif(sp_path[,1:p],
 
 ```{r echo=TRUE, eval=FALSE}
 set.seed(2022)
-p <- 4
+p <- 6
 base1 <- tourr::basis_random(p, d=1)
 base2 <- tourr::basis_random(p, d=1)
 
@@ -502,91 +502,6 @@ tourr::render_gif(sp_path[,1:p],
                   "sphere.gif")
 ```
 :::
-
-## Implementation illustration `r emo::ji("computer")` {.smaller .scrollable transition="slide"}
-
-::: panel-tabset
-### Plot
-
-::: columns
-::: {.column width="45%"}
--   2D interpolation path of 6D data on the surface of a torus in 10 steps.
-
-```{r include=FALSE}
-set.seed(2022)
-p <- 6
-n <- 1500
-d <- 2
-base1 <- tourr::basis_random(p, d=2)
-base2 <- tourr::basis_random(p, d=2)
-
-frames_2d <- givens_full_path(base1, base2, 10)
-
-proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
-  purrr::flatten_dbl() %>% 
-  matrix(ncol = p*2, byrow = TRUE) %>%
-  as_tibble()
-path_2d <- t(apply(frames_2d, 3, c)) %>% 
-  as.data.frame()
-
-proj_2d <- proj_2d %>% 
-  mutate(type="torus")
-path_2d <- path_2d %>% 
-  mutate(type="path")
-
-proj_path <- bind_rows(proj_2d, path_2d)
-
-tourr::render_gif(proj_path[,1:6], 
-                  tour_path = grand_tour(),
-                  display = display_xy(axes="bottomleft", col=proj_path$type),
-                  frames = 100,
-                  "torus.gif")
-```
-:::
-
-::: {.column width="5%"}
-:::
-
-::: {.column width="50%"}
-![](torus.gif){.r-stretch}
-:::
-:::
-
-### Code
-
-```{r echo=TRUE, eval=FALSE}
-set.seed(2022)
-p <- 3
-base1 <- tourr::basis_random(p, d=2)
-base2 <- tourr::basis_random(p, d=2)
-
-frames_2d <- givens_full_path(base1, base2, 10)
-n <- 1500
-d <- 2
-
-proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
-  purrr::flatten_dbl() %>% 
-  matrix(ncol = p*2, byrow = TRUE) %>%
-  as_tibble()
-path_2d <- t(apply(frames_2d, 3, c)) %>% 
-  as.data.frame()
-
-proj_2d <- proj_2d %>% 
-  mutate(type="torus")
-path_2d <- path_2d %>% 
-  mutate(type="path")
-
-proj_path <- bind_rows(proj_2d, path_2d)
-
-tourr::render_gif(proj_path[,1:6], 
-                  tour_path = grand_tour(),
-                  display = display_xy(axes="bottomleft", col=proj_path$type),
-                  frames = 100,
-                  "torus.gif")
-```
-:::
-
-
 
 ## Data application `r emo::ji("check")` {.scrollable transition="slide"}
 
@@ -714,3 +629,5 @@ The woylier package repo is [here](https://github.com/numbats/woylier).
 Slides produced using [quarto](https://quarto.org).
 
 Slides available in the [Github repo](https://github.com/numbats/woylier).
+
+Thank you for listening `r emo::ji("smile")`

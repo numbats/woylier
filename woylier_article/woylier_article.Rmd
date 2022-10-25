@@ -46,52 +46,52 @@ library(woylier)
 library(geozoo)
 library(ggplot2)
 library(patchwork)
+library(gganimate)
 ```
 
 # Introduction
 
-The idea of projection pursuit is a procedure used to locate the projection of high-to-low dimensional space that expose the most interesting feature of data originally proposed by Kruskal[@kruskal_1969]. The projection pursuit technique involves a criterion of interest, numerical objective function, and the most interesting projection of data is achieved when the criterion is maximized. In the literature, there are a number of such criterion has been developed based on clustering, spread, and outliers. 
+The idea of projection pursuit is a procedure used to locate the projection of high-to-low dimensional space that expose the most interesting feature of data originally proposed by [@kruskal_1969]. The projection pursuit technique involves a criterion of interest, numerical objective function, and the most interesting projection of data is achieved when the criterion is maximized. In the literature, there are a number of such criterion has been developed based on clustering, spread, and outliers. 
 
-Grand tour is a multivariate data visualization technique developed by Asimov[@asimov_1985], which is based on idea of rotations of a lower dimensional projection in high-dimensional space. This technique is equivalent to rotating an object in 3D to better understand its shape and dimensions. Originally, Asimov's grand tour presents the viewer with an automatic movie of projections with no user control. Since then the literature on the tour has been about interactivity of the tour giving the control to users.[@buja_cook_asimov_hurley_2005] One of the interactive visual data exploration tool is "guided tour".
+Grand tour is a multivariate data visualization technique developed by [@asimov_1985], which is based on idea of rotations of a lower dimensional projection in high-dimensional space. This technique is equivalent to rotating an object in 3D to better understand its shape and dimensions. Originally, Asimov's grand tour presents the viewer with an automatic movie of projections with no user control. Since then the literature on the tour has been about interactivity of the tour giving the control to users.[@buja_cook_asimov_hurley_2005] One of the interactive visual data exploration tool is "guided tour".
 
 The guided tour gives user an exploration power by combining projection pursuit with tour which is implemented in the "tourr"[@tourr] package. Current implementation of guided tour used geodesic interpolation between planes. 
 
 The interpolated paths based on geodesic interpolation between bases is visually invariant under changes of orientation. However, in some cases of non-linear projection pursuit the orientation of frames does matter. One example is splines2D index.[@pp] The lack of rotation invariance of splines2d index raise complications in the optimization process.[@pp] This rotational variety issue of non-linear projection pursuit functions was the motivation of this work. 
 
 ```{r splines2d-static, echo = FALSE, fig.height = 5, fig.cap="The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "Two side by side scatterplots with 6 points. The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index. "}
-
 data("sine_curve")
 mat <- data.frame(sine_curve[,5:6])
 mat_idx <- round(tourr::splines2d()(mat), 2)
-
 mat_rot <- data.frame(x = cos(pi/6) * sine_curve$V5 + 
                           sin(pi/6) * sine_curve$V6,
                       y = -sin(pi/6) * sine_curve$V5 + 
                            cos(pi/6) * sine_curve$V6)
 mat_rot_idx <- round(tourr::splines2d()(mat_rot), 2)
-
 p1 <- ggplot(mat, aes(x=V5, y=V6)) + 
   geom_point() + 
   ggtitle(paste("Splines index = ", mat_idx)) +
   theme(aspect.ratio=1)
-
 p2 <- ggplot(mat_rot, aes(x=x, y=y)) + 
   geom_point() + 
   xlab("Rotated 1") + ylab("Rotated 2") +
   ggtitle(paste("Splines index = ", mat_rot_idx)) +
   theme(aspect.ratio=1)
-
 p1+p2
 ```
 
+A few alternatives to geodesic interpolation were proposed by [@buja_cook_asimov_hurley_2005]. The purpose of woylier package is to implement Givens paths method. This algorithms adapts Given's matrix decomposition technique that zeros out all but first elements of a vector. 
 
-A few alternatives to geodesic interpolation were proposed by Buja et al[@buja_cook_asimov_hurley_2005]. The purpose of woylier package is to implement Givens paths method. This algorithms adapts Given's matrix decomposition technique that zeros out all but first elements of a vector. 
+```{r 2d-path-dynamic, echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 2D projections of 6D data", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "2 highlighted points on the surface of torus connected by 10 interpolated steps, rotating."}
+
+knitr::include_graphics("torus.gif")
+```
 
 This article is structured as follows. The next section provided the theoretical framework of Givens interpolation method followed by a section about the implementation Givens path in woylier package that is compatible with current geodesic_path() function of tourr package. Furthermore, we would attempt to apply this interpolation method to projection pursuit of splines index to search for nonlinear associations between variables in example data set. Finally, this article includes a discussion about the limitations.
 
 # Background
 
-The tour method of visualization is animated high-to-low dimensional data rotation that is a movie, one-parameter (time) family of static projections. Several algorithms for such dynamic projections are discussed by Buja et al[@buja_cook_asimov_hurley_2005] is based on the idea of smoothly interpolating a discrete sequence of projections. 
+The tour method of visualization is animated high-to-low dimensional data rotation that is a movie, one-parameter (time) family of static projections. Several algorithms for such dynamic projections are discussed by [@buja_cook_asimov_hurley_2005] is based on the idea of smoothly interpolating a discrete sequence of projections. 
 
 The topic of this article is the construction of paths of projections. Interpolation of paths of projection can be compared to connecting line segments that interpolate points in Euclidean space. Interpolation acts as a bridge between continuous animation and discrete choice of sequences of projections. Sequence of projections can be constructed in various ways depending on user purpose. If user wants to look at the data from all sides, a random sequence of projections can be used, which is implemented in grand tours. Furthermore, the sequence of projections can be pre-computed, data-driven, or even manually controlled. 
 
@@ -185,7 +185,7 @@ $$F_t = B * W_t$$
 
 The properties of several projection pursuit index functions were investigated.[@pp] The smoothness, squintability, flexibility, rotation invariance, and speed of projection pursuit index functions were examined. The one property that is interesting to us is rotation invariance. The rotational invariance is examined by computing projection pursuit index fro different rotations within 2D plane. It is established that the dcor2d, splines2d and TIC index are  not rotationally invariant.
 
-Splines2D index measures nonlinear association between variable by fitting spline model.[@pp] The functional dependence is stronger if the index value is larger.
+Splines2D index measures nonlinear association between variable by fitting spline model.[@pp] It compares the variance of residuals and the functional dependence is stronger if the index value is larger.
 
 **Sphere and torus**
 
@@ -201,15 +201,200 @@ d <- data.frame(d$points)
 
 # Implementation
 
+We implemented each steps mentioned in **Givens interpolation path algorithm** in separate functions and combined them in *givens_full_path()* function. Here is the input and output of each functions and it's descriptions.
+
+| Function     | Input| Output| Description |
+|-----|-------------|-------------|-------------|
+| preprojection()  | Starting and target frame (Fa, Fz) | B pre-projection px2d matrix | Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa |
+| construct_preframe()  | A frame and the pre-projection px2d matrix | Preprojected frame in preprojection space | Construct preprojected frames |
+| row_rot()  | Starting and target frame (Fa, Fz) | B pre-projection px2d matrix | Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa |
+| calculate_angles()  | Preprojected frames (Wa, Wz) | Names list of angles | Calculate angles of required rotations to map Wz to Wa |
+| givens_rotation()  | Wa starting preprojected frame, list of angles of required rotations to map Wz to Wa, stepfraction | Givens path | It implements series of Givens rotations that maps Wa to Wz |
+| construct_moving_frame()  | Pre-projection matrix B, Each frame of givens path | A frame of on a step of interpolation | Reconstruct interpolated frames using pre-projection |
+| givens_full_path()  | Starting and target frame (Fa, Fz) and number of steps | An array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames. | Construct full interpolated frames. |
+
 # Examples of interpolated paths
+
+In this section we illustrate the use of *givens_full_path()* function by plotting the interpolated path between 2 frames.
 
 **Interpolated paths of 1D projection**
 
+1D projection of data in high dimension is a point. Therefore we can plot the point on the surface of a sphere. The following plot shows the Givens interpolation steps between 2 points, 1D projection of 6D data that is. 
+
+```{r echo = FALSE, include=FALSE}
+set.seed(2022)
+p <- 6
+base1 <- tourr::basis_random(p, d=1)
+base2 <- tourr::basis_random(p, d=1)
+
+frames <- givens_full_path(base1, base2, nsteps = 10)
+
+sp <- generate_space_view(p=p)
+
+sp_path <- add_path(sp, frames)
+
+point1 <- as.data.frame(t(base1))
+point1$type <- "point1"
+
+point2 <- as.data.frame(t(base2))
+point2$type <- "point2"
+
+sp_path <- rbind(sp_path, point1, point2)
+
+tourr::render_gif(sp_path[,1:p], 
+                  tour_path = grand_tour(),
+                  display = display_xy(axes="bottomleft", col=sp_path$type),
+                  frames = 100,
+                  "sphere.gif")
+```
+
+```{r 1d-path-dynamic, echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 1D projections of 6D data", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "2 highlighted points on the surface of sphere connected by 10 interpolated steps, rotating."}
+knitr::include_graphics("sphere.gif")
+```
+
+
 **Interpolated paths of 2D projection**
 
-# Data application
+In case of 2D projections, we can plot the interpolated path between 2 frames on the surface of torus. 
+
+```{r echo = FALSE, include=FALSE}
+set.seed(2022)
+p <- 6
+n <- 1500
+d <- 2
+base1 <- tourr::basis_random(p, d=2)
+base2 <- tourr::basis_random(p, d=2)
+frames_2d <- givens_full_path(base1, base2, 10)
+proj_2d <- map(1:n, ~basis_random(n = p,  d=d)) %>%
+  purrr::flatten_dbl() %>% 
+  matrix(ncol = p*2, byrow = TRUE) %>%
+  as_tibble()
+path_2d <- t(apply(frames_2d, 3, c)) %>% 
+  as.data.frame()
+proj_2d <- proj_2d %>% 
+  mutate(type="torus")
+path_2d <- path_2d %>% 
+  mutate(type="path")
+proj_path <- bind_rows(proj_2d, path_2d)
+
+tourr::render_gif(proj_path[,1:6], 
+                  tour_path = grand_tour(),
+                  display = display_xy(axes="bottomleft", col=proj_path$type),
+                  frames = 100,
+                  "torus.gif")
+```
+
+```{r 2d-path-dynamic, echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 2D projections of 6D data", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "2 highlighted points on the surface of torus connected by 10 interpolated steps, rotating."}
+
+knitr::include_graphics("torus.gif")
+```
+
+
+# Comparison of geodesic interpolation and Givens interpolation
+
+This is Givens interpolation
+
+```{r echo = FALSE, include=FALSE}
+# Generate a sample interpolation
+set.seed(5543)
+base1 <- tourr::orthonormalise(tourr::basis_random(6, d=2))
+base2 <- matrix(c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1), ncol=2, byrow=T)
+sine_path <- givens_full_path(base1, base2, nsteps=100)
+sine_all <- NULL
+sine_proj <- NULL
+for (i in 1:dim(sine_path)[3]) {
+  d <- as.matrix(sine_curve) %*% as.matrix(sine_path[,,i])
+  d <- data.frame(d)
+  d$idx <- round(tourr::splines2d()(d), 2)
+  d$frame <- i
+  sine_all <- bind_rows(sine_all, d)
+  prj <- as.data.frame(sine_path[,,i])
+  prj$frame <- i
+  prj$names <- colnames(sine_curve)
+  sine_proj <- bind_rows(sine_proj, prj)
+}
+sine_label <- sine_all %>%
+  mutate(labelX = -1, labelY = 1.45, label_idx = paste0("spl=", format(idx, digits=2)))
+sine_proj <- sine_proj %>%
+  mutate(cx = 0, cy = 0)
+# With gganimate
+
+sine_anim <- ggplot() +
+  geom_segment(data=sine_proj, aes(x=V1, y=V2,
+                                   xend=cx, yend=cy,
+                                   group=frame),
+               colour="grey60") +
+  geom_text(data=sine_proj, aes(x=V1, y=V2,
+                                label=names,
+                                group=frame),
+               colour="grey60") +
+  geom_point(data=sine_label, aes(x=X1, y=X2)) +
+  geom_text(data=sine_label, aes(x=labelX, y=labelY,
+                label=label_idx), size=10) +
+  xlab("") + ylab("") +
+  transition_time(frame) +
+  theme_void() +
+  theme(aspect.ratio=1,
+        plot.background = element_rect(fill=NULL, colour = "black"))
+
+animate(sine_anim, fps=8, renderer = gifski_renderer(loop = FALSE), width=400, height=400)
+anim_save("sine_anim.gif")
+```
+
+```{r givens-path, echo = FALSE, fig.height = 3, fig.cap="Givens interpolation path to target frame", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "Data rotating to sine curve."}
+
+knitr::include_graphics("sine_anim.gif")
+```
+
+This is geodesic interpolation 
+
+```{r eval=FALSE}
+library(tourr)
+set.seed(5543)
+base1 <- tourr::orthonormalise(tourr::basis_random(6, d=2))
+base2 <- matrix(c(0,0,0,0,0,0,0,0,1, 0, 0, 1), ncol = 2, byrow = TRUE)
+basis_set <- array(dim = c(6,2,2))
+basis_set[,,1] <- base1
+basis_set[,,2] <- base2
+attr(basis_set, "class") <- c("history_array", class(basis_set))
+path_geo <- tourr::interpolate(basis_set, angle = 0.01)
+data("sine_curve")
+
+#sine_curve <- as.matrix(sine_curve)
+
+#geo_path <- save_history(sine_curve[, 1:6], guided_tour(splines2d, max.tries = 100), max_bases = 5)
+
+#sine_path <- givens_full_path(base1, base2, nsteps=100)
+sine_all <- NULL
+sine_proj <- NULL
+for (i in 1:dim(path_geo)[3]) {
+  d <- as.matrix(sine_curve) %*% as.matrix(path_geo[,,i])
+  d <- data.frame(d)
+  d$idx <- round(tourr::splines2d()(d), 2)
+  d$frame <- i
+  sine_all <- bind_rows(sine_all, d)
+  prj <- as.data.frame(path_geo[,,i])
+  prj$frame <- i
+  prj$names <- colnames(sine_curve)
+  sine_proj <- bind_rows(sine_proj, prj)
+}
+sine_label <- sine_all %>%
+  mutate(labelX = -1, labelY = 1.45, label_idx = paste0("spl=", format(idx, digits=2)))
+sine_proj <- sine_proj %>%
+  mutate(cx = 0, cy = 0)
+# With gganimate
+
+```
+
 
 # Conclusion
+
+The R package **woylier** provides implementation of Givens interpolation path algorithm that can be used as an alternative interpolation method for tour. The algorithm implemented in the **woylier** package comes from [@buja_cook_asimov_hurley_2005]. We illustrate the use of the functions provided in the package for R users.
+
+The motivation to develop this package comes from rotational invariance problem of current geodesic interpolation algorithm implemeneted in **tourr** package[@tourr]. The package gives users the ability to detect non-linear association between variables more precisely. 
+
+It is important to mention that **woylier** package should be integrated with **tourr** package[@tourr]. The future improvements that needs to be done in the package is to generalize the interpolation for more than 2d projections of data.
+
 
 
 
