@@ -9,9 +9,10 @@ library(woylier)
 library(geozoo)
 library(ggplot2)
 library(patchwork)
+library(gganimate)
 
 
-## ----splines2d-static, echo = FALSE, fig.height = 5, fig.cap="The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "Two side by side scatterplots with 6 points. The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index. "----
+## ----splines2d-static, echo = FALSE, fig.height = 3, fig.cap="The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index.", eval=knitr::is_html_output(), fig.alt = "Two side by side scatterplots with 6 points. The plot on the right hand side is 30 degree rotation of the left hand side. The calculated splines index is shown on top of each plots. Although they depicts the same points we can see that splines index is different which show the rotational variance of splines index. "----
 #> data("sine_curve")
 #> mat <- data.frame(sine_curve[,5:6])
 #> mat_idx <- round(tourr::splines2d()(mat), 2)
@@ -23,21 +24,35 @@ library(patchwork)
 #> p1 <- ggplot(mat, aes(x=V5, y=V6)) +
 #>   geom_point() +
 #>   ggtitle(paste("Splines index = ", mat_idx)) +
-#>   theme(aspect.ratio=1)
+#>   theme(aspect.ratio=1)+
+#>   theme_bw()
 #> p2 <- ggplot(mat_rot, aes(x=x, y=y)) +
 #>   geom_point() +
 #>   xlab("Rotated 1") + ylab("Rotated 2") +
 #>   ggtitle(paste("Splines index = ", mat_rot_idx)) +
-#>   theme(aspect.ratio=1)
+#>   theme(aspect.ratio=1)+
+#>   theme_bw()
 #> p1+p2
 
 
-## -----------------------------------------------------------------------------
-d <- sphere.hollow(p = 3, n = 1000)
-#d <- sphere.hollow(p = 5, n = 1000)
-d <- data.frame(d$points)
-#animate_xy(d, axes="off") 
-# include gif of the a sphere and torus
+## ---- echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', fig.cap="Plane to plane interpolation (left) and Frame to frame interpolation (right). We used dog_index for illustration purposes. For some non-linear index orientation of data could affect the index."----
+knitr::include_graphics(
+  c("plane.png",
+    "frame.png"))
+
+
+## ----echo=TRUE----------------------------------------------------------------
+set.seed(2022)
+p <- 6
+base1 <- tourr::basis_random(p, d=2)
+base2 <- tourr::basis_random(p, d=2)
+
+base1
+base2
+
+
+## ----echo=TRUE----------------------------------------------------------------
+givens_full_path(base1, base2, nsteps = 5)
 
 
 ## ----echo = FALSE, include=FALSE----------------------------------------------
@@ -67,8 +82,12 @@ tourr::render_gif(sp_path[,1:p],
                   "sphere.gif")
 
 
-## ----1d-path-dynamic, echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 1D projections of 6D data", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "2 highlighted points on the surface of sphere connected by 10 interpolated steps, rotating."----
+## ----1d-path-dynamic, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 1D projections of 6D data", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "2 highlighted points on the surface of sphere connected by 10 interpolated steps, rotating."----
 #> knitr::include_graphics("sphere.gif")
+
+
+## ----1d-path-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 1D projections of 6D data", include=knitr::is_latex_output(), eval=knitr::is_latex_output(), fig.alt = "2 highlighted points on the surface of sphere connected by 10 interpolated steps, rotating."----
+knitr::include_graphics("sphere_static.png")
 
 
 ## ----echo = FALSE, include=FALSE----------------------------------------------
@@ -98,41 +117,124 @@ tourr::render_gif(proj_path[,1:6],
                   "torus.gif")
 
 
-## ----2d-path-dynamic, echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 2D projections of 6D data", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "2 highlighted points on the surface of torus connected by 10 interpolated steps, rotating."----
+## ----2d-path-dynamic, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 2D projections of 6D data", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "2 highlighted points on the surface of torus connected by 10 interpolated steps, rotating."----
 #> 
 #> knitr::include_graphics("torus.gif")
 
 
-## ---- include=FALSE-----------------------------------------------------------
-library(plotly)
-library(ggplot2)
-library(palmerpenguins)
+## ----2d-path-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Interpolation steps of 2D projections of 6D data", include=knitr::is_latex_output(), eval=knitr::is_latex_output(), fig.alt = "2 highlighted points on the surface of torus connected by 10 interpolated steps, rotating."----
+
+knitr::include_graphics("torus_static.png")
 
 
-## ----penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "----
-knitr::include_graphics("penguins.png")
+## ----echo = FALSE, include=FALSE, eval=knitr::is_html_output()----------------
+#> # Generate a sample interpolation
+#> set.seed(5543)
+#> base1 <- tourr::orthonormalise(tourr::basis_random(6, d=2))
+#> base2 <- matrix(c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1), ncol=2, byrow=T)
+#> sine_path <- givens_full_path(base1, base2, nsteps=100)
+#> sine_all <- NULL
+#> sine_proj <- NULL
+#> for (i in 1:dim(sine_path)[3]) {
+#>   d <- as.matrix(sine_curve) %*% as.matrix(sine_path[,,i])
+#>   d <- data.frame(d)
+#>   d$idx <- round(tourr::splines2d()(d), 2)
+#>   d$frame <- i
+#>   sine_all <- bind_rows(sine_all, d)
+#>   prj <- as.data.frame(sine_path[,,i])
+#>   prj$frame <- i
+#>   prj$names <- colnames(sine_curve)
+#>   sine_proj <- bind_rows(sine_proj, prj)
+#> }
+#> sine_label <- sine_all %>%
+#>   mutate(labelX = -1, labelY = 1.45, label_idx = paste0("spl=", format(idx, digits=2)))
+#> sine_proj <- sine_proj %>%
+#>   mutate(cx = 0, cy = 0)
+#> # With gganimate
+#> 
+#> sine_anim <- ggplot() +
+#>   geom_segment(data=sine_proj, aes(x=V1, y=V2,
+#>                                    xend=cx, yend=cy,
+#>                                    group=frame),
+#>                colour="grey60") +
+#>   geom_text(data=sine_proj, aes(x=V1, y=V2,
+#>                                 label=names,
+#>                                 group=frame),
+#>                colour="grey60") +
+#>   geom_point(data=sine_label, aes(x=X1, y=X2)) +
+#>   geom_text(data=sine_label, aes(x=labelX, y=labelY,
+#>                 label=label_idx), size=10) +
+#>   xlab("") + ylab("") +
+#>   transition_time(frame) +
+#>   theme_void() +
+#>   theme(aspect.ratio=1,
+#>         plot.background = element_rect(fill=NULL, colour = "black"))
+#> 
+#> animate(sine_anim, fps=8, renderer = gifski_renderer(loop = TRUE), width=400, height=400)
+#> anim_save("sine_anim_givens.gif")
 
 
-## ----penguins-tab-interactive, eval = knitr::is_html_output(), layout = "l-body-outset"----
-#> knitr::kable(head(penguins), format = "html", caption = "A basic table")
+## ----echo = FALSE, include=FALSE, eval=knitr::is_html_output()----------------
+#> library(tourr)
+#> set.seed(5541)
+#> base1 <- tourr::orthonormalise(tourr::basis_random(6, d=2))
+#> base2 <- matrix(c(0,0,0,0,0,0,0,0,1, 0, 0, 1), ncol = 2, byrow = TRUE)
+#> basis_set <- array(dim = c(6,2,2))
+#> basis_set[,,1] <- base1
+#> basis_set[,,2] <- base2
+#> attr(basis_set, "class") <- c("history_array", class(basis_set))
+#> path_geo <- tourr::interpolate(basis_set, angle = 0.0151)
+#> data("sine_curve")
+#> 
+#> sine_all <- NULL
+#> sine_proj <- NULL
+#> for (i in 1:dim(path_geo)[3]) {
+#>   d <- as.matrix(sine_curve) %*% matrix(c(path_geo[,,i][[1]]), ncol = 2)
+#>   d <- data.frame(d)
+#>   d$idx <- round(tourr::splines2d()(d), 2)
+#>   d$frame <- i
+#>   sine_all <- bind_rows(sine_all, d)
+#>   prj <- as.data.frame(matrix(c(path_geo[,,i][[1]]), ncol = 2))
+#>   prj$frame <- i
+#>   prj$names <- colnames(sine_curve)
+#>   sine_proj <- bind_rows(sine_proj, prj)
+#> }
+#> sine_label <- sine_all %>%
+#>   mutate(labelX = -1, labelY = 1.45, label_idx = paste0("spl=", format(idx, digits=2)))
+#> sine_proj <- sine_proj %>%
+#>   mutate(cx = 0, cy = 0)
+#> 
+#> # With gganimate
+#> sine_anim <- ggplot() +
+#>   geom_segment(data=sine_proj, aes(x=V1, y=V2,
+#>                                    xend=cx, yend=cy,
+#>                                    group=frame),
+#>                colour="grey60") +
+#>   geom_text(data=sine_proj, aes(x=V1, y=V2,
+#>                                 label=names,
+#>                                 group=frame),
+#>                colour="grey60") +
+#>   geom_point(data=sine_label, aes(x=X1, y=X2)) +
+#>   geom_text(data=sine_label, aes(x=labelX, y=labelY,
+#>                 label=label_idx), size=10) +
+#>   xlab("") + ylab("") +
+#>   transition_time(frame) +
+#>   theme_void() +
+#>   theme(aspect.ratio=1,
+#>         plot.background = element_rect(fill=NULL, colour = "black"))
+#> 
+#> animate(sine_anim, fps=8, renderer = gifski_renderer(loop = TRUE), width=400, height=400)
+#> anim_save("sine_anim_geodesic.gif")
 
 
-## ----penguins-tab-static, eval = knitr::is_latex_output()---------------------
-knitr::kable(head(penguins), format = "latex", caption = "A basic table") %>% 
-  kableExtra::kable_styling(font_size = 7)
+## ----compare-interpolations, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.cap="Givens interpolation path (left) and Geodesic interpolation path (right) to target frame. Givens interpolation goes to exact frame that has the correct orientation while Geodesic interpolation goes to rotation of the target plane."----
+#> knitr::include_graphics(
+#>   c("sine_anim_givens.gif",
+#>     "sine_anim_geodesic.gif"))
 
 
-## ----penguins-plotly, echo = TRUE, fig.height = 5, fig.cap="A basic interactive plot made with the plotly package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. When hovering on a point, a tooltip will show the exact value of the bill depth and length for that point, along with the species name.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "A scatterplot of bill length against bill depth, both measured in millimetre. The three species are shown in different colours and loosely forms three clusters. Adelie has small bill length and large bill depth, Gentoo has small bill depth but large bill length, and Chinstrap has relatively large bill depth and bill length."----
-#> p <- penguins %>%
-#>   ggplot(aes(x = bill_depth_mm, y = bill_length_mm,
-#>              color = species)) +
-#>   geom_point()
-#> ggplotly(p)
-
-
-## ----penguins-ggplot, echo = TRUE, fig.height = 5, fig.cap="A basic non-interactive plot made with the ggplot2 package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. Visit the online article to access the interactive version made with the plotly package.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()----
-penguins %>% 
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
-             color = species)) + 
-  geom_point()
+## ----compare-interpolations-static, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', include=knitr::is_latex_output(), eval=knitr::is_latex_output(), fig.cap="Givens interpolation path (left) and Geodesic interpolation path (right) to target frame. Givens interpolation goes to exact frame that has the correct orientation while Geodesic interpolation goes to rotation of the target plane."----
+knitr::include_graphics(
+  c("given_sine.png",
+    "geodesic_sine.png"))
 
