@@ -35,7 +35,7 @@ library(gganimate)
 #> p1+p2
 
 
-## ---- echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', fig.cap="Plane to plane interpolation (left) and Frame to frame interpolation (right). We used dog_index for illustration purposes. For some non-linear index orientation of data could affect the index."----
+## ----dogs, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', fig.cap="Plane to plane interpolation (left) and Frame to frame interpolation (right). We used dog_index for illustration purposes. For some non-linear index orientation of data could affect the index."----
 knitr::include_graphics(
   c("plane.png",
     "frame.png"))

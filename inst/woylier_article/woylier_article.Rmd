@@ -57,7 +57,7 @@ The guided tour combines projection pursuit with the tour [@grandtour1995] and i
 
 A tour path is a sequence of projection and we use interpolation method to produce the path. The current implementation of guided tour in \CRANpkg{tourr} package uses geodesic interpolation between planes. Geodesic interpolation path is the locally shortest path between planes with no within-plane spin. As a result of this method, the rendered target plane could be the rotated version of the target plane we wanted. This is not a problem when the structure we are looking can be identified without turning the axis around. The detailed discussion about the role of orientation in data projection can be found in @Buja2004TheoryOD.
 
-However, in some cases of non-linear projection pursuit index, the orientation of frames does matter. One example is the splines2D index. The value of the splines2D index changes depending on the rotation [@pp]. The lack of rotation invariance of the splines2d index raises complications in the optimization process. This rotational dependence issue of non-linear projection pursuit functions is the motivation of this work. 
+However, in some cases of non-linear projection pursuit index, the orientation of frames does matter. One example is the splines2D index. The value of the splines2D index changes depending on the rotation [@pp]. The lack of rotation invariance of the splines2d index raises complications in the optimization process. This rotational dependence issue of non-linear projection pursuit functions is the motivation of this work. Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:splines2d-static)', '\\@ref(fig:splines2d-static)'))` illustrates the rotational invariance problem for the spline2D index. The data was simulated to follow a sine curve and only difference in the two plot is the righ-hand side is 30 degree rotated version of the left one. Although they have the same structure, the splines index is not the same.
 
 ```{r splines2d-static, echo = FALSE, fig.height = 3, fig.cap="The plot on the right-hand side is a 30-degree rotation of the left-hand side. The calculated splines index is shown on top of each plot. Although they depict the same points we can see that the splines index is different which shows the rotational variance of the splines index.", eval=knitr::is_html_output(), fig.alt = "Two side-by-side scatterplots with 6 points. The plot on the right-hand side is a 30-degree rotation of the left-hand side. The calculated splines index is shown on top of each plot. Although they depict the same points we can see that the splines index is different which shows the rotational variance of the splines index."}
 data("sine_curve")
@@ -96,9 +96,9 @@ The topic of this article is the construction of paths of projections. Interpola
 
 Current implementation of \CRANpkg{tourr} package is locally shortest (geodesic) interpolation of planes. The pitfall of this interpolation method is that it does not account for rotation variability. Therefore, the interpolation of frames is required when the orientation of projection matters. If the rendering on a frame and on the rotated version of the frame yields the same visual scenes, it means the orientation does not matter. 
 
-The orientation of frames could be important when non-linear projection pursuit function is used in guided tour. An illustration of such cases are shown below.
+The orientation of frames could be important when non-linear projection pursuit function is used in guided tour. An illustration of such cases are shown in Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:dogs)', '\\@ref(fig:dogs)'))`.
 
-```{r, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', fig.cap="Plane to plane interpolation (left) and Frame to frame interpolation (right). We used dog_index for illustration purposes. For some non-linear index orientation of data could affect the index."}
+```{r dogs, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', fig.cap="Plane to plane interpolation (left) and Frame to frame interpolation (right). We used dog_index for illustration purposes. For some non-linear index orientation of data could affect the index."}
 knitr::include_graphics(
   c("plane.png",
     "frame.png"))
@@ -233,7 +233,7 @@ For plotting the interpolated path of projections, we used \CRANpkg{geozoo} pack
 
 **Interpolated paths of 1D projection**
 
-1D projection of data in high dimension linear combination of data that is normalized. Therefore, we can plot the point on the surface of a sphere. The following plot shows the Givens interpolation steps between 2 points, 1D projection of 6D data that is. 
+1D projection of data in high dimension linear combination of data that is normalized. Therefore, we can plot the point on the surface of a hypersphere. Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:1d-path-dynamic)', '\\@ref(fig:1d-path-static)'))` shows the Givens interpolation steps between 2 points, 1D projection of 6D data that is. 
 
 ```{r echo = FALSE, include=FALSE}
 set.seed(2022)
@@ -272,7 +272,7 @@ knitr::include_graphics("sphere_static.png")
 
 **Interpolated paths of 2D projection**
 
-In case of 2D projections, we can plot the interpolated path between 2 frames on the surface of torus. Torus can be seen as crossing of 2 circles that are orthonormal.
+In case of 2D projections, we can plot the interpolated path between 2 frames on the surface of torus. Torus can be seen as crossing of 2 circles that are orthonormal. Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:2d-path-dynamic)', '\\@ref(fig:2d-path-static)'))` shows the Givens interpolation steps in 2D projection of 6D data. 
 
 ```{r echo = FALSE, include=FALSE}
 set.seed(2022)
@@ -437,7 +437,7 @@ This section describes the application of Givens interpolation path with guided 
 
 We have cross-rates for currencies relative to the US dollar. A cross-rate is an exchange rate between two currencies computed by reference to a third currency, usually the US dollar. 
 
-The data was extracted from [openexchangerates](https://openexchangerates.org) and contains cross-rate for AUD, CAD, CHF, CNY, EUR, GBP, INR, JPY, KRW, MXN, NZD, RUB, SEK, SGD, ZAR between 2019-11-1 to 2020-03-31.
+The data was extracted from [openexchangerates](https://openexchangerates.org) and contains cross-rate for AUD, CAD, CHF, CNY, EUR, GBP, INR, JPY, KRW, MXN, NZD, RUB, SEK, SGD, ZAR between 2019-11-1 to 2020-03-31. Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:currency)', '\\@ref(fig:currency)'))` shows how the currencies changed relative to USD over the time period. 
 
 ```{r currency, fig.height = 5, fig.cap="All the currencies are standardised and the sign is flipped. The high value means the currency strengthened against the USD, and low means that it weakened."}
 rates <- read_csv("./rates_Nov19_Mar20.csv") 
