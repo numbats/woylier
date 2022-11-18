@@ -139,7 +139,7 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
     list(target = basis$target, index = index)
   }
 
-  new_givens_path("grand", generator)
+  new_givens_path("guided", generator)
 }
 
 #' Path needed for tour with Givens interpolation
