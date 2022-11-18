@@ -13,9 +13,11 @@ rates_std <- apply(rates[,-1], 2, function(x) (x-mean(x))/sd(x))
 #rates <- rates %>% select(date, ARS, AUD, EUR, JPY, MYR, ISK)#, NZD, GBP)
 animate_xy(rates[,-1])
 animate_xy(rates[,-1], tour_path = guided_tour(splines2d()))
-pp1 <- animate_xy(rates_std[,-1], tour_path = guided_tour_givens(splines2d(), search_f = search_better))
+pp_geo <- animate_xy(rates_std[,-1], tour_path = guided_tour(splines2d()))
+pp_giv1 <- animate_xy(rates_std[,-1], tour_path = guided_tour_givens(splines2d(), search_f = search_better))
+pp_giv2 <- animate_xy(rates_std[,-1], tour_path = guided_tour_givens(splines2d(), search_f = search_better_random))
 
-basis1 <- as.matrix(pp1[737,]$basis[[1]], ncol = 2, byrow=TRUE)
+basis1 <- as.matrix(pp_giv1[737,]$basis[[1]], ncol = 2, byrow=TRUE)
 
 pp1x <- as_tibble(as.matrix(rates_std[,-1])%*%basis1)
 
