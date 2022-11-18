@@ -2,6 +2,7 @@
 library(tourr)
 library(tidyverse)
 library(GGally)
+library(woylier)
 
 # Read data
 rates <- read_csv("data-raw/rates_Nov19_Mar20.csv")
