@@ -2,6 +2,7 @@
 title: "Woylier: Alternative tour frame interpolation method"
 abstract: >
   The woylier package implements alternative method for interpolation path between tour frames using Givens rotation.
+date: "`r today()`"
 draft: true
 author:  
   # see ?rjournal_article for more information
@@ -35,7 +36,6 @@ output:
     self_contained: yes
     toc: no
 bibliography: RJreferences.bib
-
 ---
 
 ```{r setup, include=FALSE}
