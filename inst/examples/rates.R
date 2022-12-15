@@ -4,6 +4,8 @@ library(tidyverse)
 library(GGally)
 library(woylier)
 
+set.seed(202212)
+
 # Read data
 rates <- read_csv("data-raw/rates_Nov19_Mar20.csv")
 rates <- rates %>% select(date, ARS, AUD, EUR, JPY, KRW, MYR)#, NZD, GBP)
@@ -26,13 +28,50 @@ ggplot(pp1x, aes(x=V1, y=V2))+
 
 # Check PCA: why doesn't PCA detect correlation
 # Correlation is between NZD and GBP
+# Use PCA to remove linear dependence
 rates_pca <- prcomp(rates[,-1], scale. = TRUE)
 ggscatmat(rates_pca$x)
 
-# Check standardised data - not necessary
-# rates_std <- apply(rates[,-1], 2, function(x) (x-mean(x))/sd(x))
-# animate_xy(rates_std, tour_path = guided_tour(splines2d()))
+# standardise the pca
+rates_pca_sd <-  apply(rates_pca$x, 2, function(x) (x-mean(x))/sd(x))
+summary(rates_pca$x)
+animate_xy(rates_pca_sd)
 
-# Data checks
-ggplot(rates, aes(x=NZD, y=GBP)) + geom_point()
-ggplot(rates, aes(x=NZD, y=AUD)) + geom_point()
+# the index value of the givens does not go as high as geodesic
+
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(splines2d(), search_f = search_better))
+
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(splines2d(), search_f = search_better_random, max.tries = 100))
+
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour(splines2d()))
+
+# modified the splines2d
+new_splines2d <- function ()
+{
+  function(mat) {
+    mat <- as.data.frame(mat)
+    colnames(mat) <- c("x", "y")
+    kx <- ifelse(length(unique(mat$x[!is.na(mat$x)])) < 20,
+                 3, 10)
+    mgam1 <- mgcv::gam(y ~ s(x, bs = "cr", k = kx), data = mat)
+    measure <- 1 - var(residuals(mgam1), na.rm = T)/var(mat$y, na.rm = T)
+    return(measure)
+  }
+}
+
+# try modified splines index
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), search_f = search_better, max.tries = 1000))
+
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), search_f = search_better_random, max.tries = 1000))
+
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d()))
+
+set.seed(202212)
+basis1 <- basis_random(n=4, d = 2)
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d(), current = basis1))
+# index value 0.696
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis1, search_f = search_better, max.tries = 1000))
+# index value 0.762859
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis1, search_f = search_better_random, max.tries = 1000))
+# index value 0.808788
+
