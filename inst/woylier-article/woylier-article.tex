@@ -19,6 +19,10 @@ A tour path is a sequence of projection and we use interpolation method to produ
 
 However, in some cases of non-linear projection pursuit index, the orientation of frames does matter. One example is the splines2D index. The value of the splines2D index changes depending on the rotation (Laa and Cook 2020). The lack of rotation invariance of the splines2d index raises complications in the optimization process. This rotational dependence issue of non-linear projection pursuit functions is the motivation of this work. Figure \ref{fig:splines2d-static} illustrates the rotational invariance problem for the spline2D index. The data was simulated to follow a sine curve and only difference in the two plot is the righ-hand side is 30 degree rotated version of the left one. Although they have the same structure, the splines index is not the same.
 
+\begin{figure}
+\includegraphics{woylier-article_files/figure-latex/splines2d-static-1} \caption{The plot on the right-hand side is a 30-degree rotation of the left-hand side. The calculated splines index is shown on top of each plot. Although they depict the same points we can see that the splines index is different which shows the rotational variance of the splines index.}\label{fig:splines2d-static}
+\end{figure}
+
 A few alternatives to geodesic interpolation were proposed by Buja et al. (2005) including the decomposition of orthogonal matrices, Givens decomposition, and Householder decomposition. The purpose of the \textbf{woylier} package is to implement the Givens paths method in R. This algorithm adapts Given's matrix decomposition technique which allows the interpolation to be between frames rather than planes.
 
 This article is structured as follows. The next section provided the theoretical framework of the Givens interpolation method followed by a section about the implementation Givens path in R. Furthermore, we will apply this interpolation method to the projection pursuit of splines index to search for nonlinear associations between variables in the example data set. Finally, this article includes a discussion about the further steps.
@@ -393,7 +397,7 @@ This section describes the application of Givens interpolation path with guided 
 
 We have cross-rates for currencies relative to the US dollar. A cross-rate is an exchange rate between two currencies computed by reference to a third currency, usually the US dollar.
 
-The data was extracted from \href{https://openexchangerates.org}{openexchangerates} and contains cross-rate for AUD, CAD, CHF, CNY, EUR, GBP, INR, JPY, KRW, MXN, NZD, RUB, SEK, SGD, ZAR between 2019-11-1 to 2020-03-31. Figure \ref{fig:currency} shows how the currencies changed relative to USD over the time period.
+The data was extracted from \href{https://openexchangerates.org}{openexchangerates} and contains cross-rate for ARS, AUD, EUR, JPY, KRW, MYR between 2019-11-1 to 2020-03-31. Figure \ref{fig:currency} shows how the currencies changed relative to USD over the time period.
 
 \begin{figure}
 \centering
@@ -401,7 +405,57 @@ The data was extracted from \href{https://openexchangerates.org}{openexchangerat
 \caption{\label{fig:currency}All the currencies are standardised and the sign is flipped. The high value means the currency strengthened against the USD, and low means that it weakened.}
 \end{figure}
 
-We will use projection pursuit guided tour to explore non-linear functional dependence.
+Figure \ref{fig:currency-corr} visualises the correlation matrix of dataset. We can see that these currencies are highly correlated with each other.
+
+\begin{figure}
+\centering
+\includegraphics{woylier-article_files/figure-latex/currency-corr-1.pdf}
+\caption{\label{fig:currency-corr}After standardisation, these currencies are still highly correlated with each other.}
+\end{figure}
+
+\textbf{PCA result}
+
+Since our goal is to explore non-linear association in the dataset, we will use the principal components of the currency rates rather than original rates. Figure \ref{fig:pca-result} shows scatter plot matrix of PCs of our dataset. The PC1 and PC2 has strong non-linear association.
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{woylier-article_files/figure-latex/pca-result-1} 
+
+}
+
+\caption{There is a strong non-linear dependence between PC1 and PC2.}\label{fig:pca-result}
+\end{figure}
+
+\textbf{New splines2d index}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{guided_geo} 
+
+}
+
+\caption{Guided tour optimization of splines index using geodesic interpolation.}\label{fig:guided-geo-static}
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{guided_givens} 
+
+}
+
+\caption{Guided tour optimization of splines index using Givens interpolation.}\label{fig:guided-givens-static}
+\end{figure}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{guided_givens_random} 
+
+}
+
+\caption{Guided tour optimization of splines index using Givens interpolation with search_better_random.}\label{fig:guided-givens-random-static}
+\end{figure}
+
+Conclusions from above
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}

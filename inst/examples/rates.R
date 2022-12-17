@@ -67,11 +67,11 @@ animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), s
 animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d()))
 
 set.seed(202212)
-basis1 <- basis_random(n=4, d = 2)
-animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d(), current = basis1))
+basis2 <- basis_random(n=4, d = 2)
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d(), current = basis2))
 # index value 0.696
-animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis1, search_f = search_better, max.tries = 1000))
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better, max.tries = 1000))
 # index value 0.762859
-animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis1, search_f = search_better_random, max.tries = 1000))
+animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better_random, max.tries = 1000))
 # index value 0.808788
 
