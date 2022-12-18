@@ -11,9 +11,13 @@ reference:
     Functions for constructing interpolation paths
   contents:
   - givens_full_path
+  - grand_tour_givens
+  - guided_tour_givens
+  - sine_curve
 - title: Plotting the path
   desc: >
     Functions to plot paths
   contents:
   - generate_space_view
   - add_path
+
