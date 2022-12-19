@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.14)  17 DEC 2022 23:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.14)  19 DEC 2022 13:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -809,7 +809,7 @@ LaTeX Info: Redefining \nameref on input line 47.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 (./woylier-article.tex
-<woylier-article_files/figure-latex/splines2d-static-1.pdf, id=45, 449.68pt x 1
+<woylier-article_files/figure-latex/splines2d-static-1.pdf, id=34, 449.68pt x 1
 96.735pt>
 File: woylier-article_files/figure-latex/splines2d-static-1.pdf Graphic file (t
 ype pdf)
@@ -825,12 +825,12 @@ Overfull \hbox (51.34032pt too wide) in paragraph at lines 23--23
 [1{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-<plane.png, id=61, 425.08812pt x 348.80313pt>
+<plane.png, id=50, 425.08812pt x 348.80313pt>
 File: plane.png Graphic file (type png)
 <use plane.png>
 Package pdftex.def Info: plane.png  used on input line 45.
 (pdftex.def)             Requested size: 199.16928pt x 163.42654pt.
-<frame.png, id=63, 407.02063pt x 329.23pt>
+<frame.png, id=52, 407.02063pt x 329.23pt>
 File: frame.png Graphic file (type png)
 <use frame.png>
 Package pdftex.def Info: frame.png  used on input line 45.
@@ -901,29 +901,33 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 [5] [6]
-<sphere_static.png, id=110, 476.27937pt x 480.29437pt>
+<sphere_static.png, id=99, 476.27937pt x 480.29437pt>
 File: sphere_static.png Graphic file (type png)
 <use sphere_static.png>
 Package pdftex.def Info: sphere_static.png  used on input line 357.
 (pdftex.def)             Requested size: 199.16928pt x 200.85013pt.
-<torus_static.png, id=112, 476.78125pt x 477.28313pt>
+<torus_static.png, id=101, 476.78125pt x 477.28313pt>
 File: torus_static.png Graphic file (type png)
 <use torus_static.png>
 Package pdftex.def Info: torus_static.png  used on input line 370.
 (pdftex.def)             Requested size: 199.16928pt x 199.37968pt.
-<given_sine.png, id=114, 398.48875pt x 392.46625pt>
+<given_sine.png, id=103, 398.48875pt x 392.46625pt>
 File: given_sine.png Graphic file (type png)
 <use given_sine.png>
 Package pdftex.def Info: given_sine.png  used on input line 386.
 (pdftex.def)             Requested size: 199.16928pt x 196.16077pt.
-<geodesic_sine.png, id=115, 394.47375pt x 395.97937pt>
+<geodesic_sine.png, id=104, 394.47375pt x 395.97937pt>
 File: geodesic_sine.png Graphic file (type png)
 <use geodesic_sine.png>
 Package pdftex.def Info: geodesic_sine.png  used on input line 386.
 (pdftex.def)             Requested size: 199.16928pt x 199.92873pt.
 [7] [8 <./sphere_static.png> <./torus_static.png>] [9 <./given_sine.png> <./geo
 desic_sine.png>]
-<woylier-article_files/figure-latex/currency-1.pdf, id=141, 453.695pt x 349.305
+
+LaTeX Warning: Reference `fig:currency' on page 10 undefined on input line 400.
+
+
+<woylier-article_files/figure-latex/currency-1.pdf, id=130, 453.695pt x 349.305
 pt>
 File: woylier-article_files/figure-latex/currency-1.pdf Graphic file (type pdf)
 
@@ -936,7 +940,11 @@ Overfull \hbox (55.35532pt too wide) in paragraph at lines 404--405
  [][] 
  []
 
-<woylier-article_files/figure-latex/currency-corr-1.pdf, id=143, 396.48125pt x 
+
+LaTeX Warning: Reference `fig:currency-corr' on page 10 undefined on input line
+ 408.
+
+<woylier-article_files/figure-latex/currency-corr-1.pdf, id=131, 396.48125pt x 
 357.335pt>
 File: woylier-article_files/figure-latex/currency-corr-1.pdf Graphic file (type
  pdf)
@@ -944,41 +952,37 @@ File: woylier-article_files/figure-latex/currency-corr-1.pdf Graphic file (type
 Package pdftex.def Info: woylier-article_files/figure-latex/currency-corr-1.pdf
   used on input line 412.
 (pdftex.def)             Requested size: 396.48027pt x 357.33412pt.
-<woylier-article_files/figure-latex/pca-result-1.pdf, id=145, 324.21124pt x 313
-.17pt>
-File: woylier-article_files/figure-latex/pca-result-1.pdf Graphic file (type pd
-f)
-<use woylier-article_files/figure-latex/pca-result-1.pdf>
-Package pdftex.def Info: woylier-article_files/figure-latex/pca-result-1.pdf  u
-sed on input line 422.
-(pdftex.def)             Requested size: 199.16928pt x 192.39052pt.
-<guided_geo.png, id=146, 478.78876pt x 478.78876pt>
+
+LaTeX Warning: Reference `fig:pca-result' on page 10 undefined on input line 41
+8.
+
+<guided_geo.png, id=132, 478.78876pt x 478.78876pt>
 File: guided_geo.png Graphic file (type png)
 <use guided_geo.png>
-Package pdftex.def Info: guided_geo.png  used on input line 433.
+Package pdftex.def Info: guided_geo.png  used on input line 424.
 (pdftex.def)             Requested size: 199.16928pt x 199.1685pt.
-<guided_givens.png, id=147, 473.77pt x 472.76625pt>
+<guided_givens.png, id=133, 473.77pt x 472.76625pt>
 File: guided_givens.png Graphic file (type png)
 <use guided_givens.png>
-Package pdftex.def Info: guided_givens.png  used on input line 442.
+Package pdftex.def Info: guided_givens.png  used on input line 433.
 (pdftex.def)             Requested size: 199.16928pt x 198.74803pt.
-<guided_givens_random.png, id=148, 475.7775pt x 475.7775pt>
+<guided_givens_random.png, id=134, 475.7775pt x 475.7775pt>
 File: guided_givens_random.png Graphic file (type png)
 <use guided_givens_random.png>
-Package pdftex.def Info: guided_givens_random.png  used on input line 451.
+Package pdftex.def Info: guided_givens_random.png  used on input line 442.
 (pdftex.def)             Requested size: 199.16928pt x 199.1718pt.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.455 ...interpolation with search_better_random.}
+l.446 ...interpolation with search_better_random.}
                                                   \label{fig:guided-givens-r...
  
 Here is how much of TeX's memory you used:
- 22347 strings out of 480608
- 405943 string characters out of 5903630
- 688914 words of memory out of 5000000
- 37564 multiletter control sequences out of 15000+600000
- 567134 words of font info for 173 fonts, out of 8000000 for 9000
+ 22329 strings out of 480608
+ 405405 string characters out of 5903630
+ 688163 words of memory out of 5000000
+ 37550 multiletter control sequences out of 15000+600000
+ 567053 words of font info for 172 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  68i,12n,100p,947b,602s stack positions out of 5000i,500n,10000p,200000b,80000s
 !  ==> Fatal error occurred, no output PDF file produced!

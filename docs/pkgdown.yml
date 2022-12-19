@@ -1,0 +1,11 @@
+pandoc: '2.18'
+pkgdown: 2.0.6
+pkgdown_sha: ~
+articles:
+  Plotting_with_woylier: Plotting_with_woylier.html
+  woylier: woylier.html
+last_built: 2022-12-18T15:22Z
+urls:
+  reference: https://numbats.github.io/woylier/reference
+  article: https://numbats.github.io/woylier/articles
+

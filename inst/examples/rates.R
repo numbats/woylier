@@ -68,10 +68,27 @@ animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d()))
 
 set.seed(202212)
 basis2 <- basis_random(n=4, d = 2)
-animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d(), current = basis2))
+#
+r1 <- animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d(), current = basis2, search_f = search_better, max.tries = 1000), rescale=FALSE)
+r1$basis[2619]
 # index value 0.696
-animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better, max.tries = 1000))
+r2 <- animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better, max.tries = 1000), rescale=FALSE)
 # index value 0.762859
-animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better_random, max.tries = 1000))
+r3 <- animate_xy(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better_random, max.tries = 1000), rescale=FALSE)
 # index value 0.808788
 
+mat <- data.frame(rates_pca_sd[,2:1])
+mat_idx <- round(new_splines2d()(mat), 2)
+mat_idx
+
+mat_rot <- data.frame(x = cos(pi/4) * mat$PC1 +
+                        sin(pi/4) * mat$PC2 ,
+                      y = -sin(pi/4) * mat$PC1  +
+                        cos(pi/4) * mat$PC2)
+
+mat_idx2 <- round(new_splines2d()(mat_rot), 2)
+mat_idx2
+
+
+ggplot(as_tibble(rates_pca_sd), aes(x = PC2, y= PC1)) +
+  geom_point()

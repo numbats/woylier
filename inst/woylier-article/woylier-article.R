@@ -261,11 +261,11 @@ corrplot(corr, type = "upper", order = "hclust",
          tl.col = "black", tl.srt = 45)
 
 
-## ----pca-result, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', eval=knitr::is_latex_output(), fig.cap="There is a strong non-linear dependence between PC1 and PC2."----
-# Use PCA to remove linear dependence
-rates_pca <- prcomp(rates[,-1], scale. = TRUE)
-pca <- ggscatmat(rates_pca$x)
-pca
+## ----pca-result, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.cap="There is a strong non-linear dependence between PC1 and PC2."----
+#> # Use PCA to remove linear dependence
+#> rates_pca <- prcomp(rates[,-1], scale. = TRUE)
+#> pca <- ggscatmat(rates_pca$x)
+#> pca
 
 
 ## ----echo = FALSE, eval=FALSE-------------------------------------------------
