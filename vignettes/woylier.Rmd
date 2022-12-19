@@ -1,5 +1,5 @@
 ---
-title: "woylier"
+title: "Getting started"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{woylier}
@@ -19,7 +19,9 @@ The "woylier" package provides alternative method for generating a tour path by 
 ```{r setup}
 library(woylier)
 library(geozoo)
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(purrr)
 ```
 
 # Example 1

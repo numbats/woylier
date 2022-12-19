@@ -26,18 +26,13 @@ grand_tour_givens <- function(d = 2, ...) {
 #' @param alpha the initial size of the search window, in radians
 #' @param cooling the amount the size of the search window should be adjusted
 #'   by after each step
-#' @param search_f the search strategy to use: \code{\link{search_geodesic}}, \code{\link{search_better}},
-#'   \code{\link{search_better_random}}, \code{\link{search_polish}}. Default is \code{\link{search_geodesic}}.
+#' @param search_f the search strategy to use: \code{search_geodesic}, \code{search_better},
+#'   \code{search_better_random}, \code{search_polish}. Default is \code{search_geodesic}.
 #' @param max.tries the maximum number of unsuccessful attempts to find
 #'   a better projection before giving up
 #' @param max.i the maximum index value, stop search if a larger value is found
-#' @param n_sample number of samples to generate if \code{search_f} is \code{\link{search_polish}}
+#' @param n_sample number of samples to generate if \code{search_f} is \code{search_polish}
 #' @param ... arguments sent to the search_f
-#' @seealso \code{\link{cmass}}, \code{\link{holes}} and \code{\link{lda_pp}}
-#'   for examples of index functions.  The function should take a numeric
-#'   matrix and return a single number, preferably between 0 and 1.
-#' \code{\link{search_geodesic}}, \code{\link{search_better}},
-#'   \code{\link{search_better_random}} for different search strategies
 #' @export
 #' @examples
 #' library(tourr)
@@ -149,7 +144,7 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
 #' @param name name to give tour path
 #' @param generate basis generator function
 #' @param frozen matrix giving frozen variables, as described in
-#'   \code{\link{freeze}}
+#'   \code{freeze}
 #' @keywords internal
 new_givens_path <- function(name, generator, frozen = NULL, ...) {
   tries <- 1 # Needed for guided

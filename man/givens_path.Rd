@@ -16,7 +16,7 @@ givens_path(current, target, frozen = NULL, ...)
 \item{...}{arguments sent to later functions}
 }
 \value{
-\item{interpolate}{A function with single parameter in \link{0, 1} that
+\item{interpolate}{A function with single parameter in [0, 1] that
 returns an interpolated frame between the current and future frames.
 0 gives the current plane, 1 gives the new target frame in plane of
 current frame.}
