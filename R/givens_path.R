@@ -9,10 +9,10 @@
 grand_tour_givens <- function(d = 2, ...) {
   generator <- function(current, data, ...) {
     if (is.null(current)) {
-      return(basis_init(ncol(data), d))
+      return(tourr::basis_init(ncol(data), d))
     }
 
-    target <- basis_random(ncol(data), d)
+    target <- tourr::basis_random(ncol(data), d)
     list(target = target)
   }
 
@@ -58,7 +58,7 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
     }, logical(1))]
 
     if (is.null(current)) {
-      current <- basis_random(ncol(data), d)
+      current <- tourr::basis_random(ncol(data), d)
 
       cur_index <- index(current)
 

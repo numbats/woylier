@@ -1,12 +1,12 @@
 #' Interpolation format for tourr
-#' 
+#'
 #' Generates the interpolation in the form needed for
 #' tourr, modelled on geodesic_path()
 #'
 #' @param current starting frame
 #' @param target target frame
-#' @param frozen indicator whether some dimensions fixed 
-#' @param ... 
+#' @param frozen indicator whether some dimensions fixed
+#' @param ...
 #' @keywords internal
 #' @export
 #' @return
@@ -26,14 +26,14 @@ givens_path <- function (current, target, frozen = NULL, ...) {
   if (is.null(frozen)) {
     # Regular geodesic
     givens <- givens_info(current, target)
-    
+
     interpolate <- function(pos) {
       givens_step_fraction(givens, pos)
     }
   } else {
     cat("Givens path cannot handle frozen yet \n")
   }
-  
+
   list(
     interpolate = interpolate,
     Fa = current,
@@ -46,7 +46,7 @@ givens_path <- function (current, target, frozen = NULL, ...) {
 }
 
 #' Calculate information needed for Givens interpolation
-#' 
+#'
 #' The methdology is outlined in
 #' \url{http://www-stat.wharton.upenn.edu/~buja/PAPERS/paper-dyn-proj-algs.pdf}
 #'
@@ -55,19 +55,19 @@ givens_path <- function (current, target, frozen = NULL, ...) {
 #' @keywords internal
 #'
 givens_info <- function(Fa, Fz) {
-  if (!is_orthonormal(Fa)) {
+  if (!tourr::is_orthonormal(Fa)) {
     # message("Orthonormalising Fa")
-    Fa <- orthonormalise(Fa)
+    Fa <- tourr::orthonormalise(Fa)
   }
-  if (!is_orthonormal(Fz)) {
+  if (!tourr::is_orthonormal(Fz)) {
     # message("Orthonormalising Fz")
-    Fz <- orthonormalise(Fz)
+    Fz <- tourr::orthonormalise(Fz)
   }
   B <- preprojection(Fa, Fz)
   Wa <- construct_preframe(Fa, B)
   Wz <- construct_preframe(Fz, B)
   angles <- calculate_angles(Wa, Wz)
-  
+
   list(B = B, Wa = Wa, Wz = Wz, tau = angles)
 }
 
@@ -76,7 +76,7 @@ givens_info <- function(Fa, Fz) {
 #' @keywords internal
 #' @param interp interpolated path
 #' @param fraction fraction of distance between start and end frames
-#' 
+#'
 givens_step_fraction <- function(interp, fraction) {
   # Interpolate between starting and end frames
   #  - must multiply column wise (hence all the transposes)
