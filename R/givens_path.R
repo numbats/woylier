@@ -40,6 +40,8 @@ grand_tour_givens <- function(d = 2, ...) {
 #'   \code{\link{search_better_random}} for different search strategies
 #' @export
 #' @examples
+#' library(tourr)
+#' library(woylier)
 #' data(sine_curve)
 #' tourr::animate(sine_curve, guided_tour_givens(tourr::splines2d()), tourr::display_xy())
 guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.tries = 25,

@@ -13,7 +13,7 @@ givens_path(current, target, frozen = NULL, ...)
 
 \item{frozen}{indicator whether some dimensions fixed}
 
-\item{...}{}
+\item{...}{arguments sent to later functions}
 }
 \value{
 \item{interpolate}{A function with single parameter in \link{0, 1} that

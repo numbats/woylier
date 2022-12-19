@@ -42,6 +42,8 @@ a better projection before giving up}
 Create a guided tour with Givens interpolation
 }
 \examples{
+library(tourr)
+library(woylier)
 data(sine_curve)
 tourr::animate(sine_curve, guided_tour_givens(tourr::splines2d()), tourr::display_xy())
 }
