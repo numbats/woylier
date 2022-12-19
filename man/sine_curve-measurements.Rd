@@ -14,7 +14,8 @@ where the sine curve is in V5, V6. The
 other columns are normal samples.
 }
 \examples{
-
+library(woylier)
+data(sine_curve)
 plot(sine_curve$V5, sine_curve$V6)
 }
 \keyword{datasets}

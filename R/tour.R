@@ -6,11 +6,11 @@
 #' @param current starting frame
 #' @param target target frame
 #' @param frozen indicator whether some dimensions fixed
-#' @param ...
+#' @param ... arguments sent to later functions
 #' @keywords internal
 #' @export
 #' @return
-#'   \item{interpolate}{A function with single parameter in [0, 1] that
+#'   \item{interpolate}{A function with single parameter in \[0, 1\] that
 #'     returns an interpolated frame between the current and future frames.
 #'     0 gives the current plane, 1 gives the new target frame in plane of
 #'     current frame.}
@@ -41,7 +41,7 @@ givens_path <- function (current, target, frozen = NULL, ...) {
     Ga = givens$Wa,
     Gz = givens$Wz,
     tau = givens$tau,
-    dist = proj_dist(current, target)
+    dist = tourr::proj_dist(current, target)
   )
 }
 
@@ -73,9 +73,9 @@ givens_info <- function(Fa, Fz) {
 
 #' Step along a Givens interpolated path by fraction of path length.
 #'
-#' @keywords internal
 #' @param interp interpolated path
 #' @param fraction fraction of distance between start and end frames
+#' @keywords internal
 #'
 givens_step_fraction <- function(interp, fraction) {
   # Interpolate between starting and end frames

@@ -10,7 +10,7 @@ new_givens_path(name, generator, frozen = NULL, ...)
 \item{name}{name to give tour path}
 
 \item{frozen}{matrix giving frozen variables, as described in
-\code{\link{freeze}}}
+\code{freeze}}
 
 \item{generate}{basis generator function}
 }

@@ -5,3 +5,4 @@
 ^pkgdown$
 ^inst/presentation$
 ^inst/woylier_article$
+^data-raw$
