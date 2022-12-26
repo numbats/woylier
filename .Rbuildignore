@@ -3,7 +3,9 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^inst/presentation$
-^inst/woylier_article$
-^inst/testing$
-^data-raw$
+inst/presentation/*
+inst/woylier-article/*
+inst/background/*
+inst/hexsticker/*
+inst/testing/*
+data-raw

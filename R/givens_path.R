@@ -1,3 +1,5 @@
+frozen <- NULL
+
 #' Create a grand tour with Givens interpolation
 #'
 #' @param d dimension of projection
@@ -26,7 +28,7 @@ grand_tour_givens <- function(d = 2, ...) {
 #' @param alpha the initial size of the search window, in radians
 #' @param cooling the amount the size of the search window should be adjusted
 #'   by after each step
-#' @param search_f the search strategy to use: \code{search_geodesic}, \code{search_better},
+#' @param optim character indicating the search strategy to use: \code{search_geodesic}, \code{search_better},
 #'   \code{search_better_random}, \code{search_polish}. Default is \code{search_geodesic}.
 #' @param max.tries the maximum number of unsuccessful attempts to find
 #'   a better projection before giving up
@@ -35,12 +37,10 @@ grand_tour_givens <- function(d = 2, ...) {
 #' @param ... arguments sent to the search_f
 #' @export
 #' @examples
-#' library(tourr)
-#' library(woylier)
 #' data(sine_curve)
-#' tourr::animate(sine_curve, guided_tour_givens(tourr::splines2d()), tourr::display_xy())
+#' tourr::animate_xy(sine_curve, guided_tour_givens(tourr::splines2d()), sphere=FALSE)
 guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.tries = 25,
-                               max.i = Inf, search_f = search_geodesic, n_sample = 100, ...) {
+                               max.i = Inf, optim = "search_geodesic", n_sample = 100, ...) {
   generator <- function(current, data, tries, ...) {
     index <- function(proj) {
       index_f(as.matrix(data) %*% proj)
@@ -51,8 +51,16 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
       "search_polish", "search_posse"
     )
     method <- valid_fun[vapply(valid_fun, function(x) {
-      identical(get(x), search_f)
+      identical(x, optim)
     }, logical(1))]
+
+    search_f <- switch(method,
+      search_geodesic = tourr::search_geodesic,
+      search_better = tourr::search_better,
+      search_better_random = tourr::search_better_random,
+      search_polish = tourr::search_polish,
+      search_posse = tourr::search_posse
+    )
 
     if (is.null(current)) {
       current <- tourr::basis_random(ncol(data), d)
@@ -67,7 +75,7 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
           index_val = cur_index,
           info = "new_basis",
           method = method,
-          alpha = formals(guided_tour)$alpha,
+          alpha = formals(tourr::guided_tour)$alpha,
           tries = 1,
           loop = 1
         )
@@ -87,7 +95,7 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
           index_val = cur_index,
           info = "new_basis",
           method = method,
-          alpha = formals(guided_tour)$alpha,
+          alpha = formals(tourr::guided_tour)$alpha,
           tries = 1,
           loop = 1)
       }

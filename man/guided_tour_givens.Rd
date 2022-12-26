@@ -11,7 +11,7 @@ guided_tour_givens(
   cooling = 0.99,
   max.tries = 25,
   max.i = Inf,
-  search_f = search_geodesic,
+  optim = "search_geodesic",
   n_sample = 100,
   ...
 )
@@ -31,7 +31,7 @@ a better projection before giving up}
 
 \item{max.i}{the maximum index value, stop search if a larger value is found}
 
-\item{search_f}{the search strategy to use: \code{search_geodesic}, \code{search_better},
+\item{optim}{character indicating the search strategy to use: \code{search_geodesic}, \code{search_better},
 \code{search_better_random}, \code{search_polish}. Default is \code{search_geodesic}.}
 
 \item{n_sample}{number of samples to generate if \code{search_f} is \code{search_polish}}
@@ -42,8 +42,6 @@ a better projection before giving up}
 Create a guided tour with Givens interpolation
 }
 \examples{
-library(tourr)
-library(woylier)
 data(sine_curve)
-tourr::animate(sine_curve, guided_tour_givens(tourr::splines2d()), tourr::display_xy())
+tourr::animate_xy(sine_curve, guided_tour_givens(tourr::splines2d()), sphere=FALSE)
 }
