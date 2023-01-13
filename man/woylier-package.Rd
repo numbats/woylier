@@ -6,6 +6,8 @@
 \alias{woylier-package}
 \title{woylier: Alternative tour frame interpolation method}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 This method generates a tour path by interpolating between d-D frames in p-D using Givens rotations. The algorithm is arises from the problem of zero'ing elements of a matrix. This interpolation method is useful for showing specific d-D frames in the tour, as opposed to d-D planes, as done by the geodesic interpolation. It is useful for projection pursuit indexes which are not rotationally invariant. See Buja et al (2005) https://doi.org/10.1016/S0169-7161(04)24014-7.
 }
 \author{

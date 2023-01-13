@@ -193,3 +193,62 @@ new_givens_path <- function(name, generator, frozen = NULL, ...) {
     class = c("tour_path", "function")
   )
 }
+
+#' A planned tour path using frame-to-frame interpolation.
+#'
+#' The planned tour takes you from one basis to the next in a
+#' set order.  Once you have visited all the planned bases, you either stop
+#' or start from the beginning once more (if \code{cycle = TRUE}).
+#'
+#' Usually, you will not call this function directly, but will pass it to
+#' a method that works with tour paths like \code{\link{animate}},
+#' \code{\link{save_history}} or \code{\link{render}}.
+#'
+#' @param basis_set the set of bases as a list of projection matrices
+#'   or a 3d array
+#' @param cycle cycle through continuously (\code{TRUE}) or stop after
+#'   first pass (\code{FALSE})
+#' @keywords hplot dynamic
+#' @seealso The \code{\link{little_tour}}, a special type of planned tour
+#'   which cycles between all axis parallel projections.
+#' @export
+#' @examples
+#' library(tourr)
+#' twod <- save_history(flea[, 1:3], max = 5)
+#' str(twod)
+#' animate_xy(flea[, 1:3], planned_tour_givens(twod))
+#' animate_xy(flea[, 1:3], planned_tour_givens(twod, TRUE))
+#'
+#' oned <- save_history(flea[, 1:6], grand_tour(1), max = 3)
+#' animate_dist(flea[, 1:6], planned_tour_givens(oned))
+planned_tour_givens <- function(basis_set, cycle = FALSE) {
+  index <- 1
+  basis_set <- as.list(basis_set)
+
+  n <- length(basis_set)
+  if (cycle) {
+    generator <- function(current, data, ...) {
+      if (is.null(current)) {
+        return(basis_set[[1]])
+      }
+
+      index <<- (index %% n) + 1
+      target <- basis_set[[index]]
+      list(target = target)
+    }
+  } else {
+    generator <- function(current, data, ...) {
+      if (is.null(current)) {
+        return(basis_set[[1]])
+      }
+      index <<- index + 1
+      if (index > n) {
+        return(NULL)
+      }
+      target <- basis_set[[index]]
+      list(target = target)
+    }
+  }
+
+  new_givens_path("planned", generator)
+}
