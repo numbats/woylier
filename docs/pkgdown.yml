@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   Plotting_with_woylier: Plotting_with_woylier.html
   woylier: woylier.html
-last_built: 2023-01-13T05:00Z
+last_built: 2023-01-13T05:36Z
 urls:
   reference: https://numbats.github.io/woylier/reference
   article: https://numbats.github.io/woylier/articles
