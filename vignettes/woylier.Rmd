@@ -1,5 +1,5 @@
 ---
-title: "Getting started"
+title: "woylier"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{woylier}
@@ -14,7 +14,18 @@ knitr::opts_chunk$set(
 )
 ```
 
-The "woylier" package provides alternative method for generating a tour path by interpolating between d-D frames in p-D space rather than d-D planes. 
+The "woylier" package provides alternative method for generating a tour path by interpolating between d-D frames in p-D space rather than d-D planes. A tour path is a sequence of projection and we use interpolation method to produce the path. The \CRANpkg{tourr} package uses geodesic interpolation between planes. Geodesic interpolation path is the locally shortest path between planes with no within-plane spin. As a result of this method, the rendered target plane could be the rotated version of the target plane we wanted. This is not a problem when the structure we are looking can be identified without turning the axis around. 
+
+The "woylier" package implements the Givens interpolation paths method proposed by [Buja et al. (2005)](https://www.sciencedirect.com/science/article/abs/pii/S0169716104240147?via%3Dihub) in R. This algorithm adapts Given’s matrix decomposition technique which allows the interpolation to be between frames rather than planes.
+
+# Installation
+
+You can install the development version of woylier from GitHub with:
+
+```{r eval=FALSE}
+# install.packages("remotes")
+remotes::install_github("numbats/woylier")
+```
 
 ```{r setup}
 library(woylier)
@@ -26,7 +37,7 @@ library(purrr)
 
 # Example 1
 
-This example illustrates 1D visualization of the interpolation of 3 points in 6D. 
+In this example, we have 2 random 1D basis in 6D data space and the `givens_full_path()` function returns the intermediate interpolation step projections in given number of steps. The code chunk below demonstrates the interpolation between 2 random basis in 5 steps.
 
 ```{r}
 # Generate 1D example
@@ -35,77 +46,31 @@ set.seed(2022)
 p <- 6
 base1 <- tourr::basis_random(p, d=1)
 base2 <- tourr::basis_random(p, d=1)
-base3 <- tourr::basis_random(p, d=1)
 
-# First example
+base1
 
-frames <- givens_full_path(base1, base2, nsteps = 10)
+base2
 
-sp <- generate_space_view(p=p)
-
-sp_path <- add_path(sp, frames) 
-
-point1 <- as.data.frame(t(base1)) 
-point1$type <- "point1"
-
-point2 <- as.data.frame(t(base2))
-point2$type <- "point2"
-
-sp_path <- rbind(sp_path, point1, point2) 
-
-# second example
-
-frames <- givens_full_path(base2, base3, nsteps = 10)
-
-frames <- as.data.frame(t(apply(frames, 3, c)))
-
-frames$type <- "path"
-sp_path <- rbind(sp_path, frames)
-
-point3 <- as.data.frame(t(base3))
-point3$type <- "point3"
-
-sp_path <- rbind(sp_path, point3) 
-
-tourr::animate_xy(sp_path[,1:p], col=sp_path$type, 
-                  axes="bottomleft")
+givens_full_path(base1, base2, nsteps = 5)
 ```
 
 # Example 2
+
+In this example, we have 2 random 2D basis in 6D data space and the `givens_full_path()` function returns the intermediate interpolation step projections in given number of steps. The code chunk below demonstrates the interpolation between 2 random basis in 5 steps.
 
 ```{r}
 # Generate 2D example
 
 set.seed(2022)
-n <- 1000
-p <- 3
-d <- 2
-base1 <- tourr::basis_random(p, d)
-base2 <- tourr::basis_random(p, d)
+p <- 6
+base3 <- tourr::basis_random(p, d=2)
+base4 <- tourr::basis_random(p, d=2)
 
-frames_2d <- givens_full_path(base1, base2, 10)
+base3
 
-proj_2d <- map(1:n, ~tourr::basis_random(n = p,  d=d)) %>%
-  purrr::flatten_dbl() %>% 
-  matrix(ncol = p*2, byrow = TRUE) %>%
-  as_tibble()
+base4
 
-# Path
-path_2d <- t(apply(frames_2d, 3, c)) %>% 
-  as.data.frame()
-
-# Join
-proj_2d <- proj_2d %>% 
-  mutate(type="torus")
-
-path_2d <- path_2d %>% 
-  mutate(type="path")
-
-proj_path <- bind_rows(proj_2d, path_2d)
-
-tourr::animate_xy(proj_path[,1:6], 
-                  col=proj_path$type, 
-                  axes="bottomleft")
+givens_full_path(base3, base4, nsteps = 5)
 ```
  
  

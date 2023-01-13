@@ -7,12 +7,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="woylier">
 <title>woylier • woylier</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="woylier">
 <meta property="og:description" content="woylier">
+<meta property="og:image" content="https://numbats.github.io/woylier/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -67,7 +74,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>woylier</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>woylier</h1>
             
       
       
@@ -78,111 +85,210 @@
     
 <p>The “woylier” package provides alternative method for generating a
 tour path by interpolating between d-D frames in p-D space rather than
-d-D planes.</p>
+d-D planes. A tour path is a sequence of projection and we use
+interpolation method to produce the path. The package uses geodesic
+interpolation between planes. Geodesic interpolation path is the locally
+shortest path between planes with no within-plane spin. As a result of
+this method, the rendered target plane could be the rotated version of
+the target plane we wanted. This is not a problem when the structure we
+are looking can be identified without turning the axis around.</p>
+<p>The “woylier” package implements the Givens interpolation paths
+method proposed by <a href="https://www.sciencedirect.com/science/article/abs/pii/S0169716104240147?via%3Dihub" class="external-link">Buja
+et al. (2005)</a> in R. This algorithm adapts Given’s matrix
+decomposition technique which allows the interpolation to be between
+frames rather than planes.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version of woylier from GitHub
+with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"numbats/woylier"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">woylier</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://schloerke.github.io/geozoo/" class="external-link">geozoo</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ─────────────────────────────────────── tidyverse 1.3.1 ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2</span> 3.3.6      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr  </span> 0.3.5 </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble </span> 3.1.8      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr  </span> 1.0.10</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr  </span> 1.2.0      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr</span> 1.4.1 </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr  </span> 2.1.2      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats</span> 0.5.1</span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
-<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>    masks <span style="color: #0000BB;">stats</span>::lag()</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     filter, lag</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level2">
 <h2 id="example-1">Example 1<a class="anchor" aria-label="anchor" href="#example-1"></a>
 </h2>
-<p>This example illustrates 1D visualization of the interpolation of 3
-points in 6D.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>In this example, we have 2 random 1D basis in 6D data space and the
+<code><a href="../reference/givens_full_path.html">givens_full_path()</a></code> function returns the intermediate
+interpolation step projections in given number of steps. The code chunk
+below demonstrates the interpolation between 2 random basis in 5
+steps.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate 1D example</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2022</span><span class="op">)</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">6</span></span>
 <span><span class="va">base1</span> <span class="op">&lt;-</span> <span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/basis_random.html" class="external-link">basis_random</a></span><span class="op">(</span><span class="va">p</span>, d<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">base2</span> <span class="op">&lt;-</span> <span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/basis_random.html" class="external-link">basis_random</a></span><span class="op">(</span><span class="va">p</span>, d<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">base3</span> <span class="op">&lt;-</span> <span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/basis_random.html" class="external-link">basis_random</a></span><span class="op">(</span><span class="va">p</span>, d<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># First example</span></span>
+<span><span class="va">base1</span></span>
+<span><span class="co">#&gt;             [,1]</span></span>
+<span><span class="co">#&gt; [1,]  0.24406482</span></span>
+<span><span class="co">#&gt; [2,] -0.31814139</span></span>
+<span><span class="co">#&gt; [3,] -0.24334450</span></span>
+<span><span class="co">#&gt; [4,] -0.39166263</span></span>
+<span><span class="co">#&gt; [5,] -0.08975114</span></span>
+<span><span class="co">#&gt; [6,] -0.78647758</span></span>
 <span></span>
-<span><span class="va">frames</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/givens_full_path.html">givens_full_path</a></span><span class="op">(</span><span class="va">base1</span>, <span class="va">base2</span>, nsteps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">base2</span></span>
+<span><span class="co">#&gt;            [,1]</span></span>
+<span><span class="co">#&gt; [1,] -0.6256883</span></span>
+<span><span class="co">#&gt; [2,]  0.1641842</span></span>
+<span><span class="co">#&gt; [3,]  0.4427114</span></span>
+<span><span class="co">#&gt; [4,]  0.1426996</span></span>
+<span><span class="co">#&gt; [5,]  0.5943406</span></span>
+<span><span class="co">#&gt; [6,] -0.1093633</span></span>
 <span></span>
-<span><span class="va">sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generate_space_view.html">generate_space_view</a></span><span class="op">(</span>p<span class="op">=</span><span class="va">p</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">sp_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_path.html">add_path</a></span><span class="op">(</span><span class="va">sp</span>, <span class="va">frames</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="va">point1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">base1</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="va">point1</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"point1"</span></span>
-<span></span>
-<span><span class="va">point2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">base2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">point2</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"point2"</span></span>
-<span></span>
-<span><span class="va">sp_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">sp_path</span>, <span class="va">point1</span>, <span class="va">point2</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="co"># second example</span></span>
-<span></span>
-<span><span class="va">frames</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/givens_full_path.html">givens_full_path</a></span><span class="op">(</span><span class="va">base2</span>, <span class="va">base3</span>, nsteps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">frames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">frames</span>, <span class="fl">3</span>, <span class="va">c</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">frames</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"path"</span></span>
-<span><span class="va">sp_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">sp_path</span>, <span class="va">frames</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">point3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">base3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">point3</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"point3"</span></span>
-<span></span>
-<span><span class="va">sp_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">sp_path</span>, <span class="va">point3</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/display_xy.html" class="external-link">animate_xy</a></span><span class="op">(</span><span class="va">sp_path</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="va">p</span><span class="op">]</span>, col<span class="op">=</span><span class="va">sp_path</span><span class="op">$</span><span class="va">type</span>, </span>
-<span>                  axes<span class="op">=</span><span class="st">"bottomleft"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Converting input data to the required matrix format.</span></span>
-<span><span class="co">#&gt; Using half_range 0.55</span></span></code></pre></div>
-<p><img src="woylier_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<span><span class="fu"><a href="../reference/givens_full_path.html">givens_full_path</a></span><span class="op">(</span><span class="va">base1</span>, <span class="va">base2</span>, nsteps <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; , , 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             [,1]</span></span>
+<span><span class="co">#&gt; [1,]  0.01086858</span></span>
+<span><span class="co">#&gt; [2,] -0.27240617</span></span>
+<span><span class="co">#&gt; [3,] -0.08264232</span></span>
+<span><span class="co">#&gt; [4,] -0.35891689</span></span>
+<span><span class="co">#&gt; [5,]  0.14040479</span></span>
+<span><span class="co">#&gt; [6,] -0.87767429</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             [,1]</span></span>
+<span><span class="co">#&gt; [1,] -0.22389989</span></span>
+<span><span class="co">#&gt; [2,] -0.18726515</span></span>
+<span><span class="co">#&gt; [3,]  0.09001476</span></span>
+<span><span class="co">#&gt; [4,] -0.27425086</span></span>
+<span><span class="co">#&gt; [5,]  0.35025000</span></span>
+<span><span class="co">#&gt; [6,] -0.84190816</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             [,1]</span></span>
+<span><span class="co">#&gt; [1,] -0.42627939</span></span>
+<span><span class="co">#&gt; [2,] -0.07503468</span></span>
+<span><span class="co">#&gt; [3,]  0.24965046</span></span>
+<span><span class="co">#&gt; [4,] -0.14991218</span></span>
+<span><span class="co">#&gt; [5,]  0.50942866</span></span>
+<span><span class="co">#&gt; [6,] -0.68435306</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 4</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;              [,1]</span></span>
+<span><span class="co">#&gt; [1,] -0.566994057</span></span>
+<span><span class="co">#&gt; [2,]  0.048050183</span></span>
+<span><span class="co">#&gt; [3,]  0.373172156</span></span>
+<span><span class="co">#&gt; [4,] -0.003887462</span></span>
+<span><span class="co">#&gt; [5,]  0.594914254</span></span>
+<span><span class="co">#&gt; [6,] -0.427800630</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;            [,1]</span></span>
+<span><span class="co">#&gt; [1,] -0.6256883</span></span>
+<span><span class="co">#&gt; [2,]  0.1641842</span></span>
+<span><span class="co">#&gt; [3,]  0.4427114</span></span>
+<span><span class="co">#&gt; [4,]  0.1426996</span></span>
+<span><span class="co">#&gt; [5,]  0.5943406</span></span>
+<span><span class="co">#&gt; [6,] -0.1093633</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example-2">Example 2<a class="anchor" aria-label="anchor" href="#example-2"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>In this example, we have 2 random 2D basis in 6D data space and the
+<code><a href="../reference/givens_full_path.html">givens_full_path()</a></code> function returns the intermediate
+interpolation step projections in given number of steps. The code chunk
+below demonstrates the interpolation between 2 random basis in 5
+steps.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate 2D example</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2022</span><span class="op">)</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">3</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
-<span><span class="va">base1</span> <span class="op">&lt;-</span> <span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/basis_random.html" class="external-link">basis_random</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">d</span><span class="op">)</span></span>
-<span><span class="va">base2</span> <span class="op">&lt;-</span> <span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/basis_random.html" class="external-link">basis_random</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">d</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">6</span></span>
+<span><span class="va">base3</span> <span class="op">&lt;-</span> <span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/basis_random.html" class="external-link">basis_random</a></span><span class="op">(</span><span class="va">p</span>, d<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">base4</span> <span class="op">&lt;-</span> <span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/basis_random.html" class="external-link">basis_random</a></span><span class="op">(</span><span class="va">p</span>, d<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">frames_2d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/givens_full_path.html">givens_full_path</a></span><span class="op">(</span><span class="va">base1</span>, <span class="va">base2</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">base3</span></span>
+<span><span class="co">#&gt;             [,1]        [,2]</span></span>
+<span><span class="co">#&gt; [1,]  0.24406482 -0.57724655</span></span>
+<span><span class="co">#&gt; [2,] -0.31814139  0.06085804</span></span>
+<span><span class="co">#&gt; [3,] -0.24334450  0.38323969</span></span>
+<span><span class="co">#&gt; [4,] -0.39166263  0.01182949</span></span>
+<span><span class="co">#&gt; [5,] -0.08975114  0.59899558</span></span>
+<span><span class="co">#&gt; [6,] -0.78647758 -0.39657839</span></span>
 <span></span>
-<span><span class="va">proj_2d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span>, <span class="op">~</span><span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/basis_random.html" class="external-link">basis_random</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">p</span>,  d<span class="op">=</span><span class="va">d</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">flatten_dbl</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol <span class="op">=</span> <span class="va">p</span><span class="op">*</span><span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if</span></span>
-<span><span class="co">#&gt; `.name_repair` is omitted as of tibble 2.0.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Using compatibility `.name_repair`.</span></span>
+<span><span class="va">base4</span></span>
+<span><span class="co">#&gt;             [,1]        [,2]</span></span>
+<span><span class="co">#&gt; [1,] -0.64550501 -0.17034478</span></span>
+<span><span class="co">#&gt; [2,]  0.06108262  0.87051018</span></span>
+<span><span class="co">#&gt; [3,] -0.03470326  0.26771612</span></span>
+<span><span class="co">#&gt; [4,] -0.05281183  0.25452167</span></span>
+<span><span class="co">#&gt; [5,] -0.43004248  0.27472455</span></span>
+<span><span class="co">#&gt; [6,] -0.62502981  0.03560765</span></span>
 <span></span>
-<span><span class="co"># Path</span></span>
-<span><span class="va">path_2d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">frames_2d</span>, <span class="fl">3</span>, <span class="va">c</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Join</span></span>
-<span><span class="va">proj_2d</span> <span class="op">&lt;-</span> <span class="va">proj_2d</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="st">"torus"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">path_2d</span> <span class="op">&lt;-</span> <span class="va">path_2d</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>type<span class="op">=</span><span class="st">"path"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">proj_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">proj_2d</span>, <span class="va">path_2d</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">tourr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tourr/man/display_xy.html" class="external-link">animate_xy</a></span><span class="op">(</span><span class="va">proj_path</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, </span>
-<span>                  col<span class="op">=</span><span class="va">proj_path</span><span class="op">$</span><span class="va">type</span>, </span>
-<span>                  axes<span class="op">=</span><span class="st">"bottomleft"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Converting input data to the required matrix format.</span></span>
-<span><span class="co">#&gt; Using half_range 0.73</span></span></code></pre></div>
-<p><img src="woylier_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<span><span class="fu"><a href="../reference/givens_full_path.html">givens_full_path</a></span><span class="op">(</span><span class="va">base3</span>, <span class="va">base4</span>, nsteps <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; , , 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             [,1]        [,2]</span></span>
+<span><span class="co">#&gt; [1,]  0.02498501 -0.57102411</span></span>
+<span><span class="co">#&gt; [2,] -0.26080833  0.26278410</span></span>
+<span><span class="co">#&gt; [3,] -0.19820064  0.40434178</span></span>
+<span><span class="co">#&gt; [4,] -0.35542927  0.08341593</span></span>
+<span><span class="co">#&gt; [5,] -0.14433023  0.57626698</span></span>
+<span><span class="co">#&gt; [6,] -0.86308174 -0.31951242</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;            [,1]       [,2]</span></span>
+<span><span class="co">#&gt; [1,] -0.1909937 -0.5290164</span></span>
+<span><span class="co">#&gt; [2,] -0.1874044  0.4550600</span></span>
+<span><span class="co">#&gt; [3,] -0.1459678  0.4046873</span></span>
+<span><span class="co">#&gt; [4,] -0.2970111  0.1522888</span></span>
+<span><span class="co">#&gt; [5,] -0.2003186  0.5261305</span></span>
+<span><span class="co">#&gt; [6,] -0.8824688 -0.2197674</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             [,1]       [,2]</span></span>
+<span><span class="co">#&gt; [1,] -0.38527579 -0.4457635</span></span>
+<span><span class="co">#&gt; [2,] -0.10411664  0.6258684</span></span>
+<span><span class="co">#&gt; [3,] -0.09577045  0.3811614</span></span>
+<span><span class="co">#&gt; [4,] -0.22183655  0.2089977</span></span>
+<span><span class="co">#&gt; [5,] -0.26412984  0.4533801</span></span>
+<span><span class="co">#&gt; [6,] -0.84414115 -0.1137724</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 4</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             [,1]        [,2]</span></span>
+<span><span class="co">#&gt; [1,] -0.54115467 -0.32350096</span></span>
+<span><span class="co">#&gt; [2,] -0.01855341  0.76518462</span></span>
+<span><span class="co">#&gt; [3,] -0.05630484  0.33422743</span></span>
+<span><span class="co">#&gt; [4,] -0.13748432  0.24504604</span></span>
+<span><span class="co">#&gt; [5,] -0.34020920  0.36617868</span></span>
+<span><span class="co">#&gt; [6,] -0.75431619 -0.02150119</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             [,1]        [,2]</span></span>
+<span><span class="co">#&gt; [1,] -0.64550501 -0.17305000</span></span>
+<span><span class="co">#&gt; [2,]  0.06108262  0.86649508</span></span>
+<span><span class="co">#&gt; [3,] -0.03470326  0.26851774</span></span>
+<span><span class="co">#&gt; [4,] -0.05281183  0.25487107</span></span>
+<span><span class="co">#&gt; [5,] -0.43004248  0.27511042</span></span>
+<span><span class="co">#&gt; [6,] -0.62502981  0.03766958</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

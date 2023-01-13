@@ -9,3 +9,4 @@ inst/background/*
 inst/hexsticker/*
 inst/testing/*
 data-raw
+pkgdown/
