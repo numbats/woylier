@@ -2,13 +2,10 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
 \HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
-\global\let\oldcontentsline\contentsline
-\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
 \global\let\oldnewlabel\newlabel
 \gdef\newlabel#1#2{\newlabelxx{#1}#2}
 \gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
 \AtEndDocument{\ifx\hyper@anchor\@undefined
-\let\contentsline\oldcontentsline
 \let\newlabel\oldnewlabel
 \fi}
 \fi}
@@ -20,11 +17,11 @@
 \@writefile{toc}{\contentsline {chapter}{\numberline {1}woylier: Generate a tour of multivariate data using frame to frame interpolation}{1}{section*.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2.1}Introduction}{1}{section.2.1}\protected@file@percent }
 \newlabel{introduction}{{2.1}{1}{Introduction}{section.2.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.2}Background}{1}{section.2.2}\protected@file@percent }
-\newlabel{background}{{2.2}{1}{Background}{section.2.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The plot on the right-hand side is a 30-degree rotation of the left-hand side. The calculated splines index is shown on top of each plot. Although they depict the same points we can see that the splines index is different which shows the rotational variance of the splines index.\relax }}{2}{figure.caption.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Modified spline index computed on within-plane rotations of the same projection has very different values: (a) original pair has maximum index value of 1.00, (b) axes rotated 45$^o$ drops index value to 0.83, (c) axes rotated 60$^o$ drops index to a very low 0.26. This shows an index that is rotationally variable.\relax }}{2}{figure.caption.2}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:splines2d-static}{{1}{2}{The plot on the right-hand side is a 30-degree rotation of the left-hand side. The calculated splines index is shown on top of each plot. Although they depict the same points we can see that the splines index is different which shows the rotational variance of the splines index.\relax }{figure.caption.2}{}}
+\newlabel{fig:splines2d-static}{{1}{2}{Modified spline index computed on within-plane rotations of the same projection has very different values: (a) original pair has maximum index value of 1.00, (b) axes rotated 45$^o$ drops index value to 0.83, (c) axes rotated 60$^o$ drops index to a very low 0.26. This shows an index that is rotationally variable.\relax }{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Background}{2}{section.2.2}\protected@file@percent }
+\newlabel{background}{{2.2}{2}{Background}{section.2.2}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Plane to plane interpolation (left) and Frame to frame interpolation (right). We used dog index for illustration purposes. For some non-linear index orientation of data could affect the index.\relax }}{3}{figure.caption.3}\protected@file@percent }
 \newlabel{fig:dogs}{{2}{3}{Plane to plane interpolation (left) and Frame to frame interpolation (right). We used dog index for illustration purposes. For some non-linear index orientation of data could affect the index.\relax }{figure.caption.3}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {2.3}Implementation}{5}{section.2.3}\protected@file@percent }
@@ -39,3 +36,22 @@
 \newlabel{fig:2d-path-static}{{4}{8}{Interpolation steps of 2D projections of 6D data\relax }{figure.caption.5}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Givens interpolation path (left) and Geodesic interpolation path (right) to target frame. Givens interpolation goes to exact frame that has the correct orientation while Geodesic interpolation goes to rotation of the target plane.\relax }}{9}{figure.caption.6}\protected@file@percent }
 \newlabel{fig:compare-interpolations-static}{{5}{9}{Givens interpolation path (left) and Geodesic interpolation path (right) to target frame. Givens interpolation goes to exact frame that has the correct orientation while Geodesic interpolation goes to rotation of the target plane.\relax }{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.6}Data application}{9}{section.2.6}\protected@file@percent }
+\newlabel{data-application}{{2.6}{9}{Data application}{section.2.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces All the currencies are standardised and the sign is flipped. The high value means the currency strengthened against the USD, and low means that it weakened.\relax }}{10}{figure.caption.7}\protected@file@percent }
+\newlabel{fig:currency}{{6}{10}{All the currencies are standardised and the sign is flipped. The high value means the currency strengthened against the USD, and low means that it weakened.\relax }{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces After standardisation, these currencies are still highly correlated with each other.\relax }}{11}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:currency-corr}{{7}{11}{After standardisation, these currencies are still highly correlated with each other.\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Guided tour optimization of splines index using geodesic interpolation.\relax }}{11}{figure.caption.9}\protected@file@percent }
+\newlabel{fig:guided-geo-static}{{8}{11}{Guided tour optimization of splines index using geodesic interpolation.\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Guided tour optimization of modified splines index using Givens interpolation.\relax }}{12}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:guided-givens-static}{{9}{12}{Guided tour optimization of modified splines index using Givens interpolation.\relax }{figure.caption.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Guided tour optimization of modified splines index using Givens interpolation with better optimization.\relax }}{12}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:guided-givens-random-static}{{10}{12}{Guided tour optimization of modified splines index using Givens interpolation with better optimization.\relax }{figure.caption.11}{}}
+\bibdata{woylier-article.bib}
+\@writefile{toc}{\contentsline {section}{\numberline {2.7}Conclusion}{13}{section.2.7}\protected@file@percent }
+\newlabel{conclusion}{{2.7}{13}{Conclusion}{section.2.7}{}}
+\newlabel{references}{{2.7}{13}{}{section.2.7}{}}
+\@writefile{toc}{\contentsline {section}{References}{13}{section.2.7}\protected@file@percent }
+\ttl@finishall
+\gdef \@abspage@last{13}

@@ -38,7 +38,12 @@ bibliography: woylier-article.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE)
+```
+
+```{r load}
 library(tourr)
 library(tidyverse)
 library(woylier)
@@ -58,9 +63,9 @@ The guided tour combines projection pursuit with the tour [@grandtour1995] and i
 
 A tour path is a sequence of projection and we use interpolation method to produce the path. The current implementation of guided tour in \CRANpkg{tourr} package uses geodesic interpolation between planes. Geodesic interpolation path is the locally shortest path between planes with no within-plane spin. As a result of this method, the rendered target plane could be the rotated version of the target plane we wanted. This is not a problem when the structure we are looking can be identified without turning the axis around. The detailed discussion about the role of orientation in data projection can be found in @Buja2004TheoryOD.
 
-However, in some cases of non-linear projection pursuit index, the orientation of frames does matter. One example is the splines2D index. The value of the splines2D index changes depending on the rotation [@pp]. The lack of rotation invariance of the splines2d index raises complications in the optimization process. This rotational dependence issue of non-linear projection pursuit functions is the motivation of this work. Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:splines2d-static)', '\\@ref(fig:splines2d-static)'))` illustrates the rotational invariance problem for the spline2D index. The data was simulated to follow a sine curve and only difference in the two plot is the righ-hand side is 30 degree rotated version of the left one. Although they have the same structure, the splines index is not the same.
+However, in some cases of non-linear projection pursuit index, the orientation of frames does matter. One example is the splines2D index. The value of the splines2D index [@Grimm2016] changes depending on the rotation [@pp]. The lack of rotation invariance of the splines2d index raises complications in the optimization process. This rotational dependence issue of non-linear projection pursuit functions is the motivation of this work. Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:splines2d-static)', '\\@ref(fig:splines2d-static)'))` illustrates the rotational invariance problem for a modified spline2D index. The original implementation for the splines2d index makes a couple of additional calculations to reduce (but not remove) the rotational invariance. Our modified index computes the splines on one orientation, exaggerating the rotational variability. The example data was simulated to follow a sine curve and the modified splines index is calculated on different within-plane rotations of the data. Although they have the same structure, the index values vary greatly. The goal with the frame to frame interpolation is that optimization would find the best within-plane rotation, and thus appropriately optimize the index. 
 
-```{r splines2d-static, echo = FALSE, fig.height = 3, fig.cap="The plot on the right-hand side is a 30-degree rotation of the left-hand side. The calculated splines index is shown on top of each plot. Although they depict the same points we can see that the splines index is different which shows the rotational variance of the splines index.", fig.alt = "Two side-by-side scatterplots with 6 points. The plot on the right-hand side is a 30-degree rotation of the left-hand side. The calculated splines index is shown on top of each plot. Although they depict the same points we can see that the splines index is different which shows the rotational variance of the splines index."}
+```{r splines2d-static, out.width = "100%", fig.height = 4, layout = "l-page", fig.cap="Modified spline index computed on within-plane rotations of the same projection has very different values: (a) original pair has maximum index value of 1.00, (b) axes rotated 45$^o$ drops index value to 0.83, (c) axes rotated 60$^o$ drops index to a very low 0.26. This shows an index that is rotationally variable.", fig.alt = "Three side-by-side scatterplots. The left side plot shows two variables, V5, V6, with a sine curve. The index value is the maximum of 1. The middle plot shows the two variables rotated 45 degrees clock-wise, and the calculated index value is 0.83. The right-side plot is rotated 60 degrees, and the calculated index value is 0.26."}
 data("sine_curve")
 
 # modified the splines2d
@@ -78,23 +83,50 @@ new_splines2d <- function ()
 }
 mat <- data.frame(sine_curve[,5:6])
 mat_idx <- round(new_splines2d()(mat), 2)
-mat_rot <- data.frame(x = cos(pi/6) * sine_curve$V5 + 
-                          sin(pi/6) * sine_curve$V6,
-                      y = -sin(pi/6) * sine_curve$V5 + 
-                           cos(pi/6) * sine_curve$V6)
-mat_rot_idx <- round(new_splines2d()(mat_rot), 2)
+rot1 <- matrix(c(cos(pi/4), sin(pi/4), 
+                -sin(pi/4), cos(pi/4)),
+              ncol=2, byrow=T)
+mat_rot1 <- data.frame(x = rot1[1,1] * sine_curve$V5 + 
+                          rot1[1,2] * sine_curve$V6,
+                      y = rot1[2,1] * sine_curve$V5 + 
+                           rot1[2,2] * sine_curve$V6)
+mat_rot1_idx <- round(new_splines2d()(mat_rot1), 2)
+rot2 <- matrix(c(cos(pi/3), sin(pi/3), 
+                -sin(pi/3), cos(pi/3)),
+              ncol=2, byrow=T)
+mat_rot2 <- data.frame(x = rot2[1,1] * sine_curve$V5 + 
+                          rot2[1,2] * sine_curve$V6,
+                      y = rot2[2,1] * sine_curve$V5 + 
+                           rot2[2,2] * sine_curve$V6)
+mat_rot2_idx <- round(new_splines2d()(mat_rot2), 2)
+
 p1 <- ggplot(mat, aes(x=V5, y=V6)) + 
   geom_point() + 
-  ggtitle(paste("Splines index = ", mat_idx)) +
-  theme(aspect.ratio=1)+
-  theme_bw()
-p2 <- ggplot(mat_rot, aes(x=x, y=y)) + 
+  geom_segment(data=tibble(cnt=c(0,0), V5=c(1,0), V6=c(0,1)), mapping=aes(x=cnt, xend=V5, y=cnt, yend=V6)) +
+  geom_text(data=tibble(V5=c(1,0), V6=c(0,1), label=c("V5", "V6")), aes(x=V5, y=V6, label=label)) +
+  xlim(c(-1.2, 1.2)) + ylim(c(-1.2, 1.2)) +
+  ggtitle(paste("a. 0 deg: ", mat_idx)) +
+  theme_bw() +
+  theme(aspect.ratio=1)
+p2 <- ggplot(mat_rot1, aes(x=x, y=y)) + 
   geom_point() + 
-  xlab("Rotated 1") + ylab("Rotated 2") +
-  ggtitle(paste("Splines index = ", mat_rot_idx)) +
-  theme(aspect.ratio=1)+
-  theme_bw()
-p1+p2
+  geom_segment(data=tibble(cnt=c(0,0), V5=rot1[1,], V6=rot1[2,]), mapping=aes(x=cnt, xend=V5, y=cnt, yend=V6)) +
+  geom_text(data=tibble(V5=rot1[1,], V6=rot1[2,], label=c("V5", "V6")), aes(x=V5, y=V6, label=label)) +
+  xlim(c(-1.2, 1.2)) + ylim(c(-1.2, 1.2)) +
+  xlab("Proj 1") + ylab("Proj 2") +
+  ggtitle(paste("b. 45 deg: ", mat_rot1_idx)) +
+  theme_bw() +
+  theme(aspect.ratio=1)
+p3 <- ggplot(mat_rot2, aes(x=x, y=y)) + 
+  geom_point() + 
+  geom_segment(data=tibble(cnt=c(0,0), V5=rot2[1,], V6=rot2[2,]), mapping=aes(x=cnt, xend=V5, y=cnt, yend=V6)) +
+  geom_text(data=tibble(V5=rot2[1,], V6=rot2[2,], label=c("V5", "V6")), aes(x=V5, y=V6, label=label)) +
+  xlim(c(-1.2, 1.2)) + ylim(c(-1.2, 1.2)) +
+  xlab("Proj 1") + ylab("Proj 2") +
+  ggtitle(paste("c. 60 deg: ", mat_rot2_idx)) +
+  theme_bw() +
+  theme(aspect.ratio=1)
+p1+p2+p3
 ```
 
 A few alternatives to geodesic interpolation were proposed by @buja_cook_asimov_hurley_2005 including the decomposition of orthogonal matrices, Givens decomposition, and Householder decomposition. The purpose of the **woylier** package is to implement the Givens paths method in R. This algorithm adapts Given's matrix decomposition technique which allows the interpolation to be between frames rather than planes.
@@ -547,15 +579,15 @@ knitr::include_graphics("guided_geo.png")
 knitr::include_graphics("guided_givens.gif")
 ```
 
-```{r guided-givens-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of splines index using Givens interpolation.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
+```{r guided-givens-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of modified splines index using Givens interpolation.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
 knitr::include_graphics("guided_givens.png")
 ```
 
-```{r guided-givens-random-dynamic, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of splines index using Givens interpolation with search_better_random.", include=knitr::is_html_output(), eval=knitr::is_html_output()}
+```{r guided-givens-random-dynamic, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of modified splines index using Givens interpolation with better optimization.", include=knitr::is_html_output(), eval=knitr::is_html_output()}
 knitr::include_graphics("guided_givens_random.gif")
 ```
 
-```{r guided-givens-random-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of splines index using Givens interpolation with search_better_random.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
+```{r guided-givens-random-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of modified splines index using Givens interpolation with better optimization.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
 knitr::include_graphics("guided_givens_random.png")
 ```
 

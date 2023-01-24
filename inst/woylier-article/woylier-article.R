@@ -2,7 +2,12 @@
 # Please edit woylier-article.Rmd to modify this file
 
 ## ----setup, include=FALSE-----------------------------------------------------
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE)
+
+
+## ----load---------------------------------------------------------------------
 library(tourr)
 library(tidyverse)
 library(woylier)
@@ -14,27 +19,68 @@ library(GGally)
 library(corrplot)
 
 
-## ----splines2d-static, echo = FALSE, fig.height = 3, fig.cap="The plot on the right-hand side is a 30-degree rotation of the left-hand side. The calculated splines index is shown on top of each plot. Although they depict the same points we can see that the splines index is different which shows the rotational variance of the splines index.", fig.alt = "Two side-by-side scatterplots with 6 points. The plot on the right-hand side is a 30-degree rotation of the left-hand side. The calculated splines index is shown on top of each plot. Although they depict the same points we can see that the splines index is different which shows the rotational variance of the splines index."----
+## ----splines2d-static, out.width = "100%", fig.height = 4, layout = "l-page", fig.cap="Modified spline index computed on within-plane rotations of the same projection has very different values: (a) original pair has maximum index value of 1.00, (b) axes rotated 45$^o$ drops index value to 0.83, (c) axes rotated 60$^o$ drops index to a very low 0.26. This shows an index that is rotationally variable.", fig.alt = "Three side-by-side scatterplots. The left side plot shows two variables, V5, V6, with a sine curve. The index value is the maximum of 1. The middle plot shows the two variables rotated 45 degrees clock-wise, and the calculated index value is 0.83. The right-side plot is rotated 60 degrees, and the calculated index value is 0.26."----
 data("sine_curve")
+
+# modified the splines2d
+new_splines2d <- function ()
+{
+  function(mat) {
+    mat <- as.data.frame(mat)
+    colnames(mat) <- c("x", "y")
+    kx <- ifelse(length(unique(mat$x[!is.na(mat$x)])) < 20,
+                 3, 10)
+    mgam1 <- mgcv::gam(y ~ s(x, bs = "cr", k = kx), data = mat)
+    measure <- 1 - var(residuals(mgam1), na.rm = T)/var(mat$y, na.rm = T)
+    return(measure)
+  }
+}
 mat <- data.frame(sine_curve[,5:6])
-mat_idx <- round(tourr::splines2d()(mat), 2)
-mat_rot <- data.frame(x = cos(pi/6) * sine_curve$V5 + 
-                          sin(pi/6) * sine_curve$V6,
-                      y = -sin(pi/6) * sine_curve$V5 + 
-                           cos(pi/6) * sine_curve$V6)
-mat_rot_idx <- round(tourr::splines2d()(mat_rot), 2)
+mat_idx <- round(new_splines2d()(mat), 2)
+rot1 <- matrix(c(cos(pi/4), sin(pi/4), 
+                -sin(pi/4), cos(pi/4)),
+              ncol=2, byrow=T)
+mat_rot1 <- data.frame(x = rot1[1,1] * sine_curve$V5 + 
+                          rot1[1,2] * sine_curve$V6,
+                      y = rot1[2,1] * sine_curve$V5 + 
+                           rot1[2,2] * sine_curve$V6)
+mat_rot1_idx <- round(new_splines2d()(mat_rot1), 2)
+rot2 <- matrix(c(cos(pi/3), sin(pi/3), 
+                -sin(pi/3), cos(pi/3)),
+              ncol=2, byrow=T)
+mat_rot2 <- data.frame(x = rot2[1,1] * sine_curve$V5 + 
+                          rot2[1,2] * sine_curve$V6,
+                      y = rot2[2,1] * sine_curve$V5 + 
+                           rot2[2,2] * sine_curve$V6)
+mat_rot2_idx <- round(new_splines2d()(mat_rot2), 2)
+
 p1 <- ggplot(mat, aes(x=V5, y=V6)) + 
   geom_point() + 
-  ggtitle(paste("Splines index = ", mat_idx)) +
-  theme(aspect.ratio=1)+
-  theme_bw()
-p2 <- ggplot(mat_rot, aes(x=x, y=y)) + 
+  geom_segment(data=tibble(cnt=c(0,0), V5=c(1,0), V6=c(0,1)), mapping=aes(x=cnt, xend=V5, y=cnt, yend=V6)) +
+  geom_text(data=tibble(V5=c(1,0), V6=c(0,1), label=c("V5", "V6")), aes(x=V5, y=V6, label=label)) +
+  xlim(c(-1.2, 1.2)) + ylim(c(-1.2, 1.2)) +
+  ggtitle(paste("a. 0 deg: ", mat_idx)) +
+  theme_bw() +
+  theme(aspect.ratio=1)
+p2 <- ggplot(mat_rot1, aes(x=x, y=y)) + 
   geom_point() + 
-  xlab("Rotated 1") + ylab("Rotated 2") +
-  ggtitle(paste("Splines index = ", mat_rot_idx)) +
-  theme(aspect.ratio=1)+
-  theme_bw()
-p1+p2
+  geom_segment(data=tibble(cnt=c(0,0), V5=rot1[1,], V6=rot1[2,]), mapping=aes(x=cnt, xend=V5, y=cnt, yend=V6)) +
+  geom_text(data=tibble(V5=rot1[1,], V6=rot1[2,], label=c("V5", "V6")), aes(x=V5, y=V6, label=label)) +
+  xlim(c(-1.2, 1.2)) + ylim(c(-1.2, 1.2)) +
+  xlab("Proj 1") + ylab("Proj 2") +
+  ggtitle(paste("b. 45 deg: ", mat_rot1_idx)) +
+  theme_bw() +
+  theme(aspect.ratio=1)
+p3 <- ggplot(mat_rot2, aes(x=x, y=y)) + 
+  geom_point() + 
+  geom_segment(data=tibble(cnt=c(0,0), V5=rot2[1,], V6=rot2[2,]), mapping=aes(x=cnt, xend=V5, y=cnt, yend=V6)) +
+  geom_text(data=tibble(V5=rot2[1,], V6=rot2[2,], label=c("V5", "V6")), aes(x=V5, y=V6, label=label)) +
+  xlim(c(-1.2, 1.2)) + ylim(c(-1.2, 1.2)) +
+  xlab("Proj 1") + ylab("Proj 2") +
+  ggtitle(paste("c. 60 deg: ", mat_rot2_idx)) +
+  theme_bw() +
+  theme(aspect.ratio=1)
+p1+p2+p3
 
 
 ## ----dogs, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', fig.cap="Plane to plane interpolation (left) and Frame to frame interpolation (right). We used dog index for illustration purposes. For some non-linear index orientation of data could affect the index."----
@@ -268,6 +314,10 @@ corrplot(corr, type = "upper", order = "hclust",
 #> pca
 
 
+## -----------------------------------------------------------------------------
+
+
+
 ## ----echo = FALSE, eval=FALSE-------------------------------------------------
 #> # modified the splines2d
 #> new_splines2d <- function ()
@@ -308,14 +358,14 @@ knitr::include_graphics("guided_geo.png")
 #> knitr::include_graphics("guided_givens.gif")
 
 
-## ----guided-givens-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of splines index using Givens interpolation.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()----
+## ----guided-givens-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of modified splines index using Givens interpolation.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()----
 knitr::include_graphics("guided_givens.png")
 
 
-## ----guided-givens-random-dynamic, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of splines index using Givens interpolation with search_better_random.", include=knitr::is_html_output(), eval=knitr::is_html_output()----
+## ----guided-givens-random-dynamic, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of modified splines index using Givens interpolation with better optimization.", include=knitr::is_html_output(), eval=knitr::is_html_output()----
 #> knitr::include_graphics("guided_givens_random.gif")
 
 
-## ----guided-givens-random-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of splines index using Givens interpolation with search_better_random.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()----
+## ----guided-givens-random-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of modified splines index using Givens interpolation with better optimization.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()----
 knitr::include_graphics("guided_givens_random.png")
 
