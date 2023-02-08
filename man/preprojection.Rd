@@ -2,7 +2,7 @@
 % Please edit documentation in R/givens.R
 \name{preprojection}
 \alias{preprojection}
-\title{Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa}
+\title{Build a d-dimensional pre-projection space by orthonormaliing Fz with regard to Fa}
 \usage{
 preprojection(Fa, Fz)
 }
@@ -15,6 +15,6 @@ preprojection(Fa, Fz)
 B pre-projection px2d matrix
 }
 \description{
-Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa
+Build a d-dimensional pre-projection space by orthonormaliing Fz with regard to Fa
 }
 \keyword{internal}

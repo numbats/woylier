@@ -10,3 +10,4 @@ inst/hexsticker/*
 inst/testing/*
 data-raw
 pkgdown/
+^cran-comments\.md$

@@ -12,7 +12,7 @@ givens_info(Fa, Fz)
 \item{Fz}{target frame, will be orthonormalised if necessary}
 }
 \description{
-The methdology is outlined in
+The methodology is outlined in
 \url{http://www-stat.wharton.upenn.edu/~buja/PAPERS/paper-dyn-proj-algs.pdf}
 }
 \keyword{internal}
