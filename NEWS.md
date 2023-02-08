@@ -1,3 +1,3 @@
-# woylier 0.0.0.9000
+# woylier 0.0.1
 
-* Added a `NEWS.md` file to track changes to the package.
+* Initial release of the package
