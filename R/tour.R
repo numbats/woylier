@@ -47,7 +47,7 @@ givens_path <- function (current, target, frozen = NULL, ...) {
 
 #' Calculate information needed for Givens interpolation
 #'
-#' The methdology is outlined in
+#' The methodology is outlined in
 #' \url{http://www-stat.wharton.upenn.edu/~buja/PAPERS/paper-dyn-proj-algs.pdf}
 #'
 #' @param Fa starting frame, will be orthonormalised if necessary

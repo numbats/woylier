@@ -1,10 +1,10 @@
-#' Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa
+#' Build a d-dimensional pre-projection space by orthonormaliing Fz with regard to Fa
 #'
 #' @keywords internal
 #' @param Fa starting pxd frame
 #' @param Fz ending pxd frame
 #'
-#' @returns B pre-projection px2d matrix 
+#' @returns B pre-projection px2d matrix
 
 preprojection <- function(Fa, Fz) {
   # check both are matrices are both correct size
@@ -21,11 +21,11 @@ preprojection <- function(Fa, Fz) {
 }
 
 #' Construct preprojected frames
-#' 
+#'
 #' @keywords internal
 #'
 #' @param Fr Orthonormal frame
-#' @param B pre-projection px2d matrix 
+#' @param B pre-projection px2d matrix
 #'
 #' @returns Preprojected 2dxd frame on preprojection space (first dxd entry of this matrix is identity matrix by construction)
 
@@ -43,8 +43,8 @@ construct_preframe <- function(Fr, B) {
 #'
 #' @return angle in radians
 
-angle2 <-  function(x, y){ 
-  theta <- atan2(x[2], x[1]) - atan2(y[2], y[1]) 
+angle2 <-  function(x, y){
+  theta <- atan2(x[2], x[1]) - atan2(y[2], y[1])
   return(theta)
 }
 
@@ -57,7 +57,7 @@ angle2 <-  function(x, y){
 #' @param theta  angle between them
 #'
 #' @return rotated matrix a
-#' 
+#'
 #' refer to Algorithm 5.1.6 of Matrix computation (Golub, Van)
 
 row_rot <- function(a, i, k, theta) {
@@ -72,7 +72,7 @@ row_rot <- function(a, i, k, theta) {
 }
 
 #' Calculate angles of required rotations to map Wz to Wa
-#' 
+#'
 #' @keywords internal
 #'
 #' @param Wa starting preprojected frame
@@ -85,7 +85,7 @@ calculate_angles <- function(Wa, Wz) {
   wi = Wz
   for (col in 1:ncol(Wz)) {
     for (row in col:(nrow(Wz)-1)){
-      # store angles in a named list 
+      # store angles in a named list
       x <- as.matrix(c(Wa[col, col], Wa[row+1, col]))
       y <- as.matrix(c(wi[col, col], wi[row+1, col]))
       theta = angle2(x, y)
@@ -98,12 +98,12 @@ calculate_angles <- function(Wa, Wz) {
 
 
 #' It implements series of Givens rotations that maps Wa to Wz
-#' 
+#'
 #' @keywords internal
 #'
 #' @param Wa starting preprojected frame
 #' @param angles angles of required rotations to map Wz to Wa
-#' @param stepfraction for the interpolation of rotations 
+#' @param stepfraction for the interpolation of rotations
 #'
 #' @return Givens path by stepfraction in pre-projected space
 
@@ -121,10 +121,10 @@ givens_rotation <- function(Wa, angles, stepfraction) {
 }
 
 #' Reconstruct interpolated frames using pre-projection
-#' 
+#'
 #' @keywords internal
 #'
-#' @param B pre-projection px2d matrix 
+#' @param B pre-projection px2d matrix
 #' @param Wt A givens path by stepfraction
 #'
 #' @returns A frame of on the step of interpolation
@@ -140,10 +140,10 @@ construct_moving_frame <- function(Wt, B) {
 #' @param Fa starting pxd frame
 #' @param Fz target pxd frame
 #'
-#' @returns array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames. 
+#' @returns array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames.
 #' @export
 #'
-#' @examples 
+#' @examples
 #' p <- 4
 #' base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
 #' base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
