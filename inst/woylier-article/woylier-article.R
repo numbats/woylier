@@ -307,6 +307,13 @@ corrplot(corr, type = "upper", order = "hclust",
          tl.col = "black", tl.srt = 45)
 
 
+## ----pca-result-static, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', include=knitr::is_latex_output(), eval=knitr::is_latex_output(), fig.cap="There is a strong non-linear dependence between PC1 and PC2."----
+# Use PCA to remove linear dependence
+rates_pca <- prcomp(rates[,-1], scale. = TRUE)
+pca <- ggscatmat(rates_pca$x)
+pca
+
+
 ## ----pca-result, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.cap="There is a strong non-linear dependence between PC1 and PC2."----
 #> # Use PCA to remove linear dependence
 #> rates_pca <- prcomp(rates[,-1], scale. = TRUE)
@@ -315,7 +322,7 @@ corrplot(corr, type = "upper", order = "hclust",
 
 
 ## -----------------------------------------------------------------------------
-
+rates_pca_sd <-  apply(rates_pca$x, 2, function(x) (x-mean(x))/sd(x))
 
 
 ## ----echo = FALSE, eval=FALSE-------------------------------------------------
@@ -337,9 +344,9 @@ corrplot(corr, type = "upper", order = "hclust",
 #> basis2 <- basis_random(n=4, d = 2)
 #> anim_geo <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d(), current = basis2))
 #> 
-#> anim_givens <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better, max.tries = 1000))
+#> anim_givens <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better, max.tries = 100))
 #> 
-#> anim_givens_random <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better_random, max.tries = 1000))
+#> anim_givens_random <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better_random, max.tries = 100))
 #> 
 #> render_gif(rates_pca_sd[,1:4], planned_tour(anim_geo), display = display_xy(), gif_file = "guided_geo.gif", loop = FALSE)
 #> render_gif(rates_pca_sd[,1:4], planned_tour(anim_givens), display = display_xy(), gif_file = "guided_givens.gif", loop = FALSE)

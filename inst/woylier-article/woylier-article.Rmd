@@ -8,27 +8,27 @@ author:
   - name: Zoljargal Batsaikhan
     affiliation: Monash University
     address:
-    - Department of Letter Q
-    - Somewhere, Australia
-    url: https://www.britannica.com/animal/quokka
-    orcid: N/A
+    - Department of Econometrics and Business Statistics
+    - Clayton, VIC, Australia
+    url: https://github.com/zolabat
+    orcid: 0009-0005-0055-1448
     email:  zoljargal11@gmail.com
   - name: Dianne Cook
-    url: https://www.britannica.com/animal/bilby
+    url: http://www.dicook.org
     email: dicook@monash.edu
     orcid: 0000-0002-3813-7155
     affiliation: Monash University
     address:
-    - Department of Letter B
-    - Somewhere, Australia
+    - Department of Econometrics and Business Statistics
+    - Clayton, VIC, Australia
   - name: Ursula Laa
-    url: https://www.britannica.com/animal/bilby
+    url: https://uschilaa.github.io
     email: ursula.laa@boku.ac.at
     orcid: 0000-0002-0249-6439
     affiliation: BOKU University
     address:
-    - Department of Letter B
-    - Somewhere, Australia
+    - Institute of Statistics
+    - Vienna, Austria
 type: package
 output: 
   rjtools::rjournal_web_article:
@@ -525,6 +525,13 @@ corrplot(corr, type = "upper", order = "hclust",
 
 Since our goal is to explore non-linear association in the dataset, we will use the principal components of the currency rates rather than original rates. Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:pca-result)', '\\@ref(fig:pca-result)'))` shows scatter plot matrix of PCs of our dataset. The PC1 and PC2 has strong non-linear association.  
 
+```{r pca-result-static, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', include=knitr::is_latex_output(), eval=knitr::is_latex_output(), fig.cap="There is a strong non-linear dependence between PC1 and PC2."}
+# Use PCA to remove linear dependence
+rates_pca <- prcomp(rates[,-1], scale. = TRUE)
+pca <- ggscatmat(rates_pca$x)
+pca
+```
+
 ```{r pca-result, echo=FALSE, out.width="50%", fig.align = "center", fig.show='hold', include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.cap="There is a strong non-linear dependence between PC1 and PC2."}
 # Use PCA to remove linear dependence
 rates_pca <- prcomp(rates[,-1], scale. = TRUE)
@@ -535,7 +542,7 @@ pca
 **New splines2d index**
 
 ```{r}
-
+rates_pca_sd <-  apply(rates_pca$x, 2, function(x) (x-mean(x))/sd(x))
 ```
 
 ```{r echo = FALSE, eval=FALSE}
@@ -557,9 +564,9 @@ set.seed(202212)
 basis2 <- basis_random(n=4, d = 2)
 anim_geo <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour(new_splines2d(), current = basis2))
 
-anim_givens <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better, max.tries = 1000))
+anim_givens <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better, max.tries = 100))
 
-anim_givens_random <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better_random, max.tries = 1000))
+anim_givens_random <- save_history(rates_pca_sd[,1:4], tour_path = guided_tour_givens(new_splines2d(), current = basis2, search_f = search_better_random, max.tries = 100))
 
 render_gif(rates_pca_sd[,1:4], planned_tour(anim_geo), display = display_xy(), gif_file = "guided_geo.gif", loop = FALSE)
 render_gif(rates_pca_sd[,1:4], planned_tour(anim_givens), display = display_xy(), gif_file = "guided_givens.gif", loop = FALSE)
@@ -570,6 +577,14 @@ render_gif(rates_pca_sd[,1:4], planned_tour(anim_givens_random), display = displ
 knitr::include_graphics("guided_geo.gif")
 ```
 
+Value  0.826   0.0 % better 
+No better bases found after 25 tries.  Giving up.
+Final projection: 
+0.855  -0.231  
+-0.294  0.465  
+0.268  0.758  
+-0.333  -0.394  
+
 ```{r guided-geo-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of splines index using geodesic interpolation.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
 knitr::include_graphics("guided_geo.png")
 ```
@@ -579,6 +594,14 @@ knitr::include_graphics("guided_geo.png")
 knitr::include_graphics("guided_givens.gif")
 ```
 
+Value  0.842   0.0 % better 
+No better bases found after 100 tries.  Giving up.
+Final projection: 
+-0.847  -0.055  
+0.399  0.527  
+-0.164  0.723  
+0.312  -0.442  
+
 ```{r guided-givens-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of modified splines index using Givens interpolation.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
 knitr::include_graphics("guided_givens.png")
 ```
@@ -586,6 +609,14 @@ knitr::include_graphics("guided_givens.png")
 ```{r guided-givens-random-dynamic, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of modified splines index using Givens interpolation with better optimization.", include=knitr::is_html_output(), eval=knitr::is_html_output()}
 knitr::include_graphics("guided_givens_random.gif")
 ```
+
+Value  0.785   0.0 % better 
+No better bases found after 100 tries.  Giving up.
+Final projection: 
+0.835  0.305  
+-0.269  -0.462  
+0.328  -0.730  
+-0.350  0.399  
 
 ```{r guided-givens-random-static, out.width="50%", fig.align="center", echo = FALSE, fig.height = 3, fig.cap="Guided tour optimization of modified splines index using Givens interpolation with better optimization.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
 knitr::include_graphics("guided_givens_random.png")

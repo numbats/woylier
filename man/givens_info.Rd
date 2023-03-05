@@ -7,9 +7,9 @@
 givens_info(Fa, Fz)
 }
 \arguments{
-\item{Fa}{starting frame, will be orthonormalised if necessary}
+\item{Fa}{starting frame, will be orthonormalized if necessary}
 
-\item{Fz}{target frame, will be orthonormalised if necessary}
+\item{Fz}{target frame, will be orthonormalized if necessary}
 }
 \description{
 The methodology is outlined in

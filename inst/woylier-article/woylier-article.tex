@@ -417,7 +417,24 @@ Figure \ref{fig:currency-corr} visualises the correlation matrix of dataset. We 
 
 Since our goal is to explore non-linear association in the dataset, we will use the principal components of the currency rates rather than original rates. Figure \ref{fig:pca-result} shows scatter plot matrix of PCs of our dataset. The PC1 and PC2 has strong non-linear association.
 
+\begin{figure}
+
+{\centering \includegraphics[width=0.5\linewidth]{woylier-article_files/figure-latex/pca-result-static-1} 
+
+}
+
+\caption{There is a strong non-linear dependence between PC1 and PC2.}\label{fig:pca-result-static}
+\end{figure}
+
 \textbf{New splines2d index}
+
+Value 0.826 0.0 \% better
+No better bases found after 25 tries. Giving up.
+Final projection:
+0.855 -0.231\\
+-0.294 0.465\\
+0.268 0.758\\
+-0.333 -0.394
 
 \begin{figure}
 
@@ -428,6 +445,14 @@ Since our goal is to explore non-linear association in the dataset, we will use 
 \caption{Guided tour optimization of splines index using geodesic interpolation.}\label{fig:guided-geo-static}
 \end{figure}
 
+Value 0.842 0.0 \% better
+No better bases found after 100 tries. Giving up.
+Final projection:
+-0.847 -0.055\\
+0.399 0.527\\
+-0.164 0.723\\
+0.312 -0.442
+
 \begin{figure}
 
 {\centering \includegraphics[width=0.5\linewidth]{guided_givens} 
@@ -436,6 +461,14 @@ Since our goal is to explore non-linear association in the dataset, we will use 
 
 \caption{Guided tour optimization of modified splines index using Givens interpolation.}\label{fig:guided-givens-static}
 \end{figure}
+
+Value 0.785 0.0 \% better
+No better bases found after 100 tries. Giving up.
+Final projection:
+0.835 0.305\\
+-0.269 -0.462\\
+0.328 -0.730\\
+-0.350 0.399
 
 \begin{figure}
 
@@ -497,19 +530,19 @@ Schloerke, Barret. 2016. \emph{Geozoo: Zoo of Geometric Objects}. \url{https://C
 \address{%
 Zoljargal Batsaikhan\\
 Monash University\\%
-Department of Letter Q\\ Somewhere, Australia\\
+Department of Econometrics and Business Statistics\\ Clayton, VIC, Australia\\
 %
-\url{https://www.britannica.com/animal/quokka}\\%
-\textit{ORCiD: \href{https://orcid.org/N/A}{N/A}}\\%
+\url{https://github.com/zolabat}\\%
+\textit{ORCiD: \href{https://orcid.org/0009-0005-0055-1448}{0009-0005-0055-1448}}\\%
 \href{mailto:zoljargal11@gmail.com}{\nolinkurl{zoljargal11@gmail.com}}%
 }
 
 \address{%
 Dianne Cook\\
 Monash University\\%
-Department of Letter B\\ Somewhere, Australia\\
+Department of Econometrics and Business Statistics\\ Clayton, VIC, Australia\\
 %
-\url{https://www.britannica.com/animal/bilby}\\%
+\url{http://www.dicook.org}\\%
 \textit{ORCiD: \href{https://orcid.org/0000-0002-3813-7155}{0000-0002-3813-7155}}\\%
 \href{mailto:dicook@monash.edu}{\nolinkurl{dicook@monash.edu}}%
 }
@@ -517,9 +550,9 @@ Department of Letter B\\ Somewhere, Australia\\
 \address{%
 Ursula Laa\\
 BOKU University\\%
-Department of Letter B\\ Somewhere, Australia\\
+Institute of Statistics\\ Vienna, Austria\\
 %
-\url{https://www.britannica.com/animal/bilby}\\%
+\url{https://uschilaa.github.io}\\%
 \textit{ORCiD: \href{https://orcid.org/0000-0002-0249-6439}{0000-0002-0249-6439}}\\%
 \href{mailto:ursula.laa@boku.ac.at}{\nolinkurl{ursula.laa@boku.ac.at}}%
 }

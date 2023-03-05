@@ -50,8 +50,8 @@ givens_path <- function (current, target, frozen = NULL, ...) {
 #' The methodology is outlined in
 #' \url{http://www-stat.wharton.upenn.edu/~buja/PAPERS/paper-dyn-proj-algs.pdf}
 #'
-#' @param Fa starting frame, will be orthonormalised if necessary
-#' @param Fz target frame, will be orthonormalised if necessary
+#' @param Fa starting frame, will be orthonormalized if necessary
+#' @param Fz target frame, will be orthonormalized if necessary
 #' @keywords internal
 #'
 givens_info <- function(Fa, Fz) {

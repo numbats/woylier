@@ -23,7 +23,7 @@ grand_tour_givens <- function(d = 2, ...) {
 
 #' Create a guided tour with Givens interpolation
 #'
-#' @param index_f the index function to optimise.
+#' @param index_f the index function to optimize.
 #' @param d target dimensionality
 #' @param alpha the initial size of the search window, in radians
 #' @param cooling the amount the size of the search window should be adjusted

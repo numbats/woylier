@@ -1,4 +1,4 @@
-#' Build a d-dimensional pre-projection space by orthonormaliing Fz with regard to Fa
+#' Build a d-dimensional pre-projection space by orthonormalizing Fz with regard to Fa
 #'
 #' @keywords internal
 #' @param Fa starting pxd frame
@@ -48,7 +48,7 @@ angle2 <-  function(x, y){
   return(theta)
 }
 
-#' Takes i and k th row of a matrix and rotate matrix by theta angle (requires matrix a to be 2*q matrix)
+#' Takes i and k-th row of a matrix and rotate matrix by theta angle (requires matrix a to be 2*q matrix)
 #'
 #' @keywords internal
 #' @param a matrix

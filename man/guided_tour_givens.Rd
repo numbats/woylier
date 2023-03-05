@@ -17,7 +17,7 @@ guided_tour_givens(
 )
 }
 \arguments{
-\item{index_f}{the index function to optimise.}
+\item{index_f}{the index function to optimize.}
 
 \item{d}{target dimensionality}
 
