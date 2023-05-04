@@ -1,3 +1,7 @@
+# woylier 0.0.3
+
+* Initial release of the package (resubmitting initial release)
+
 # woylier 0.0.2
 
 * Initial release of the package (resubmitting)
