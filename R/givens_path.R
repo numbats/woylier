@@ -4,6 +4,9 @@ frozen <- NULL
 #'
 #' @param d dimension of projection
 #' @param ... additional parameters to pass through
+#'
+#' @return creates grand tour
+#'
 #' @export
 #' @examples
 #' data(sine_curve)
@@ -35,6 +38,9 @@ grand_tour_givens <- function(d = 2, ...) {
 #' @param max.i the maximum index value, stop search if a larger value is found
 #' @param n_sample number of samples to generate if \code{search_f} is \code{search_polish}
 #' @param ... arguments sent to the search_f
+#'
+#' @return creates guided tour
+#'
 #' @export
 #' @examples
 #' data(sine_curve)
@@ -107,22 +113,22 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
     cur_index <- index(current)
 
     if (cur_index > max.i) {
-      cat("Found index ", cur_index, ", larger than selected maximum ", max.i, ". Stopping search.\n",
+      message("Found index ", cur_index, ", larger than selected maximum ", max.i, ". Stopping search.\n",
           sep = ""
       )
-      cat("Final projection: \n")
+      message("Final projection: \n")
       if (ncol(current) == 1) {
         for (i in 1:length(current)) {
-          cat(sprintf("%.3f", current[i]), " ")
+          message(sprintf("%.3f", current[i]), " ")
         }
-        cat("\n")
+        message("\n")
       }
       else {
         for (i in 1:nrow(current)) {
           for (j in 1:ncol(current)) {
-            cat(sprintf("%.3f", current[i, j]), " ")
+            message(sprintf("%.3f", current[i, j]), " ")
           }
-          cat("\n")
+          message("\n")
         }
       }
       return(NULL)
@@ -153,6 +159,9 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
 #' @param generate basis generator function
 #' @param frozen matrix giving frozen variables, as described in
 #'   \code{freeze}
+#'
+#' @return creates path for Givens interpolation
+#'
 #' @keywords internal
 new_givens_path <- function(name, generator, frozen = NULL, ...) {
   tries <- 1 # Needed for guided
@@ -182,7 +191,7 @@ new_givens_path <- function(name, generator, frozen = NULL, ...) {
         return(NULL)
       }
 
-      #cat("generation:  dist =  ", dist, "\n")
+      #message("generation:  dist =  ", dist, "\n")
     }
     list(ingred = givens_components, index = gen$index, tries = tries)
   }
@@ -211,6 +220,7 @@ new_givens_path <- function(name, generator, frozen = NULL, ...) {
 #' @keywords hplot dynamic
 #' @seealso The \code{\link{little_tour}}, a special type of planned tour
 #'   which cycles between all axis parallel projections.
+#' @return creates planned tour path
 #' @export
 #' @examples
 #' library(tourr)

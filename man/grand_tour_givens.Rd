@@ -11,6 +11,9 @@ grand_tour_givens(d = 2, ...)
 
 \item{...}{additional parameters to pass through}
 }
+\value{
+creates grand tour
+}
 \description{
 Create a grand tour with Givens interpolation
 }

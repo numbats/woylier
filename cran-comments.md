@@ -4,3 +4,4 @@
 
 * This is a new release. (resubmission)
 
+Fixed the manual inspection issues and resubmitting.

@@ -38,6 +38,9 @@ a better projection before giving up}
 
 \item{...}{arguments sent to the search_f}
 }
+\value{
+creates guided tour
+}
 \description{
 Create a guided tour with Givens interpolation
 }

@@ -13,6 +13,9 @@ or a 3d array}
 \item{cycle}{cycle through continuously (\code{TRUE}) or stop after
 first pass (\code{FALSE})}
 }
+\value{
+creates planned tour path
+}
 \description{
 The planned tour takes you from one basis to the next in a
 set order.  Once you have visited all the planned bases, you either stop

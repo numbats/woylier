@@ -14,6 +14,9 @@ new_givens_path(name, generator, frozen = NULL, ...)
 
 \item{generate}{basis generator function}
 }
+\value{
+creates path for Givens interpolation
+}
 \description{
 Path needed for tour with Givens interpolation
 }
