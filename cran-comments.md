@@ -4,4 +4,4 @@
 
 * This is a new release. (resubmission)
 
-Fixed the manual inspection issues and resubmitting.
+Fixed the manual inspection issues and resubmitting. Regarding the copyright holder, we have changed it to the authors.

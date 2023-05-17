@@ -1,12 +1,9 @@
 #' Generate the background sphere or torus
-#'
 #' @param n number of points on the sphere
 #' @param p dimension of data
 #' @param d dimension of projection
-#'
 #' @return n number of points on the surface of sphere
 #' @export
-#'
 #' @examples
 #' p <- 4
 #' sp <- generate_space_view(p=p)
@@ -23,13 +20,10 @@ generate_space_view <- function(n=1000, p=3, d=1) {
 }
 
 #' Overlay paths of interpolation on the sphere
-#'
 #' @param proj_space  n number of points on the surface of sphere
 #' @param path interpolated path
-#'
 #' @return data frame with interpolated path and points on sphere surface
 #' @export
-#'
 #' @examples
 #' p <- 4
 #' base1 <- tourr::basis_random(p, d=1)

@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 NUMBATS: Non-Uniform Monash Business Analytics Team repo for joint projects
+Copyright (c) 2023 Zola Batsaikhan, Dianne Cook, Ursula Laa
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

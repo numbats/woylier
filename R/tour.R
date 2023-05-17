@@ -2,7 +2,6 @@
 #'
 #' Generates the interpolation in the form needed for
 #' tourr, modelled on geodesic_path()
-#'
 #' @param current starting frame
 #' @param target target frame
 #' @param frozen indicator whether some dimensions fixed
@@ -21,7 +20,6 @@
 #'  \item{tau}{The principle angles between the current and target frames.}
 #'  \item{Ga}{The current plane.}
 #'  \item{Gz}{The target plane.}
-#'
 givens_path <- function (current, target, frozen = NULL, ...) {
   if (is.null(frozen)) {
     # Regular geodesic
@@ -31,7 +29,7 @@ givens_path <- function (current, target, frozen = NULL, ...) {
       givens_step_fraction(givens, pos)
     }
   } else {
-    cat("Givens path cannot handle frozen yet \n")
+    message("Givens path cannot handle frozen yet \n")
   }
 
   list(
@@ -46,14 +44,11 @@ givens_path <- function (current, target, frozen = NULL, ...) {
 }
 
 #' Calculate information needed for Givens interpolation
-#'
 #' The methodology is outlined in
 #' \url{http://www-stat.wharton.upenn.edu/~buja/PAPERS/paper-dyn-proj-algs.pdf}
-#'
 #' @param Fa starting frame, will be orthonormalized if necessary
 #' @param Fz target frame, will be orthonormalized if necessary
 #' @keywords internal
-#'
 givens_info <- function(Fa, Fz) {
   if (!tourr::is_orthonormal(Fa)) {
     # message("Orthonormalising Fa")
@@ -72,11 +67,9 @@ givens_info <- function(Fa, Fz) {
 }
 
 #' Step along a Givens interpolated path by fraction of path length.
-#'
 #' @param interp interpolated path
 #' @param fraction fraction of distance between start and end frames
 #' @keywords internal
-#'
 givens_step_fraction <- function(interp, fraction) {
   # Interpolate between starting and end frames
   #  - must multiply column wise (hence all the transposes)

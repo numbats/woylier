@@ -1,12 +1,9 @@
 frozen <- NULL
 
 #' Create a grand tour with Givens interpolation
-#'
 #' @param d dimension of projection
 #' @param ... additional parameters to pass through
-#'
 #' @return creates grand tour
-#'
 #' @export
 #' @examples
 #' data(sine_curve)
@@ -25,7 +22,6 @@ grand_tour_givens <- function(d = 2, ...) {
 }
 
 #' Create a guided tour with Givens interpolation
-#'
 #' @param index_f the index function to optimize.
 #' @param d target dimensionality
 #' @param alpha the initial size of the search window, in radians
@@ -38,9 +34,7 @@ grand_tour_givens <- function(d = 2, ...) {
 #' @param max.i the maximum index value, stop search if a larger value is found
 #' @param n_sample number of samples to generate if \code{search_f} is \code{search_polish}
 #' @param ... arguments sent to the search_f
-#'
 #' @return creates guided tour
-#'
 #' @export
 #' @examples
 #' data(sine_curve)
@@ -51,7 +45,6 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
     index <- function(proj) {
       index_f(as.matrix(data) %*% proj)
     }
-
     valid_fun <- c(
       "search_geodesic", "search_better", "search_better_random",
       "search_polish", "search_posse"
@@ -59,7 +52,6 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
     method <- valid_fun[vapply(valid_fun, function(x) {
       identical(x, optim)
     }, logical(1))]
-
     search_f <- switch(method,
       search_geodesic = tourr::search_geodesic,
       search_better = tourr::search_better,
@@ -67,12 +59,9 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
       search_polish = tourr::search_polish,
       search_posse = tourr::search_posse
     )
-
     if (is.null(current)) {
       current <- tourr::basis_random(ncol(data), d)
-
       cur_index <- index(current)
-
       tryCatch({
         rcd_env <- parent.frame(n = 3)
         rcd_env[["record"]] <- dplyr::add_row(
@@ -106,12 +95,9 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
           loop = 1)
       }
       )
-
       return(current)
     }
-
     cur_index <- index(current)
-
     if (cur_index > max.i) {
       message("Found index ", cur_index, ", larger than selected maximum ", max.i, ". Stopping search.\n",
           sep = ""
@@ -133,10 +119,8 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
       }
       return(NULL)
     }
-
     # current, alpha = 1, index, max.tries = 5, n = 5, delta = 0.01, cur_index = NA, ..
     basis <- search_f(current, alpha, index, tries, max.tries, cur_index = cur_index, frozen = frozen, n_sample = n_sample, ...)
-
     if (method == "search_posse") {
       if (!is.null(basis$h)) {
         if (basis$h > 30) {
@@ -146,26 +130,20 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
     } else {
       alpha <<- alpha * cooling
     }
-
     list(target = basis$target, index = index)
   }
-
   new_givens_path("guided", generator)
 }
 
 #' Path needed for tour with Givens interpolation
-#'
 #' @param name name to give tour path
 #' @param generate basis generator function
 #' @param frozen matrix giving frozen variables, as described in
 #'   \code{freeze}
-#'
 #' @return creates path for Givens interpolation
-#'
 #' @keywords internal
 new_givens_path <- function(name, generator, frozen = NULL, ...) {
   tries <- 1 # Needed for guided
-
   tour_path <- function(current, data, ...) {
     if (is.null(current)) {
       return(generator(NULL, data, tries, ...))
@@ -175,22 +153,17 @@ new_givens_path <- function(name, generator, frozen = NULL, ...) {
     dist <- 0
     while (dist < 1e-3) {
       if (name %in% c("guided", "frozen-guided")) tries <<- tries + 1
-
       gen <- generator(current, data, tries, ...)
       target <- gen$target
-
       # generator has run out, so give up
       if (is.null(target)) {
         return(NULL)
       }
-
       givens_components <- givens_path(current, target, frozen, ...)
       dist <- sum(abs(unlist(givens_components$tau)))
-
       if (dist < 1e-2) {
         return(NULL)
       }
-
       #message("generation:  dist =  ", dist, "\n")
     }
     list(ingred = givens_components, index = gen$index, tries = tries)
@@ -228,20 +201,17 @@ new_givens_path <- function(name, generator, frozen = NULL, ...) {
 #' str(twod)
 #' animate_xy(flea[, 1:3], planned_tour_givens(twod))
 #' animate_xy(flea[, 1:3], planned_tour_givens(twod, TRUE))
-#'
 #' oned <- save_history(flea[, 1:6], grand_tour(1), max = 3)
 #' animate_dist(flea[, 1:6], planned_tour_givens(oned))
 planned_tour_givens <- function(basis_set, cycle = FALSE) {
   index <- 1
   basis_set <- as.list(basis_set)
-
   n <- length(basis_set)
   if (cycle) {
     generator <- function(current, data, ...) {
       if (is.null(current)) {
         return(basis_set[[1]])
       }
-
       index <<- (index %% n) + 1
       target <- basis_set[[index]]
       list(target = target)
@@ -259,6 +229,5 @@ planned_tour_givens <- function(basis_set, cycle = FALSE) {
       list(target = target)
     }
   }
-
   new_givens_path("planned", generator)
 }
