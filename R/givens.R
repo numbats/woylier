@@ -109,7 +109,7 @@ construct_moving_frame <- function(Wt, B) {
 #' @param nsteps number of steps of interpolation
 #' @param Fa starting pxd frame
 #' @param Fz target pxd frame
-#' @returns array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames.
+#' @returns array with nsteps+1 matrices. Each matrix is interpolated frame in between starting and target frames.
 #' @export
 #' @examples
 #' p <- 4
@@ -122,12 +122,13 @@ givens_full_path <- function(Fa, Fz, nsteps) {
   Wa <- construct_preframe(Fa, B)
   Wz <- construct_preframe(Fz, B)
   angles <- calculate_angles(Wa, Wz)
-  path <- array(dim = c(nrow(B), ncol(Wa), nsteps))
+  path <- array(dim = c(nrow(B), ncol(Wa), nsteps+1))
+  path[,,1] <- Fa
   for (i in 1:nsteps) {
     stepfraction <- i/nsteps
     Wt = givens_rotation(Wa, angles, stepfraction)
     Ft = construct_moving_frame(Wt, B)
-    path[,,i] <- Ft
+    path[,,i+1] <- Ft
   }
   return(path)
 }
