@@ -39,7 +39,7 @@ givens_path <- function (current, target, frozen = NULL, ...) {
     Ga = givens$Wa,
     Gz = givens$Wz,
     tau = givens$tau,
-    dist = tourr::proj_dist(current, target)
+    dist = sum(abs(unlist(givens$tau)))
   )
 }
 
