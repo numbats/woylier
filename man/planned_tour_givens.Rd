@@ -32,7 +32,6 @@ twod <- save_history(flea[, 1:3], max = 5)
 str(twod)
 animate_xy(flea[, 1:3], planned_tour_givens(twod))
 animate_xy(flea[, 1:3], planned_tour_givens(twod, TRUE))
-
 oned <- save_history(flea[, 1:6], grand_tour(1), max = 3)
 animate_dist(flea[, 1:6], planned_tour_givens(oned))
 }

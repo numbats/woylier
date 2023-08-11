@@ -14,7 +14,7 @@ givens_full_path(Fa, Fz, nsteps)
 \item{nsteps}{number of steps of interpolation}
 }
 \value{
-array with nsteps matrix. Each matrix is interpolated frame in between starting and target frames.
+array with nsteps+1 matrices. Each matrix is interpolated frame in between starting and target frames.
 }
 \description{
 Construct full interpolated frames

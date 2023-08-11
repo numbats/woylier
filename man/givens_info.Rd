@@ -2,7 +2,9 @@
 % Please edit documentation in R/tour.R
 \name{givens_info}
 \alias{givens_info}
-\title{Calculate information needed for Givens interpolation}
+\title{Calculate information needed for Givens interpolation
+The methodology is outlined in
+\url{http://www-stat.wharton.upenn.edu/~buja/PAPERS/paper-dyn-proj-algs.pdf}}
 \usage{
 givens_info(Fa, Fz)
 }
@@ -12,6 +14,7 @@ givens_info(Fa, Fz)
 \item{Fz}{target frame, will be orthonormalized if necessary}
 }
 \description{
+Calculate information needed for Givens interpolation
 The methodology is outlined in
 \url{http://www-stat.wharton.upenn.edu/~buja/PAPERS/paper-dyn-proj-algs.pdf}
 }

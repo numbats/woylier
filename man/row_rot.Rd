@@ -17,7 +17,6 @@ row_rot(a, i, k, theta)
 }
 \value{
 rotated matrix a
-
 refer to Algorithm 5.1.6 of Matrix computation (Golub, Van)
 }
 \description{

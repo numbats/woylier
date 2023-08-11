@@ -1,3 +1,8 @@
+# woylier 0.0.6
+
+* Include starting basis in sequence
+* Add orthonormalise for each step, to fix small leakage in calculations
+
 # woylier 0.0.5
 
 * Initial release of the package (resubmitting initial release)

@@ -101,7 +101,7 @@ givens_rotation <- function(Wa, angles, stepfraction) {
 #' @returns A frame of on the step of interpolation
 
 construct_moving_frame <- function(Wt, B) {
-  Ft = B %*% Wt
+  Ft = tourr::orthonormalise(B %*% Wt)
   return(Ft)
 }
 
