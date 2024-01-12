@@ -28,4 +28,6 @@ Suggests:
     ash,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+URL: https://numbats.github.io/woylier/, https://github.com/numbats/woylier
+BugReports: https://github.com/numbats/woylier/issues
 VignetteBuilder: knitr
