@@ -11,11 +11,11 @@
 This method generates a tour path by interpolating between d-D frames in p-D using Givens rotations. The algorithm arises from the problem of zeroing elements of a matrix. This interpolation method is useful for showing specific d-D frames in the tour, as opposed to d-D planes, as done by the geodesic interpolation. It is useful for projection pursuit indexes which are not s invariant. See Buja et al (2005) \doi{10.1016/S0169-7161(04)24014-7}.
 }
 \author{
-\strong{Maintainer}: Zola Batsaikan \email{zoljargal11@gmail.com} (\href{https://orcid.org/0009-0005-0055-1448}{ORCID})
+\strong{Maintainer}: Dianne Cook \email{dicook@monash.edu} (\href{https://orcid.org/0000-0002-3813-7155}{ORCID})
 
 Authors:
 \itemize{
-  \item Dianne Cook \email{dicook@monash.edu} (\href{https://orcid.org/0000-0002-3813-7155}{ORCID})
+  \item Zola Batsaikan \email{zoljargal11@gmail.com} (\href{https://orcid.org/0009-0005-0055-1448}{ORCID})
   \item Ursula Laa \email{ursula.laa@boku.ac.at} (\href{https://orcid.org/0000-0002-0249-6439}{ORCID})
 }
 

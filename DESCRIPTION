@@ -2,9 +2,9 @@ Package: woylier
 Title: Alternative Tour Frame Interpolation Method 
 Version: 0.0.6
 Authors@R: 
-    c(person("Zola", "Batsaikan", email = "zoljargal11@gmail.com", role = c("aut", "cre"),
+    c(person("Zola", "Batsaikan", email = "zoljargal11@gmail.com", role = c("aut"),
            comment = c(ORCID = "0009-0005-0055-1448")),
-      person("Dianne", "Cook", email = "dicook@monash.edu", role = c("aut"),
+      person("Dianne", "Cook", email = "dicook@monash.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-3813-7155")),
       person("Ursula", "Laa", email = "ursula.laa@boku.ac.at", role = c("aut"),
            comment = c(ORCID = "0000-0002-0249-6439")))
