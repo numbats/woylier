@@ -9,10 +9,10 @@ new_givens_path(name, generator, frozen = NULL, ...)
 \arguments{
 \item{name}{name to give tour path}
 
+\item{generator}{basis generator function}
+
 \item{frozen}{matrix giving frozen variables, as described in
 \code{freeze}}
-
-\item{generate}{basis generator function}
 }
 \value{
 creates path for Givens interpolation

@@ -137,7 +137,7 @@ guided_tour_givens <- function(index_f, d = 2, alpha = 0.5, cooling = 0.99, max.
 
 #' Path needed for tour with Givens interpolation
 #' @param name name to give tour path
-#' @param generate basis generator function
+#' @param generator basis generator function
 #' @param frozen matrix giving frozen variables, as described in
 #'   \code{freeze}
 #' @return creates path for Givens interpolation
