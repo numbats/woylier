@@ -13,6 +13,7 @@ reference:
   - givens_full_path
   - grand_tour_givens
   - guided_tour_givens
+  - planned_tour_givens
   - sine_curve
 - title: Plotting the path
   desc: >

@@ -7,6 +7,9 @@
     <loc>https://numbats.github.io/woylier/LICENSE-text.html</loc>
   </url>
   <url>
+    <loc>https://numbats.github.io/woylier/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>https://numbats.github.io/woylier/articles/Plotting_with_woylier.html</loc>
   </url>
   <url>
@@ -68,6 +71,9 @@
   </url>
   <url>
     <loc>https://numbats.github.io/woylier/reference/new_givens_path.html</loc>
+  </url>
+  <url>
+    <loc>https://numbats.github.io/woylier/reference/planned_tour_givens.html</loc>
   </url>
   <url>
     <loc>https://numbats.github.io/woylier/reference/preprojection.html</loc>
