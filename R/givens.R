@@ -115,7 +115,7 @@ construct_moving_frame <- function(Wt, B) {
 #' p <- 4
 #' base1 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
 #' base2 <- tourr::orthonormalise(tourr::basis_random(p, d=1))
-#' path <- givens_full_path(base1, base2, nsteps=10)
+#' path <- woylier::givens_full_path(base1, base2, nsteps=10)
 
 givens_full_path <- function(Fa, Fz, nsteps) {
   B <- preprojection(Fa, Fz)

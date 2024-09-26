@@ -23,20 +23,20 @@ or start from the beginning once more (if \code{cycle = TRUE}).
 }
 \details{
 Usually, you will not call this function directly, but will pass it to
-a method that works with tour paths like \code{\link{animate}},
-\code{\link{save_history}} or \code{\link{render}}.
+a method that works with tour paths like \code{\link[tourr:animate]{tour::animate()}},
+\code{\link[tourr:save_history]{tourr::save_history()}} or \code{\link[tourr:render]{tourr::render()}}.
 }
 \examples{
 library(tourr)
 twod <- save_history(flea[, 1:3], max = 5)
 str(twod)
-animate_xy(flea[, 1:3], planned_tour_givens(twod))
-animate_xy(flea[, 1:3], planned_tour_givens(twod, TRUE))
-oned <- save_history(flea[, 1:6], grand_tour(1), max = 3)
-animate_dist(flea[, 1:6], planned_tour_givens(oned))
+tourr::animate_xy(flea[, 1:3], woylier::planned_tour_givens(twod))
+tourr::animate_xy(flea[, 1:3], woylier::planned_tour_givens(twod, TRUE))
+oned <- tourr::save_history(flea[, 1:6], tourr::grand_tour(1), max = 3)
+tourr::animate_dist(flea[, 1:6], woylier::planned_tour_givens(oned))
 }
 \seealso{
-The \code{\link{little_tour}}, a special type of planned tour
+The \code{\link[tourr:little_tour]{tourr::little_tour()}}, a special type of planned tour
 which cycles between all axis parallel projections.
 }
 \keyword{dynamic}

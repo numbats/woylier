@@ -28,9 +28,9 @@ generate_space_view <- function(n=1000, p=3, d=1) {
 #' p <- 4
 #' base1 <- tourr::basis_random(p, d=1)
 #' base2 <- tourr::basis_random(p, d=1)
-#' path <- givens_full_path(base1, base2, nsteps=10)
-#' sp <- generate_space_view(p=p)
-#' sp_path <- add_path(sp, path)
+#' path <- woylier::givens_full_path(base1, base2, nsteps=10)
+#' sp <- woylier::generate_space_view(p=p)
+#' sp_path <- woylier::add_path(sp, path)
 #' tourr::animate_xy(sp_path[,1:4], col=sp_path$type)
 add_path <- function(proj_space, path) {
   # overlay sequence of dots for the path

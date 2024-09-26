@@ -19,5 +19,5 @@ Create a grand tour with Givens interpolation
 }
 \examples{
 data(sine_curve)
-tourr::animate(sine_curve, grand_tour_givens(), tourr::display_xy())
+tourr::animate(sine_curve, woylier::grand_tour_givens(), tourr::display_xy())
 }

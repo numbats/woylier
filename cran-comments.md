@@ -8,4 +8,10 @@ Duration: 16.7s
 
 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
+and on the command line:
+
+* DONE
+
+Status: OK
+
 
