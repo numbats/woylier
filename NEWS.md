@@ -1,3 +1,8 @@
+# woylier 0.0.7
+
+* Fixes for CRAN
+* Document missing functions
+
 # woylier 0.0.6
 
 * Include starting basis in sequence
