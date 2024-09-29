@@ -19,3 +19,7 @@ You can install the development version of woylier from
 # install.packages("devtools")
 devtools::install_github("numbats/woylier")
 ```
+
+## More documentation
+
+https://doi.org/10.48550/arXiv.2311.08181

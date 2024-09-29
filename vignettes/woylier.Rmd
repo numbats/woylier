@@ -35,7 +35,7 @@ library(dplyr)
 library(purrr)
 ```
 
-# Example 1
+# Path 1
 
 In this example, we have 2 random 1D basis in 6D data space and the `givens_full_path()` function returns the intermediate interpolation step projections in given number of steps. The code chunk below demonstrates the interpolation between 2 random basis in 5 steps.
 
@@ -54,7 +54,7 @@ base2
 givens_full_path(base1, base2, nsteps = 5)
 ```
 
-# Example 2
+# Path 2
 
 In this example, we have 2 random 2D basis in 6D data space and the `givens_full_path()` function returns the intermediate interpolation step projections in given number of steps. The code chunk below demonstrates the interpolation between 2 random basis in 5 steps.
 
@@ -73,4 +73,7 @@ base4
 givens_full_path(base3, base4, nsteps = 5)
 ```
  
+# Examples
+
+To see how to use this for examining projections of multivariate data, see [Batsaikhan, Cook, Laa (2024)](https://doi.org/10.48550/arXiv.2311.08181).
  
