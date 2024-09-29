@@ -1,6 +1,6 @@
 Package: woylier
 Title: Alternative Tour Frame Interpolation Method 
-Version: 0.0.7
+Version: 0.0.9
 Authors@R: 
     c(person("Zola", "Batsaikan", email = "zoljargal11@gmail.com", role = c("aut"),
            comment = c(ORCID = "0009-0005-0055-1448")),
@@ -8,7 +8,7 @@ Authors@R:
            comment = c(ORCID = "0000-0002-3813-7155")),
       person("Ursula", "Laa", email = "ursula.laa@boku.ac.at", role = c("aut"),
            comment = c(ORCID = "0000-0002-0249-6439")))
-Description: This method generates a tour path by interpolating between d-D frames in p-D using Givens rotations. The algorithm arises from the problem of zeroing elements of a matrix. This interpolation method is useful for showing specific d-D frames in the tour, as opposed to d-D planes, as done by the geodesic interpolation. It is useful for projection pursuit indexes which are not s invariant. See Buja et al (2005) <doi:10.1016/S0169-7161(04)24014-7>. 
+Description: This method generates a tour path by interpolating between d-D frames in p-D using Givens rotations. The algorithm arises from the problem of zeroing elements of a matrix. This interpolation method is useful for showing specific d-D frames in the tour, as opposed to d-D planes, as done by the geodesic interpolation. It is useful for projection pursuit indexes which are not s invariant. See more details at <doi:10.1016/S0169-7161(04)24014-7>. 
 Depends:
     R (>= 4.1)
 Imports:

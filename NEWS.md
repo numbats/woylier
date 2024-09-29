@@ -1,3 +1,11 @@
+# woylier 0.0.9
+
+* Hopefully links finally fixed
+
+# woylier 0.0.8
+
+* Link fix
+
 # woylier 0.0.7
 
 * Fixes for CRAN

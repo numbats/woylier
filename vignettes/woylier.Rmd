@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 The "woylier" package provides alternative method for generating a tour path by interpolating between d-D frames in p-D space rather than d-D planes. A tour path is a sequence of projection and we use interpolation method to produce the path. The \CRANpkg{tourr} package uses geodesic interpolation between planes. Geodesic interpolation path is the locally shortest path between planes with no within-plane spin. As a result of this method, the rendered target plane could be the rotated version of the target plane we wanted. This is not a problem when the structure we are looking can be identified without turning the axis around. 
 
-The "woylier" package implements the Givens interpolation paths method proposed by [Buja et al. (2005)](https://www.sciencedirect.com/science/article/abs/pii/S0169716104240147?via%3Dihub) in R. This algorithm adapts Given’s matrix decomposition technique which allows the interpolation to be between frames rather than planes.
+The "woylier" package implements the Givens interpolation paths method proposed by [Buja et al. (2005)](https://doi.org/10.1016/S0169-7161(04)24014-7) in R. This algorithm adapts Given’s matrix decomposition technique which allows the interpolation to be between frames rather than planes.
 
 # Installation
 
