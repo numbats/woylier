@@ -5,7 +5,7 @@ Zola Batsaikhan, Dianne Cook, Ursula Laa
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# woylier <a href='https://numbats.github.io/woylier/'><img src='man/figures/logo.png' align="right" height="138.5" /></a>
+# woylier <a href="https://numbats.github.io/woylier/"><img src="man/figures/logo.svg" align="right" height="139" alt="woylier website" /></a>
 
 <!-- badges: start -->
 
